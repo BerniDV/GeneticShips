@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{5B7CFE58-416C-B5FC-B7A1-4D96B9721EC4}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "NausTFGMultiPlayer",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
