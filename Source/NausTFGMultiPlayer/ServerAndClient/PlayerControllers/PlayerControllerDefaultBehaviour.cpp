@@ -3,9 +3,10 @@
 
 #include "PlayerControllerDefaultBehaviour.h"
 #include "Blueprint/UserWidget.h"
+#include "NausTFGMultiPlayer/Client/Controllers/PresentationController.h"
 
 
-void APlayerControllerDefaultBehaviour::InitializeMenus()
+void APlayerControllerDefaultBehaviour::InitializePresentationController()
 {
 
 	unimplemented();
@@ -49,33 +50,19 @@ void APlayerControllerDefaultBehaviour::HideAndLockMouseCursor(UUserWidget* UIMe
 	
 }
 
-void APlayerControllerDefaultBehaviour::LoadMenu(UUserWidget* UIMenu)
-{
-
-	if (IsLocalPlayerController())
-	{
-
-		UIMenu->bIsFocusable = true;
-		UIMenu->AddToViewport();
-		
-	}
-
-}
-
-void APlayerControllerDefaultBehaviour::UnloadMenu(UUserWidget* UIMenu)
-{
-
-	if (IsLocalPlayerController())
-	{
-
-		UIMenu->RemoveFromViewport();
-		UIMenu->bIsFocusable = false;
-
-	}
-
-}
 
 void APlayerControllerDefaultBehaviour::bindSignals()
 {
 
+	if(IsLocalPlayerController())
+	{
+
+		presentationController->signalShowNotLockingCursor.AddDynamic(this, &APlayerControllerDefaultBehaviour::ShowNotLockingMouseCursor);
+		presentationController->signalHideAndLockMouseCursor.AddDynamic(this, &APlayerControllerDefaultBehaviour::HideAndLockMouseCursor);
+
+	}
+	
+
 }
+
+

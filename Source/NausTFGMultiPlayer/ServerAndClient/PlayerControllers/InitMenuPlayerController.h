@@ -6,7 +6,6 @@
 #include "PlayerControllerDefaultBehaviour.h"
 #include "InitMenuPlayerController.generated.h"
 
-class UInitMenu_EP;
 /**
  * 
  */
@@ -20,7 +19,7 @@ public:
 
 	AInitMenuPlayerController();
 
-	virtual void InitializeMenus() override;
+	virtual void InitializePresentationController() override;
 
 	virtual void CreaMenus() override;
 
@@ -31,19 +30,14 @@ public:
 
 	virtual void bindSignals() override;
 
+	void LoadInitMenu();
+
+	void UnloadInitMenu();
+
 protected:
 
 	virtual void BeginPlay() override;
 
 	virtual void SetupInputComponent() override;
-
-private:
-
-	//referencia a la classe blueprint de initMenu
-	TSubclassOf<UInitMenu_EP> initMenuClass;
-
-	//instancia de la clase initMenu
-	UPROPERTY()
-	UInitMenu_EP* initMenu;
 	
 };

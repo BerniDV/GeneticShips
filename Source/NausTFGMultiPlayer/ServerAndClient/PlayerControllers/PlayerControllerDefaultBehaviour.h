@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "PlayerControllerDefaultBehaviour.generated.h"
 
+class UPresentationController;
 /**
  * 
  */
@@ -17,17 +18,20 @@ class NAUSTFGMULTIPLAYER_API APlayerControllerDefaultBehaviour : public APlayerC
 
 public:
 
-	virtual void InitializeMenus();
+	virtual void InitializePresentationController();
 
 	virtual void CreaMenus();
 
+	UFUNCTION()
 	virtual void ShowNotLockingMouseCursor(UUserWidget* UIMenu);
 
+	UFUNCTION()
 	virtual void HideAndLockMouseCursor(UUserWidget* UIMenu);
 
-	virtual void LoadMenu(UUserWidget* UIMenu);
-
-	virtual void UnloadMenu(UUserWidget* UIMenu);
-
 	virtual void bindSignals();
+
+protected:
+
+	UPROPERTY()
+	UPresentationController* presentationController;
 };

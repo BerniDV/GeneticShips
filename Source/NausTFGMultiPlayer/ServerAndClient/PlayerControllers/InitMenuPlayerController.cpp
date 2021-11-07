@@ -3,12 +3,13 @@
 
 #include "InitMenuPlayerController.h"
 
-#include "NausTFGMultiPlayer/Client/GUI/Menus/InitMenu_EP.h"
+#include "NausTFGMultiPlayer/Client/Controllers/InitMenuController.h"
 
 AInitMenuPlayerController::AInitMenuPlayerController()
 {
 
-	InitializeMenus();
+	InitializePresentationController();
+	
 
 }
 
@@ -20,7 +21,7 @@ void AInitMenuPlayerController::BeginPlay()
 
 	bindSignals();
 
-	LoadMenu(initMenu);
+	LoadInitMenu();
 	
 }
 
@@ -31,14 +32,15 @@ void AInitMenuPlayerController::SetupInputComponent()
 	InputComponent->BindKey(EKeys::AnyKey, EInputEvent::IE_Pressed, this, &AInitMenuPlayerController::AnyKeyPressed);
 }
 
-void AInitMenuPlayerController::InitializeMenus()
+void AInitMenuPlayerController::InitializePresentationController()
 {
 
 	if(IsLocalPlayerController())
 	{
 
-		ConstructorHelpers::FClassFinder <UInitMenu_EP> initMenuClassBP(TEXT("/Game/Client/GUI/Menus/InitMenu/InitMenu_BP"));
-		initMenuClass = initMenuClassBP.Class;
+		presentationController = NewObject<UInitMenuController>();
+		
+		presentationController->Init(this);
 	}
 	
 }
@@ -48,7 +50,7 @@ void AInitMenuPlayerController::CreaMenus()
 
 	if (IsLocalPlayerController())
 	{
-		initMenu = CreateWidget<UInitMenu_EP>(this, initMenuClass);
+		presentationController->CreaMenus();
 
 	}
 }
@@ -58,7 +60,7 @@ void AInitMenuPlayerController::AnyKeyPressed()
 	if(IsLocalPlayerController())
 	{
 
-		initMenu->OnClickAnyKey();
+		Cast<UInitMenuController>(presentationController)->AnyKeyPressed();
 	}
 	
 }
@@ -86,9 +88,32 @@ void AInitMenuPlayerController::bindSignals()
 	if(IsLocalPlayerController())
 	{
 
-		initMenu->signalOnClickAnyKey.AddDynamic(this, &AInitMenuPlayerController::JoinServerRoom);
+		Cast<UInitMenuController>(presentationController)->BindAnyKeySignal();
 
 	}
+}
+
+void AInitMenuPlayerController::LoadInitMenu()
+{
+
+	if(IsLocalPlayerController())
+	{
+
+		Cast<UInitMenuController>(presentationController)->LoadInitMenu();
+
+	}
+}
+
+void AInitMenuPlayerController::UnloadInitMenu()
+{
+
+	if(IsLocalPlayerController())
+	{
+
+		Cast<UInitMenuController>(presentationController)->UnloadInitMenu();
+
+	}
+	
 }
 
 
