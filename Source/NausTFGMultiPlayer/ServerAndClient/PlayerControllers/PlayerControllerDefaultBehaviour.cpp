@@ -65,4 +65,12 @@ void APlayerControllerDefaultBehaviour::bindSignals()
 
 }
 
+void APlayerControllerDefaultBehaviour::BeginPlay()
+{
+	Super::BeginPlay();
+
+
+
+}
+
 

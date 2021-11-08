@@ -32,6 +32,10 @@ public:
 
 protected:
 
+	virtual void BeginPlay() override;
+
+protected:
+
 	UPROPERTY()
 	UPresentationController* presentationController;
 };
