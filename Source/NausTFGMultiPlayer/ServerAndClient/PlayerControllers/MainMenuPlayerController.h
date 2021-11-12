@@ -6,6 +6,7 @@
 #include "PlayerControllerDefaultBehaviour.h"
 #include "MainMenuPlayerController.generated.h"
 
+enum class NausTFGRolTypes_Enum : uint8;
 class AMainMenuCameraActor;
 /**
  * 
@@ -20,12 +21,27 @@ public:
 
 	AMainMenuPlayerController();
 
+	virtual void InitializePresentationController() override;
+
+	virtual void BindSignals() override;
+
+	void LoadMainMenu();
+
+	void UnloadMainMenu();
+
+	void SpawnMainMenuCamera();
+
+	UFUNCTION()
+	void SetRoleToPilot();
+
+	UFUNCTION()
+	void SetRoleToArtillery();
+
 protected:
 
 	virtual void BeginPlay() override;
 
 private:
+	NausTFGRolTypes_Enum roleSelected;
 
-	AMainMenuCameraActor* cameraActor;
-	
 };

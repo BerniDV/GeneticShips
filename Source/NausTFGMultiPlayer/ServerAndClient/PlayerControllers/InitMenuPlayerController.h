@@ -21,14 +21,12 @@ public:
 
 	virtual void InitializePresentationController() override;
 
-	virtual void CreaMenus() override;
-
 	void AnyKeyPressed();
 
 	UFUNCTION()
 	void JoinServerRoom();
 
-	virtual void bindSignals() override;
+	virtual void BindSignals() override;
 
 	void LoadInitMenu();
 

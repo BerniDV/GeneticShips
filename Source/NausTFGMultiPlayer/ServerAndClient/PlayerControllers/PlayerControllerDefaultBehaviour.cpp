@@ -15,7 +15,11 @@ void APlayerControllerDefaultBehaviour::InitializePresentationController()
 void APlayerControllerDefaultBehaviour::CreaMenus()
 {
 
-	unimplemented();
+	if (IsLocalPlayerController())
+	{
+		presentationController->CreaMenus();
+
+	}
 }
 
 void APlayerControllerDefaultBehaviour::ShowNotLockingMouseCursor(UUserWidget* UIMenu)
@@ -51,7 +55,7 @@ void APlayerControllerDefaultBehaviour::HideAndLockMouseCursor(UUserWidget* UIMe
 }
 
 
-void APlayerControllerDefaultBehaviour::bindSignals()
+void APlayerControllerDefaultBehaviour::BindSignals()
 {
 
 	if(IsLocalPlayerController())
@@ -65,10 +69,24 @@ void APlayerControllerDefaultBehaviour::bindSignals()
 
 }
 
+ACameraActor* APlayerControllerDefaultBehaviour::GetCameraActor()
+{
+
+	return cameraActor;
+}
+
+void APlayerControllerDefaultBehaviour::SetCameraActor(ACameraActor* camera)
+{
+
+	cameraActor = camera;
+}
+
 void APlayerControllerDefaultBehaviour::BeginPlay()
 {
 	Super::BeginPlay();
 
+	CreaMenus();
+	BindSignals();
 
 
 }

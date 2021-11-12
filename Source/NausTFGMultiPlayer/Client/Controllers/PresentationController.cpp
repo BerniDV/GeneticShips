@@ -3,6 +3,8 @@
 
 #include "PresentationController.h"
 
+#include "Blueprint/UserWidget.h"
+
 UPresentationController::UPresentationController()
 {
 
@@ -37,5 +39,19 @@ void UPresentationController::HideAndLockMouseCursor(UUserWidget* UIMenu)
 {
 
 	signalHideAndLockMouseCursor.Broadcast(UIMenu);
+}
+
+void UPresentationController::LoadMenu(UUserWidget* UIMenu)
+{
+
+	UIMenu->bIsFocusable = true;
+	UIMenu->AddToViewport();
+}
+
+void UPresentationController::UnloadMenu(UUserWidget* UIMenu)
+{
+
+	UIMenu->RemoveFromViewport();
+	UIMenu->bIsFocusable = false;
 }
 

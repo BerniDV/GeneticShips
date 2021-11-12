@@ -20,7 +20,7 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnClickAnyKey);
 	FOnClickAnyKey signalOnClickAnyKey;
 
-	UFUNCTION(BlueprintCallable, DisplayName = "OnCLickEnter")
+	UFUNCTION(BlueprintCallable, DisplayName = "OnCLickAnyButton")
 	void OnClickAnyKey();
 
 

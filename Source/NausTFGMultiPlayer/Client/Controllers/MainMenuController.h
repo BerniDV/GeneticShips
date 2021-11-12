@@ -1,0 +1,48 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "PresentationController.h"
+#include "MainMenuController.generated.h"
+
+class AMainMenuPlayerController;
+class UMainMenu_EP;
+/**
+ * 
+ */
+UCLASS()
+class NAUSTFGMULTIPLAYER_API UMainMenuController : public UPresentationController
+{
+	GENERATED_BODY()
+
+public:
+
+	UMainMenuController();
+
+	virtual void InitializeMenus() override;
+
+	virtual void Init(APlayerController* owner) override;
+
+	virtual void CreaMenus() override;
+
+	void LoadMainMenu();
+
+	void UnloadMainMenu();
+
+	void BindSetPilotAsRoleSelected();
+
+	void BindSetArtilleryAsRoleSelected();
+
+private:
+
+	AMainMenuPlayerController* mainMenuPlayerController;
+
+	//referencia a la classe blueprint de initMenu
+	TSubclassOf<UMainMenu_EP> mainMenuClass;
+
+	//instancia de la clase initMenu
+	UPROPERTY()
+	UMainMenu_EP* mainMenu;
+	
+};

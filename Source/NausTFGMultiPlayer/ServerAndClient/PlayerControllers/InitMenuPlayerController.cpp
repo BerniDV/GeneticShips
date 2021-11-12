@@ -7,19 +7,14 @@
 
 AInitMenuPlayerController::AInitMenuPlayerController()
 {
-
-	InitializePresentationController();
 	
-
+	InitializePresentationController();
 }
 
 void AInitMenuPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CreaMenus();
-
-	bindSignals();
 
 	LoadInitMenu();
 	
@@ -45,15 +40,6 @@ void AInitMenuPlayerController::InitializePresentationController()
 	
 }
 
-void AInitMenuPlayerController::CreaMenus()
-{
-
-	if (IsLocalPlayerController())
-	{
-		presentationController->CreaMenus();
-
-	}
-}
 
 void AInitMenuPlayerController::AnyKeyPressed()
 {
@@ -81,9 +67,9 @@ void AInitMenuPlayerController::JoinServerRoom()
 
 }
 
-void AInitMenuPlayerController::bindSignals()
+void AInitMenuPlayerController::BindSignals()
 {
-	Super::bindSignals();
+	Super::BindSignals();
 
 	if(IsLocalPlayerController())
 	{

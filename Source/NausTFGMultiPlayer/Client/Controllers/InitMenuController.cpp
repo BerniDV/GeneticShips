@@ -37,16 +37,14 @@ void UInitMenuController::CreaMenus()
 void UInitMenuController::LoadInitMenu()
 {
 
-	initMenu->bIsFocusable = true;
-	initMenu->AddToViewport();
+	Super::LoadMenu(initMenu);
 	
 }
 
 void UInitMenuController::UnloadInitMenu()
 {
 
-	initMenu->RemoveFromViewport();
-	initMenu->bIsFocusable = false;
+	Super::UnloadMenu(initMenu);
 
 }
 

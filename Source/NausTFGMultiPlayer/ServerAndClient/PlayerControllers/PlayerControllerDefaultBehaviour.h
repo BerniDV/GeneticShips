@@ -18,6 +18,7 @@ class NAUSTFGMULTIPLAYER_API APlayerControllerDefaultBehaviour : public APlayerC
 
 public:
 
+
 	virtual void InitializePresentationController();
 
 	virtual void CreaMenus();
@@ -27,8 +28,12 @@ public:
 
 	UFUNCTION()
 	virtual void HideAndLockMouseCursor(UUserWidget* UIMenu);
+	
+	virtual void BindSignals();
 
-	virtual void bindSignals();
+	ACameraActor* GetCameraActor();
+
+	void SetCameraActor(ACameraActor* camera);
 
 protected:
 
@@ -38,4 +43,9 @@ protected:
 
 	UPROPERTY()
 	UPresentationController* presentationController;
+
+
+private:
+
+	ACameraActor* cameraActor;
 };
