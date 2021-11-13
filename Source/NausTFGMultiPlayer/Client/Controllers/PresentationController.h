@@ -26,6 +26,8 @@ public:
 
 	virtual void CreaMenus();
 
+	virtual void BindSignals();
+
 	virtual void ShowNotLockingMouseCursor(UUserWidget* UIMenu);
 
 	virtual void HideAndLockMouseCursor(UUserWidget* UIMenu);

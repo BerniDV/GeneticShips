@@ -37,6 +37,11 @@ public:
 	UFUNCTION()
 	void SetRoleToArtillery();
 
+	UFUNCTION(Server, Reliable)
+	void JoinGame();
+	void JoinGame_Implementation();
+
+
 protected:
 
 	virtual void BeginPlay() override;

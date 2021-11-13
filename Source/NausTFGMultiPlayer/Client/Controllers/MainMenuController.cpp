@@ -30,6 +30,14 @@ void UMainMenuController::CreaMenus()
 	mainMenu = CreateWidget<UMainMenu_EP>(mainMenuPlayerController, mainMenuClass);
 }
 
+void UMainMenuController::BindSignals()
+{
+
+	BindSetPilotAsRoleSelected();
+	BindSetArtilleryAsRoleSelected();
+	BindImReadyButton();
+}
+
 void UMainMenuController::LoadMainMenu()
 {
 
@@ -54,6 +62,23 @@ void UMainMenuController::BindSetArtilleryAsRoleSelected()
 {
 
 	mainMenu->signalOnClickArtilleryButton.AddDynamic(mainMenuPlayerController, &AMainMenuPlayerController::SetRoleToArtillery);
+}
+
+void UMainMenuController::BindImReadyButton()
+{
+
+	mainMenu->signalOnClickImReady.AddDynamic(mainMenuPlayerController, &AMainMenuPlayerController::JoinGame);
+}
+
+void UMainMenuController::SetRoleToPilot()
+{
+
+	mainMenu->SetSelectionRolToPilot();
+}
+
+void UMainMenuController::SetRoleToArtillery()
+{
+	mainMenu->SetSelectionRolToArtillery();
 }
 
 

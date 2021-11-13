@@ -15,7 +15,7 @@ void APlayerControllerDefaultBehaviour::InitializePresentationController()
 void APlayerControllerDefaultBehaviour::CreaMenus()
 {
 
-	if (IsLocalPlayerController())
+	if (IsLocalPlayerController() && presentationController)
 	{
 		presentationController->CreaMenus();
 

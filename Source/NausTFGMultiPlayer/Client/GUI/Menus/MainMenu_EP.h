@@ -6,6 +6,7 @@
 #include "MenusDefaultBehaviours.h"
 #include "MainMenu_EP.generated.h"
 
+
 /**
  * 
  */
@@ -22,10 +23,27 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnClickArtilleryButton);
 	FOnClickArtilleryButton signalOnClickArtilleryButton;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnClickImReady);
+	FOnClickImReady signalOnClickImReady;
+
+	UMainMenu_EP();
+
 	UFUNCTION(BlueprintCallable, DisplayName = "OnCLickPilotButton")
 	void OnClickPilotButton();
 
 	UFUNCTION(BlueprintCallable, DisplayName = "OnCLickArtilleryButton")
 	void OnClickArtilleryButton();
+
+	UFUNCTION(BlueprintCallable, DisplayName = "OnCLickImReady")
+	void OnClickImReady();
+
+	void SetSelectionRolToPilot();
+
+	void SetSelectionRolToArtillery();
+
+protected:
+
+	UPROPERTY(BlueprintReadOnly, Category = "Text")
+	FString RolTypeSelectedText;
 	
 };

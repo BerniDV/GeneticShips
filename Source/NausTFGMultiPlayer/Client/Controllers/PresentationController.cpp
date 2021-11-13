@@ -29,6 +29,11 @@ void UPresentationController::CreaMenus()
 	unimplemented();
 }
 
+void UPresentationController::BindSignals()
+{
+	unimplemented();
+}
+
 void UPresentationController::ShowNotLockingMouseCursor(UUserWidget* UIMenu)
 {
 

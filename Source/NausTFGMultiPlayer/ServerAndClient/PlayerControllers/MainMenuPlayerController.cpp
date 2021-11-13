@@ -6,6 +6,7 @@
 #include "NausTFGMultiPlayer/Client/Controllers/MainMenuController.h"
 #include "NausTFGMultiPlayer/Client/Levels/Cameras/MainMenuCameraActor.h"
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Singletons/CustomGameInstance.h"
 
 AMainMenuPlayerController::AMainMenuPlayerController()
 {
@@ -37,9 +38,7 @@ void AMainMenuPlayerController::BindSignals()
 	if(IsLocalPlayerController())
 	{
 
-		Cast<UMainMenuController>(presentationController)->BindSetPilotAsRoleSelected();
-
-		Cast<UMainMenuController>(presentationController)->BindSetArtilleryAsRoleSelected();
+		Cast<UMainMenuController>(presentationController)->BindSignals();
 	}
 }
 
@@ -81,12 +80,33 @@ void AMainMenuPlayerController::SpawnMainMenuCamera()
 void AMainMenuPlayerController::SetRoleToPilot()
 {
 	roleSelected = NausTFGRolTypes_Enum::PilotActionRolType;
+	Cast<UMainMenuController>(presentationController)->SetRoleToPilot();
+	Cast<UCustomGameInstance>(GetGameInstance())->SetRoleSelected(roleSelected);
 }
 
 void AMainMenuPlayerController::SetRoleToArtillery()
 {
 
 	roleSelected = NausTFGRolTypes_Enum::ArtilleryActionRolType;
+	Cast<UMainMenuController>(presentationController)->SetRoleToArtillery();
+	Cast<UCustomGameInstance>(GetGameInstance())->SetRoleSelected(roleSelected);
+}
+
+void AMainMenuPlayerController::JoinGame_Implementation()
+{
+	if(!IsLocalPlayerController())
+	{
+
+		UWorld* World = GetWorld();
+
+		if (World)
+		{
+
+			World->ServerTravel("/Game/Levels/GameLevels/TestGameLevel");
+		}
+
+	}
+	
 }
 
 void AMainMenuPlayerController::BeginPlay()

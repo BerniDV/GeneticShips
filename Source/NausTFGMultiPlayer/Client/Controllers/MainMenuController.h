@@ -26,13 +26,23 @@ public:
 
 	virtual void CreaMenus() override;
 
+	virtual void BindSignals() override;
+
 	void LoadMainMenu();
 
 	void UnloadMainMenu();
 
+	void SetRoleToPilot();
+
+	void SetRoleToArtillery();
+
+private:
+
 	void BindSetPilotAsRoleSelected();
 
 	void BindSetArtilleryAsRoleSelected();
+
+	void BindImReadyButton();
 
 private:
 
