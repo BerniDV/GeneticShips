@@ -6,7 +6,11 @@
 UMainMenu_EP::UMainMenu_EP()
 {
 
-	RolTypeSelectedText = "Escoge rol";
+	rolTypeSelectedText = "Escoge rol";
+
+	numPlayersText = "Num Jugadores: 0";
+
+	numPlayersValue = 0;
 }
 
 void UMainMenu_EP::OnClickPilotButton()
@@ -29,13 +33,25 @@ void UMainMenu_EP::OnClickImReady()
 void UMainMenu_EP::SetSelectionRolToPilot()
 {
 
-	RolTypeSelectedText = "Has seleccionado Piloto";
+	rolTypeSelectedText = "Has seleccionado Piloto";
 }
 
 void UMainMenu_EP::SetSelectionRolToArtillery()
 {
 
-	RolTypeSelectedText = "Has seleccionado Artillero";
+	rolTypeSelectedText = "Has seleccionado Artillero";
+}
+
+void UMainMenu_EP::UpdateNumPlayers()
+{
+	
+	numPlayersText = FString::Printf(TEXT("Num Jugadores: %d"), numPlayersValue);
+}
+
+void UMainMenu_EP::SetNumPlayersValue(int32 numPlayer)
+{
+
+	numPlayersValue = numPlayer;
 }
 
 

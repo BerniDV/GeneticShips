@@ -6,13 +6,16 @@
 #include "NausTFGMultiPlayer/Client/Controllers/MainMenuController.h"
 #include "NausTFGMultiPlayer/Client/Levels/Cameras/MainMenuCameraActor.h"
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
+#include "NausTFGMultiPlayer/ServerAndClient/GameStates/MainMenuGameState.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Singletons/CustomGameInstance.h"
+
 
 AMainMenuPlayerController::AMainMenuPlayerController()
 {
 
-	InitializePresentationController();
 
+	InitializePresentationController();
+	
 	roleSelected = NausTFGRolTypes_Enum::NoneType;
 
 }
@@ -109,11 +112,24 @@ void AMainMenuPlayerController::JoinGame_Implementation()
 	
 }
 
+
+void AMainMenuPlayerController::UpdateNumPlayers_Implementation(int32 numPlayers)
+{
+	if (IsLocalPlayerController())
+	{
+
+		Cast<UMainMenuController>(presentationController)->SetNumPLayers(numPlayers);
+		Cast<UMainMenuController>(presentationController)->UpdateNumPlayers();
+
+	}
+}
+
 void AMainMenuPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	LoadMainMenu();
 
 	SpawnMainMenuCamera();
+
 }

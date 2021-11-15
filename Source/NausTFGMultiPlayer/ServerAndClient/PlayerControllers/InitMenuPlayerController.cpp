@@ -58,7 +58,7 @@ void AInitMenuPlayerController::JoinServerRoom()
 	{
 
 
-		FString URL("127.0.0.1");
+		FString URL("25.55.225.211");
 
 		ClientTravel(URL, ETravelType::TRAVEL_Absolute);
 

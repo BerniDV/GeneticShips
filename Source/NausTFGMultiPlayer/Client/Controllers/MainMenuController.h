@@ -36,6 +36,10 @@ public:
 
 	void SetRoleToArtillery();
 
+	void SetNumPLayers(int32 numPlayers);
+
+	void UpdateNumPlayers();
+
 private:
 
 	void BindSetPilotAsRoleSelected();
@@ -54,5 +58,7 @@ private:
 	//instancia de la clase initMenu
 	UPROPERTY()
 	UMainMenu_EP* mainMenu;
+
+	int32 numPlayersDataForMainMenuText;
 	
 };

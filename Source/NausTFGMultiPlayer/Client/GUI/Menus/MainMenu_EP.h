@@ -41,9 +41,20 @@ public:
 
 	void SetSelectionRolToArtillery();
 
+	void UpdateNumPlayers();
+
+	void SetNumPlayersValue(int32 numPlayer);
+
 protected:
 
-	UPROPERTY(BlueprintReadOnly, Category = "Text")
-	FString RolTypeSelectedText;
+	UPROPERTY(BlueprintReadOnly, Category = "TextPlayersInfo")
+	FString rolTypeSelectedText;
+
+	UPROPERTY(BlueprintReadOnly, Category = "TextPlayersInfo")
+	FString numPlayersText;
+
+private:
+
+	int32 numPlayersValue;
 	
 };

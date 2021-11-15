@@ -6,6 +6,7 @@
 #include "GameFramework/GameMode.h"
 #include "MainMenuGameMode.generated.h"
 
+class AMainMenuPlayerController;
 /**
  * 
  */
@@ -18,4 +19,15 @@ class NAUSTFGMULTIPLAYER_API AMainMenuGameMode : public AGameMode
 public:
 
 	AMainMenuGameMode();
+
+	virtual void PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage) override;
+
+	virtual void PostLogin(APlayerController* NewPlayer) override;
+
+	void UpdateNumPlayers(int32 numPlayers);
+	
+
+private:
+
+	TArray<AMainMenuPlayerController*> PlayerControllerArray;
 };

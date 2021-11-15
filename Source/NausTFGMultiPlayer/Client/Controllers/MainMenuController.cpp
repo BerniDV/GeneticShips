@@ -7,7 +7,7 @@
 
 UMainMenuController::UMainMenuController()
 {
-
+	numPlayersDataForMainMenuText = 0;
 	InitializeMenus();
 }
 
@@ -22,12 +22,16 @@ void UMainMenuController::Init(APlayerController* MovieSceneBlends)
 {
 
 	mainMenuPlayerController = Cast<AMainMenuPlayerController>(MovieSceneBlends);
+	
 }
 
 void UMainMenuController::CreaMenus()
 {
-	
+
+
 	mainMenu = CreateWidget<UMainMenu_EP>(mainMenuPlayerController, mainMenuClass);
+	mainMenu->SetNumPlayersValue(numPlayersDataForMainMenuText);
+	mainMenu->UpdateNumPlayers();
 }
 
 void UMainMenuController::BindSignals()
@@ -79,6 +83,23 @@ void UMainMenuController::SetRoleToPilot()
 void UMainMenuController::SetRoleToArtillery()
 {
 	mainMenu->SetSelectionRolToArtillery();
+}
+
+void UMainMenuController::SetNumPLayers(int32 numPlayers)
+{
+
+	numPlayersDataForMainMenuText = numPlayers;
+}
+
+void UMainMenuController::UpdateNumPlayers()
+{
+
+	if(mainMenu)
+	{
+		mainMenu->SetNumPlayersValue(numPlayersDataForMainMenuText);
+		mainMenu->UpdateNumPlayers();
+	}
+	
 }
 
 

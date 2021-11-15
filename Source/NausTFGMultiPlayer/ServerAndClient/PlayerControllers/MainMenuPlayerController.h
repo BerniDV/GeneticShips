@@ -39,7 +39,9 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void JoinGame();
-	void JoinGame_Implementation();
+
+	UFUNCTION(Client, Reliable)
+	void UpdateNumPlayers(int32 numPlayers);
 
 
 protected:
