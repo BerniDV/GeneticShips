@@ -43,12 +43,19 @@ public:
 	UFUNCTION(Client, Reliable)
 	void UpdateNumPlayers(int32 numPlayers);
 
+	void SetId(int32 Id);
+
+	int32 GetId();
+
 
 protected:
 
 	virtual void BeginPlay() override;
 
 private:
+
+	int32 Id;
+
 	NausTFGRolTypes_Enum roleSelected;
 
 };

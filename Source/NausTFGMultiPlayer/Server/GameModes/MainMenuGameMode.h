@@ -24,10 +24,14 @@ public:
 
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 
+	virtual void Logout(AController* Exiting) override;
+
 	void UpdateNumPlayers(int32 numPlayers);
 	
 
 private:
 
-	TArray<AMainMenuPlayerController*> PlayerControllerArray;
+	TMap<int32, AMainMenuPlayerController*> PlayerControllerMap;
+
+	int32 lastPlayerControllerId;
 };

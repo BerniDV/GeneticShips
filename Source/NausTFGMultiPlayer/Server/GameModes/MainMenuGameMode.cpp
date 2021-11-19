@@ -12,6 +12,8 @@ AMainMenuGameMode::AMainMenuGameMode()
 	DefaultPawnClass = nullptr;
 	PlayerControllerClass = AMainMenuPlayerController::StaticClass();
 	GameStateClass = AMainMenuGameState::StaticClass();
+
+	lastPlayerControllerId = 0;
 	
 }
 
@@ -41,7 +43,26 @@ void AMainMenuGameMode::PostLogin(APlayerController* NewPlayer)
 
 	AMainMenuPlayerController* playerController = Cast<AMainMenuPlayerController>(NewPlayer);
 
-	PlayerControllerArray.Add(playerController);
+	lastPlayerControllerId++;
+
+	playerController->SetId(lastPlayerControllerId);
+
+	PlayerControllerMap.Add(lastPlayerControllerId, playerController);
+
+	UpdateNumPlayers(numPlayers);
+}
+
+void AMainMenuGameMode::Logout(AController* Exiting)
+{
+	Super::Logout(Exiting);
+
+	AMainMenuPlayerController* playerController = Cast<AMainMenuPlayerController>(Exiting);
+
+	int32 idToRemove = playerController->GetId();
+
+	PlayerControllerMap.Remove(idToRemove);
+
+	int32 numPlayers = GetNumPlayers();
 
 	UpdateNumPlayers(numPlayers);
 }
@@ -49,9 +70,9 @@ void AMainMenuGameMode::PostLogin(APlayerController* NewPlayer)
 void AMainMenuGameMode::UpdateNumPlayers(int32 numPlayers)
 {
 
-	for(AMainMenuPlayerController* playerController: PlayerControllerArray)
+	for(auto& Elem: PlayerControllerMap)
 	{
 
-		playerController->UpdateNumPlayers(numPlayers);
+		Elem.Value->UpdateNumPlayers(numPlayers);
 	}
 }

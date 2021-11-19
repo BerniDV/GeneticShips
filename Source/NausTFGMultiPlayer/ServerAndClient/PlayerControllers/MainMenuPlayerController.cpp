@@ -124,6 +124,18 @@ void AMainMenuPlayerController::UpdateNumPlayers_Implementation(int32 numPlayers
 	}
 }
 
+void AMainMenuPlayerController::SetId(int32 ID)
+{
+
+	Id = ID;
+}
+
+int32 AMainMenuPlayerController::GetId()
+{
+
+	return Id;
+}
+
 void AMainMenuPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
