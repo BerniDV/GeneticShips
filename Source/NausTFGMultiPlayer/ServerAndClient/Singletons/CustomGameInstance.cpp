@@ -8,15 +8,3 @@ UCustomGameInstance::UCustomGameInstance()
 
 
 }
-
-void UCustomGameInstance::SetRoleSelected(NausTFGRolTypes_Enum Role)
-{
-
-	roleSelected = Role;
-}
-
-NausTFGRolTypes_Enum UCustomGameInstance::GetRoleSelected()
-{
-
-	return roleSelected;
-}

@@ -6,6 +6,7 @@
 #include "PlayerControllerDefaultBehaviour.h"
 #include "ActionPlayerController.generated.h"
 
+enum class NausTFGRolTypes_Enum : uint8;
 /**
  * 
  */
@@ -22,11 +23,15 @@ public:
 
 	virtual void BindSignals() override;
 
+	UClass* GetDefaultPawn();
 
+	void InitializeDefaultPawn(NausTFGRolTypes_Enum type);
 
+	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
 
 private:
 
-
+	UPROPERTY(Replicated)
+	UClass* defaultPawn;
 	
 };

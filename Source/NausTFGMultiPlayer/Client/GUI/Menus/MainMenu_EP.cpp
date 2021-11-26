@@ -6,9 +6,11 @@
 UMainMenu_EP::UMainMenu_EP()
 {
 
-	rolTypeSelectedText = "Escoge rol";
+	rolTypeSelectedText = defaultRolTypeSelectedText;
 
 	numPlayersText = "Num Jugadores: 0";
+
+	buttonReadyClicked = false;
 
 	numPlayersValue = 0;
 }
@@ -27,7 +29,13 @@ void UMainMenu_EP::OnClickArtilleryButton()
 void UMainMenu_EP::OnClickImReady()
 {
 
-	signalOnClickImReady.Broadcast();
+	if(rolTypeSelectedText != defaultRolTypeSelectedText)
+	{
+
+		buttonReadyClicked = !buttonReadyClicked;
+		signalOnClickImReady.Broadcast(buttonReadyClicked);
+	}
+
 }
 
 void UMainMenu_EP::SetSelectionRolToPilot()

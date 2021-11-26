@@ -8,6 +8,7 @@
 UMainMenuController::UMainMenuController()
 {
 	numPlayersDataForMainMenuText = 0;
+	
 	InitializeMenus();
 }
 
@@ -71,7 +72,8 @@ void UMainMenuController::BindSetArtilleryAsRoleSelected()
 void UMainMenuController::BindImReadyButton()
 {
 
-	mainMenu->signalOnClickImReady.AddDynamic(mainMenuPlayerController, &AMainMenuPlayerController::JoinGame);
+	
+	mainMenu->signalOnClickImReady.AddDynamic(mainMenuPlayerController, &AMainMenuPlayerController::SetReady);
 }
 
 void UMainMenuController::SetRoleToPilot()

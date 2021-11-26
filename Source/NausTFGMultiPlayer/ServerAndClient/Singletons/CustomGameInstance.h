@@ -20,12 +20,8 @@ public:
 
 	UCustomGameInstance();
 
-	void SetRoleSelected(NausTFGRolTypes_Enum Role);
-
-	NausTFGRolTypes_Enum GetRoleSelected();
 
 private:
 
-	NausTFGRolTypes_Enum roleSelected;
 
 };

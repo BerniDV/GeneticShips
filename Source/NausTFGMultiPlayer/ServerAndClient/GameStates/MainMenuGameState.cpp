@@ -4,12 +4,14 @@
 #include "MainMenuGameState.h"
 
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/MainMenuPlayerController.h"
+#include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/MainMenuPlayerState.h"
 #include "Net/UnrealNetwork.h"
 
 AMainMenuGameState::AMainMenuGameState()
 {
 
 	bReplicates = true;
+
 }
 
 void AMainMenuGameState::SetNumPlayers(int32 num_Players)
@@ -23,6 +25,29 @@ int32 AMainMenuGameState::GetNumPlayers()
 	
 	return numPlayers;
 }
+
+int32 AMainMenuGameState::GetNumPlayersReady()
+{
+
+	int playersReady = 0;
+
+	for(auto playerState : PlayerArray)
+	{
+
+		AMainMenuPlayerState* player = Cast<AMainMenuPlayerState>(playerState);
+
+		if(player->GetIsReady())
+		{
+
+			playersReady++;
+		}
+	}
+
+	return playersReady;
+	
+	
+}
+
 
 void AMainMenuGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {

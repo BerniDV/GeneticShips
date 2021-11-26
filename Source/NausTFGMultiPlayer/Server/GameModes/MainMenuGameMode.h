@@ -26,6 +26,11 @@ public:
 
 	virtual void Logout(AController* Exiting) override;
 
+	UFUNCTION()
+	void JoinGame();
+
+	bool AreAllPlayersReady();
+
 	void UpdateNumPlayers(int32 numPlayers);
 	
 
@@ -34,4 +39,6 @@ private:
 	TMap<int32, AMainMenuPlayerController*> PlayerControllerMap;
 
 	int32 lastPlayerControllerId;
+
+	const int32 numPlayerReadyNeededToJoinGame = 1;
 };

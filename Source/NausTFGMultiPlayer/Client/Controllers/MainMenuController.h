@@ -48,6 +48,10 @@ private:
 
 	void BindImReadyButton();
 
+protected:
+
+	
+
 private:
 
 	AMainMenuPlayerController* mainMenuPlayerController;

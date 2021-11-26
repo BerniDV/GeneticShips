@@ -23,11 +23,12 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnClickArtilleryButton);
 	FOnClickArtilleryButton signalOnClickArtilleryButton;
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnClickImReady);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnClickImReady, bool, buttonReadyClicked);
 	FOnClickImReady signalOnClickImReady;
 
-	UMainMenu_EP();
 
+	UMainMenu_EP();
+	
 	UFUNCTION(BlueprintCallable, DisplayName = "OnCLickPilotButton")
 	void OnClickPilotButton();
 
@@ -53,8 +54,13 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "TextPlayersInfo")
 	FString numPlayersText;
 
-private:
+	UPROPERTY(BlueprintReadOnly, Category = "buttonReady")
+	bool buttonReadyClicked;
 
+private:
+	
 	int32 numPlayersValue;
+
+	const FString defaultRolTypeSelectedText = "Escoge rol";
 	
 };

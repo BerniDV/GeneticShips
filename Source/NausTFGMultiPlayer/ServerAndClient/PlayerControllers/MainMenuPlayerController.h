@@ -38,10 +38,12 @@ public:
 	void SetRoleToArtillery();
 
 	UFUNCTION(Server, Reliable)
-	void JoinGame();
+	void SetReady(bool ready);
 
 	UFUNCTION(Client, Reliable)
 	void UpdateNumPlayers(int32 numPlayers);
+
+	virtual void ClientTravelInternal_Implementation(const FString& URL, ETravelType TravelType, bool bSeamless, FGuid MapPackageGuid) override;
 
 	void SetId(int32 Id);
 
@@ -55,7 +57,5 @@ protected:
 private:
 
 	int32 Id;
-
-	NausTFGRolTypes_Enum roleSelected;
 
 };

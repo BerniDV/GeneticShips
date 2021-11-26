@@ -5,9 +5,12 @@
 
 #include "NausTFGMultiPlayer/Client/Controllers/MainMenuController.h"
 #include "NausTFGMultiPlayer/Client/Levels/Cameras/MainMenuCameraActor.h"
+#include "NausTFGMultiPlayer/Server/GameModes/MainMenuGameMode.h"
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "NausTFGMultiPlayer/ServerAndClient/GameStates/MainMenuGameState.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Singletons/CustomGameInstance.h"
+#include "Engine/World.h"
+#include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/MainMenuPlayerState.h"
 
 
 AMainMenuPlayerController::AMainMenuPlayerController()
@@ -15,8 +18,6 @@ AMainMenuPlayerController::AMainMenuPlayerController()
 
 
 	InitializePresentationController();
-	
-	roleSelected = NausTFGRolTypes_Enum::NoneType;
 
 }
 
@@ -82,31 +83,30 @@ void AMainMenuPlayerController::SpawnMainMenuCamera()
 
 void AMainMenuPlayerController::SetRoleToPilot()
 {
-	roleSelected = NausTFGRolTypes_Enum::PilotActionRolType;
+	NausTFGRolTypes_Enum rol = NausTFGRolTypes_Enum::PilotActionRolType;
 	Cast<UMainMenuController>(presentationController)->SetRoleToPilot();
-	Cast<UCustomGameInstance>(GetGameInstance())->SetRoleSelected(roleSelected);
+	GetPlayerState<AMainMenuPlayerState>()->SetRolType(rol);
+	
 }
 
 void AMainMenuPlayerController::SetRoleToArtillery()
 {
 
-	roleSelected = NausTFGRolTypes_Enum::ArtilleryActionRolType;
+	NausTFGRolTypes_Enum rol = NausTFGRolTypes_Enum::ArtilleryActionRolType;
 	Cast<UMainMenuController>(presentationController)->SetRoleToArtillery();
-	Cast<UCustomGameInstance>(GetGameInstance())->SetRoleSelected(roleSelected);
+	GetPlayerState<AMainMenuPlayerState>()->SetRolType(rol);
+	
 }
 
-void AMainMenuPlayerController::JoinGame_Implementation()
+void AMainMenuPlayerController::SetReady_Implementation(bool ready)
 {
-	if(!IsLocalPlayerController())
+
+	NausTFGRolTypes_Enum rol = GetPlayerState<AMainMenuPlayerState>()->GetRolType();
+
+	if(!IsLocalPlayerController() && rol != NausTFGRolTypes_Enum::NoneType)
 	{
 
-		UWorld* World = GetWorld();
-
-		if (World)
-		{
-
-			World->ServerTravel("/Game/Levels/GameLevels/TestGameLevel");
-		}
+		GetPlayerState<AMainMenuPlayerState>()->SetIsReady(ready);
 
 	}
 	
@@ -123,6 +123,19 @@ void AMainMenuPlayerController::UpdateNumPlayers_Implementation(int32 numPlayers
 
 	}
 }
+
+void AMainMenuPlayerController::ClientTravelInternal_Implementation(const FString& URL, ETravelType Travel,
+	bool bSeamless, FGuid MapPackageGuid)
+{
+
+	NausTFGRolTypes_Enum rol = GetPlayerState<AMainMenuPlayerState>()->GetRolType();
+
+	FString URLWithParameters = URL + FString::Printf(TEXT("?Role=%d"), rol);
+
+	Super::ClientTravelInternal_Implementation(URLWithParameters, Travel, bSeamless, MapPackageGuid);
+
+}
+
 
 void AMainMenuPlayerController::SetId(int32 ID)
 {
