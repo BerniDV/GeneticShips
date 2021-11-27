@@ -6,6 +6,8 @@
 #include "PlayerControllerDefaultBehaviour.h"
 #include "ActionPlayerController.generated.h"
 
+class AArtilleryActionPawn;
+class APilotActionPawn;
 enum class NausTFGRolTypes_Enum : uint8;
 /**
  * 
@@ -33,5 +35,8 @@ private:
 
 	UPROPERTY(Replicated)
 	UClass* defaultPawn;
+
+	TSubclassOf<APilotActionPawn> pilotClass;
+	TSubclassOf<AArtilleryActionPawn> artilleryClass;
 	
 };

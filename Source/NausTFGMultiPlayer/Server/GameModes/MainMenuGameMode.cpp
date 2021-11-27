@@ -81,14 +81,20 @@ void AMainMenuGameMode::JoinGame()
 
 	if(AreAllPlayersReady())
 	{
-
-		UWorld* World = GetWorld();
-
-		if (World)
+		if(GetGameState<AMainMenuGameState>()->AllPlayersRolesAreDifferent())
 		{
 
-			World->ServerTravel("/Game/Levels/GameLevels/TestGameLevel");
+			UWorld* World = GetWorld();
+
+			if (World)
+			{
+
+				World->ServerTravel("/Game/Levels/GameLevels/TestGameLevel");
+			}
 		}
+
+		//Aqui podemos decir que pasa si se repiten roles
+
 	}
 
 }

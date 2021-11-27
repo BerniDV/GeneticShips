@@ -14,6 +14,11 @@ AActionPlayerController::AActionPlayerController()
 
 	bReplicates = true;
 	defaultPawn = nullptr;
+
+	ConstructorHelpers::FClassFinder <APilotActionPawn> refPilotActionPawnBP(TEXT("/Game/ServerAndClient/Pawns/PilotActionPawn_BP"));
+	pilotClass = refPilotActionPawnBP.Class;
+	ConstructorHelpers::FClassFinder <AArtilleryActionPawn> refArtilleryActionPawnBP(TEXT("/Game/ServerAndClient/Pawns/ArtilleryActionPawn_BP"));
+	artilleryClass = refArtilleryActionPawnBP.Class;
 }
 
 void AActionPlayerController::InitializePresentationController()
@@ -47,11 +52,11 @@ void AActionPlayerController::InitializeDefaultPawn(NausTFGRolTypes_Enum type)
 	if (type == NausTFGRolTypes_Enum::PilotActionRolType)
 	{
 
-		defaultPawn = APilotActionPawn::StaticClass();
+		defaultPawn = pilotClass;
 
 	}else if (type == NausTFGRolTypes_Enum::ArtilleryActionRolType)
 	{
-		defaultPawn = AArtilleryActionPawn::StaticClass();
+		defaultPawn = artilleryClass;
 	}
 
 	

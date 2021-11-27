@@ -25,6 +25,8 @@ public:
 
 	int32 GetNumPlayersReady();
 
+	bool AllPlayersRolesAreDifferent();
+
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
 
 private:

@@ -48,6 +48,37 @@ int32 AMainMenuGameState::GetNumPlayersReady()
 	
 }
 
+bool AMainMenuGameState::AllPlayersRolesAreDifferent()
+{
+
+	bool allDifferents = true;
+
+	TSet<NausTFGRolTypes_Enum> rolTypesUsed;
+
+	for (auto playerState : PlayerArray)
+	{
+
+		AMainMenuPlayerState* player = Cast<AMainMenuPlayerState>(playerState);
+
+		NausTFGRolTypes_Enum roleSelected = player->GetRolType();
+
+		if(rolTypesUsed.Find(roleSelected))
+		{
+
+			allDifferents = false;
+			return allDifferents;
+		}else
+		{
+
+			rolTypesUsed.Add(roleSelected);
+		}
+
+	}
+
+	return allDifferents;
+
+}
+
 
 void AMainMenuGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
