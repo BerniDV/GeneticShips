@@ -21,6 +21,15 @@ enum class NausTFGRolTypes_Enum : uint8
 	NoneType
 };
 
+UENUM()
+enum class NausTFGPawnReferencesFactories_Enum : uint8
+{
+	PilotActionPawnReferenceFactory,
+
+	ArtilleryActionPawnReferenceFactory,
+
+};
+
 /*
 UCLASS()
 class NAUSTFGMULTIPLAYER_API UNausTFGEnums : public UObject

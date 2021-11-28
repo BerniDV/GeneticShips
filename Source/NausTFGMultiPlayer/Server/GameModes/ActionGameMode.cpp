@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Factories/ReferencePawnsFactory.h"
 #include "NausTFGMultiPlayer/ServerAndClient/GameStates/ActionGameState.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ArtilleryActionPlayerController.h"
@@ -27,11 +28,13 @@ FString AActionGameMode::InitNewPlayer(APlayerController* NewPlayerController, c
 	const FString& Options, const FString& Portal)
 {
 
-	NausTFGRolTypes_Enum RoleSelected = (NausTFGRolTypes_Enum) FCString::Atoi(*UGameplayStatics::ParseOption(Options, TEXT("Role")));
+	NausTFGRolTypes_Enum roleSelected = (NausTFGRolTypes_Enum) FCString::Atoi(*UGameplayStatics::ParseOption(Options, TEXT("Role")));
 
 	AActionPlayerController* playerController = Cast<AActionPlayerController>(NewPlayerController);
-	
-	playerController->InitializeDefaultPawn(RoleSelected);
+
+	UReferencePawnsFactory* factory = UReferencePawnsFactory::GetInstance();
+
+	playerController->InitializeDefaultPawn(factory->GetFactory(roleSelected));
 
 	return Super::InitNewPlayer(playerController, UniqueNetId, Options, Portal);
 }
@@ -40,13 +43,6 @@ void AActionGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 
-
-	AActionPlayerController* myController = Cast<AActionPlayerController>(NewPlayer);
-
-	AActionPawn* pawn = Cast<AActionPawn>(GetWorld()->SpawnActor(GetDefaultPawnClassForController_Implementation(myController)));
-
-	if(pawn)
-		myController->Possess(pawn);
 }
 
 UClass* AActionGameMode::GetDefaultPawnClassForController_Implementation(AController* InController)

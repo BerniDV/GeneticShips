@@ -6,6 +6,7 @@
 #include "PlayerControllerDefaultBehaviour.h"
 #include "ActionPlayerController.generated.h"
 
+class UReferencePawnsFactory;
 class AArtilleryActionPawn;
 class APilotActionPawn;
 enum class NausTFGRolTypes_Enum : uint8;
@@ -27,7 +28,7 @@ public:
 
 	UClass* GetDefaultPawn();
 
-	void InitializeDefaultPawn(NausTFGRolTypes_Enum type);
+	void InitializeDefaultPawn(UReferencePawnsFactory* factoryType);
 
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
 
