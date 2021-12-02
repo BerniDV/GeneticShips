@@ -30,7 +30,7 @@ public:
 
 	virtual void ShowNotLockingMouseCursor(UUserWidget* UIMenu);
 
-	virtual void HideAndLockMouseCursor(UUserWidget* UIMenu);
+	virtual void HideAndLockMouseCursor();
 
 	virtual void LoadMenu(UUserWidget* UIMenu);
 
@@ -41,7 +41,7 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FShowNotLockingCursor, UUserWidget*, userWidget);
 	FShowNotLockingCursor signalShowNotLockingCursor;
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHideAndLockMouseCursor, UUserWidget*, userWidget);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHideAndLockMouseCursor);
 	FHideAndLockMouseCursor signalHideAndLockMouseCursor;
 
 private:

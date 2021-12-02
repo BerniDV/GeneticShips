@@ -40,10 +40,10 @@ void UPresentationController::ShowNotLockingMouseCursor(UUserWidget* UIMenu)
 	signalShowNotLockingCursor.Broadcast(UIMenu);
 }
 
-void UPresentationController::HideAndLockMouseCursor(UUserWidget* UIMenu)
+void UPresentationController::HideAndLockMouseCursor()
 {
 
-	signalHideAndLockMouseCursor.Broadcast(UIMenu);
+	signalHideAndLockMouseCursor.Broadcast();
 }
 
 void UPresentationController::LoadMenu(UUserWidget* UIMenu)

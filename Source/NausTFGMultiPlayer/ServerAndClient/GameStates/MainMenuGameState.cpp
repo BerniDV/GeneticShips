@@ -3,6 +3,7 @@
 
 #include "MainMenuGameState.h"
 
+#include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/MainMenuPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/MainMenuPlayerState.h"
 #include "Net/UnrealNetwork.h"
@@ -62,11 +63,17 @@ bool AMainMenuGameState::AllPlayersRolesAreDifferent()
 
 		NausTFGRolTypes_Enum roleSelected = player->GetRolType();
 
+		if (roleSelected == NausTFGRolTypes_Enum::NoneType) {
+
+
+			allDifferents = false;
+		}
+
 		if(rolTypesUsed.Find(roleSelected))
 		{
 
 			allDifferents = false;
-			return allDifferents;
+			
 		}else
 		{
 

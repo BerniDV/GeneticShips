@@ -34,7 +34,9 @@ FString AActionGameMode::InitNewPlayer(APlayerController* NewPlayerController, c
 
 	UReferencePawnsFactory* factory = UReferencePawnsFactory::GetInstance();
 
-	playerController->InitializeDefaultPawn(factory->GetFactory(roleSelected));
+	factory = factory->GetFactory(roleSelected);
+
+	playerController->InitializeDefaultPawn(factory);
 
 	return Super::InitNewPlayer(playerController, UniqueNetId, Options, Portal);
 }

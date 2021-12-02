@@ -27,7 +27,7 @@ public:
 	virtual void ShowNotLockingMouseCursor(UUserWidget* UIMenu);
 
 	UFUNCTION()
-	virtual void HideAndLockMouseCursor(UUserWidget* UIMenu);
+	virtual void HideAndLockMouseCursor();
 	
 	virtual void BindSignals();
 

@@ -46,16 +46,6 @@ UClass* AActionPlayerController::GetDefaultPawn()
 void AActionPlayerController::InitializeDefaultPawn(UReferencePawnsFactory* factoryType)
 {
 
-	/*
-	if (type == NausTFGRolTypes_Enum::PilotActionRolType)
-	{
-
-		defaultPawn = pilotClass;
-
-	}else if (type == NausTFGRolTypes_Enum::ArtilleryActionRolType)
-	{
-		defaultPawn = artilleryClass;
-	}*/
 
 	defaultPawn = factoryType->CreateReference();
 
@@ -66,4 +56,11 @@ void AActionPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AActionPlayerController, defaultPawn);
+}
+
+void AActionPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	HideAndLockMouseCursor();
 }

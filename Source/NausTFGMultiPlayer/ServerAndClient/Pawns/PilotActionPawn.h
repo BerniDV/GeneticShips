@@ -6,6 +6,7 @@
 #include "ActionPawn.h"
 #include "PilotActionPawn.generated.h"
 
+class URotationComponent;
 /**
  * 
  */
@@ -18,5 +19,24 @@ class NAUSTFGMULTIPLAYER_API APilotActionPawn : public AActionPawn
 public:
 
 	APilotActionPawn();
-	
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
+
+
+protected:
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	URotationComponent* rotationComponent;
+
 };

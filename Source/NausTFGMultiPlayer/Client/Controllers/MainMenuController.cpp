@@ -54,7 +54,7 @@ void UMainMenuController::UnloadMainMenu()
 {
 
 	Super::UnloadMenu(mainMenu);
-	HideAndLockMouseCursor(mainMenu);
+	HideAndLockMouseCursor();
 }
 
 void UMainMenuController::BindSetPilotAsRoleSelected()

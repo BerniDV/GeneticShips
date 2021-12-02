@@ -3,6 +3,7 @@
 
 #include "PlayerControllerDefaultBehaviour.h"
 #include "Blueprint/UserWidget.h"
+#include "GameFramework/GameUserSettings.h"
 #include "NausTFGMultiPlayer/Client/Controllers/PresentationController.h"
 
 
@@ -39,7 +40,7 @@ void APlayerControllerDefaultBehaviour::ShowNotLockingMouseCursor(UUserWidget* U
 
 }
 
-void APlayerControllerDefaultBehaviour::HideAndLockMouseCursor(UUserWidget* UIMenu)
+void APlayerControllerDefaultBehaviour::HideAndLockMouseCursor()
 {
 
 	if(IsLocalPlayerController())
@@ -84,6 +85,12 @@ void APlayerControllerDefaultBehaviour::SetCameraActor(ACameraActor* camera)
 void APlayerControllerDefaultBehaviour::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//Pantalla modo window
+	UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
+	UserSettings->SetFullscreenMode(EWindowMode::Windowed);
+	UserSettings->SetScreenResolution(FIntPoint(960, 540));
+	UserSettings->ApplySettings(false);
 
 	CreaMenus();
 	BindSignals();
