@@ -24,17 +24,24 @@ AActionGameMode::AActionGameMode()
 
 }
 
+struct MatchOptions
+{
+	MatchOptions(const FString& i_options)
+	{
+		//...
+		roleSelected = (NausTFGRolTypes_Enum) FCString::Atoi(*UGameplayStatics::ParseOption(i_options, TEXT("Role")));
+	}
+	NausTFGRolTypes_Enum roleSelected;
+};
+
 FString AActionGameMode::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueNetId,
 	const FString& Options, const FString& Portal)
 {
-
-	NausTFGRolTypes_Enum roleSelected = (NausTFGRolTypes_Enum) FCString::Atoi(*UGameplayStatics::ParseOption(Options, TEXT("Role")));
+	MatchOptions options(Options);
 
 	AActionPlayerController* playerController = Cast<AActionPlayerController>(NewPlayerController);
 
-	UReferencePawnsFactory* factory = UReferencePawnsFactory::GetInstance();
-
-	playerController->InitializeDefaultPawn(factory->GetFactory(roleSelected));
+	playerController->Initialize(options.roleSelected);
 
 	return Super::InitNewPlayer(playerController, UniqueNetId, Options, Portal);
 }

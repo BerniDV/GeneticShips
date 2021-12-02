@@ -28,10 +28,11 @@ public:
 
 	UClass* GetDefaultPawn();
 
-	void InitializeDefaultPawn(UReferencePawnsFactory* factoryType);
-
+	//void InitializeDefaultPawn(UReferencePawnsFactory* factoryType);
+	void Initialize(NausTFGRolTypes_Enum i_type /*....*/);
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
 
+	class ActionPlayerControllerImpl;
 private:
 
 	UPROPERTY(Replicated)
@@ -39,5 +40,10 @@ private:
 
 	TSubclassOf<APilotActionPawn> pilotClass;
 	TSubclassOf<AArtilleryActionPawn> artilleryClass;
+
+
+	
+
+	ActionPlayerControllerImpl* m_impl;
 	
 };

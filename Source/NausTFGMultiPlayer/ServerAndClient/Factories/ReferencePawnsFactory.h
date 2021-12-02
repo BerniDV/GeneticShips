@@ -23,7 +23,7 @@ public:
 
 	virtual UClass* CreateReference();
 
-	UReferencePawnsFactory* GetFactory(NausTFGRolTypes_Enum factory);
+	SettingsBlabla* GetFactory(NausTFGRolTypes_Enum factory);
 
 protected:
 
