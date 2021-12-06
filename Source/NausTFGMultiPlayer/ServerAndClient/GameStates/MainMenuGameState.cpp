@@ -54,16 +54,16 @@ bool AMainMenuGameState::AllPlayersRolesAreDifferent()
 
 	bool allDifferents = true;
 
-	TSet<NausTFGRolTypes_Enum> rolTypesUsed;
+	TSet<NausTFGRolTypes> rolTypesUsed;
 
 	for (auto playerState : PlayerArray)
 	{
 
 		AMainMenuPlayerState* player = Cast<AMainMenuPlayerState>(playerState);
 
-		NausTFGRolTypes_Enum roleSelected = player->GetRolType();
+		NausTFGRolTypes roleSelected = player->GetRolType();
 
-		if (roleSelected == NausTFGRolTypes_Enum::NoneType) {
+		if (roleSelected == NausTFGRolTypes::NoneType) {
 
 
 			allDifferents = false;

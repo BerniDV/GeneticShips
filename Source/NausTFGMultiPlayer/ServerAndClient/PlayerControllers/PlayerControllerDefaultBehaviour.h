@@ -10,7 +10,7 @@ class UPresentationController;
 /**
  * 
  */
-UCLASS(Abstract)
+UCLASS()
 class NAUSTFGMULTIPLAYER_API APlayerControllerDefaultBehaviour : public APlayerController
 {
 	GENERATED_BODY()
@@ -18,15 +18,16 @@ class NAUSTFGMULTIPLAYER_API APlayerControllerDefaultBehaviour : public APlayerC
 
 public:
 
+	APlayerControllerDefaultBehaviour();
 
 	virtual void InitializePresentationController();
 
 	virtual void CreaMenus();
 
-	UFUNCTION()
+	UFUNCTION(Client, Reliable)
 	virtual void ShowNotLockingMouseCursor(UUserWidget* UIMenu);
 
-	UFUNCTION()
+	UFUNCTION(Client, Reliable)
 	virtual void HideAndLockMouseCursor();
 	
 	virtual void BindSignals();
@@ -34,6 +35,8 @@ public:
 	ACameraActor* GetCameraActor();
 
 	void SetCameraActor(ACameraActor* camera);
+
+	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
 
 protected:
 

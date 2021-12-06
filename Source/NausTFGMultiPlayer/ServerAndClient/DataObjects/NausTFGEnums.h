@@ -12,7 +12,7 @@
 
 
 UENUM()
-enum class NausTFGRolTypes_Enum : uint8
+enum class NausTFGRolTypes : uint8
 {
 	PilotActionRolType,
 

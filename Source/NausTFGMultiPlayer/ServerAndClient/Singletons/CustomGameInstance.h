@@ -7,7 +7,7 @@
 #include "CustomGameInstance.generated.h"
 
 
-enum class NausTFGRolTypes_Enum : uint8;
+enum class NausTFGRolTypes : uint8;
 /**
  * 
  */

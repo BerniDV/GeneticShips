@@ -8,9 +8,6 @@
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Factories/ReferencePawnsFactory.h"
 #include "NausTFGMultiPlayer/ServerAndClient/GameStates/ActionGameState.h"
-#include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
-#include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ArtilleryActionPlayerController.h"
-#include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/PilotActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/ActionPlayerState.h"
 
 AActionGameMode::AActionGameMode()
@@ -24,28 +21,32 @@ AActionGameMode::AActionGameMode()
 
 }
 
+struct MatchOptions
+{
+
+	MatchOptions(const FString& i_options)
+	{
+
+		roleSelected = (NausTFGRolTypes)FCString::Atoi(*UGameplayStatics::ParseOption(i_options, TEXT("Role")));
+
+	}
+
+	NausTFGRolTypes roleSelected;
+};
+
 FString AActionGameMode::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueNetId,
 	const FString& Options, const FString& Portal)
 {
 
-	NausTFGRolTypes_Enum roleSelected = (NausTFGRolTypes_Enum) FCString::Atoi(*UGameplayStatics::ParseOption(Options, TEXT("Role")));
+	MatchOptions matchOptions(Options);
 
 	AActionPlayerController* playerController = Cast<AActionPlayerController>(NewPlayerController);
 
-	UReferencePawnsFactory* factory = UReferencePawnsFactory::GetInstance();
-
-	factory = factory->GetFactory(roleSelected);
-
-	playerController->InitializeDefaultPawn(factory);
+	playerController->Initialize(matchOptions.roleSelected);
 
 	return Super::InitNewPlayer(playerController, UniqueNetId, Options, Portal);
 }
 
-void AActionGameMode::PostLogin(APlayerController* NewPlayer)
-{
-	Super::PostLogin(NewPlayer);
-
-}
 
 UClass* AActionGameMode::GetDefaultPawnClassForController_Implementation(AController* InController)
 {

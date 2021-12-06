@@ -5,12 +5,19 @@
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/GameUserSettings.h"
 #include "NausTFGMultiPlayer/Client/Controllers/PresentationController.h"
+#include "Net/UnrealNetwork.h"
 
+
+APlayerControllerDefaultBehaviour::APlayerControllerDefaultBehaviour()
+{
+
+	bReplicates = true;
+}
 
 void APlayerControllerDefaultBehaviour::InitializePresentationController()
 {
 
-	unimplemented();
+	
 }
 
 void APlayerControllerDefaultBehaviour::CreaMenus()
@@ -23,9 +30,9 @@ void APlayerControllerDefaultBehaviour::CreaMenus()
 	}
 }
 
-void APlayerControllerDefaultBehaviour::ShowNotLockingMouseCursor(UUserWidget* UIMenu)
+void APlayerControllerDefaultBehaviour::ShowNotLockingMouseCursor_Implementation(UUserWidget* UIMenu)
 {
-	if(IsLocalPlayerController())
+	if (IsLocalPlayerController())
 	{
 
 		FInputModeUIOnly InputModeData;
@@ -40,7 +47,8 @@ void APlayerControllerDefaultBehaviour::ShowNotLockingMouseCursor(UUserWidget* U
 
 }
 
-void APlayerControllerDefaultBehaviour::HideAndLockMouseCursor()
+
+void APlayerControllerDefaultBehaviour::HideAndLockMouseCursor_Implementation()
 {
 
 	if(IsLocalPlayerController())
@@ -82,6 +90,12 @@ void APlayerControllerDefaultBehaviour::SetCameraActor(ACameraActor* camera)
 	cameraActor = camera;
 }
 
+void APlayerControllerDefaultBehaviour::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& MovieSceneBlendses) const
+{
+	Super::GetLifetimeReplicatedProps(MovieSceneBlendses);
+	
+}
+
 void APlayerControllerDefaultBehaviour::BeginPlay()
 {
 	Super::BeginPlay();
@@ -92,8 +106,8 @@ void APlayerControllerDefaultBehaviour::BeginPlay()
 	UserSettings->SetScreenResolution(FIntPoint(960, 540));
 	UserSettings->ApplySettings(false);
 
-	CreaMenus();
-	BindSignals();
+	//CreaMenus();
+	//BindSignals();
 
 
 }

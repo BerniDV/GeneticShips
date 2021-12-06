@@ -30,7 +30,7 @@ public:
 	FRotator GetRotation();
 
 	//UFUNCTION(Client, Reliable)
-	void CalculateRotation(float value);
+	void ExecuteRotation(float value);
 
 	//UFUNCTION()
 	void ApplyRotation();

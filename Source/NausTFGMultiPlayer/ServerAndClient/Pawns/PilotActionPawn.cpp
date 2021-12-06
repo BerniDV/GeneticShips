@@ -3,7 +3,6 @@
 
 #include "PilotActionPawn.h"
 
-#include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/RotationComponent.h"
 #include "Net/UnrealNetwork.h"
 
 APilotActionPawn::APilotActionPawn()
@@ -13,8 +12,6 @@ APilotActionPawn::APilotActionPawn()
 
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Pilot Pawn Prepared"));
-
-	rotationComponent = CreateDefaultSubobject<URotationComponent>(TEXT("rotationComponent"));
 	
 }
 
@@ -34,12 +31,12 @@ void APilotActionPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("Turn", rotationComponent, &URotationComponent::CalculateRotation);
+	
 }
 
 void APilotActionPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	//DOREPLIFETIME(AMainMenuPlayerState, rolSelected);
+	
 }

@@ -83,7 +83,7 @@ void AMainMenuPlayerController::SpawnMainMenuCamera()
 
 void AMainMenuPlayerController::SetRoleToPilot()
 {
-	NausTFGRolTypes_Enum rol = NausTFGRolTypes_Enum::PilotActionRolType;
+	NausTFGRolTypes rol = NausTFGRolTypes::PilotActionRolType;
 	Cast<UMainMenuController>(presentationController)->SetRoleToPilot();
 	GetPlayerState<AMainMenuPlayerState>()->SetRolType(rol);
 	
@@ -92,7 +92,7 @@ void AMainMenuPlayerController::SetRoleToPilot()
 void AMainMenuPlayerController::SetRoleToArtillery()
 {
 
-	NausTFGRolTypes_Enum rol = NausTFGRolTypes_Enum::ArtilleryActionRolType;
+	NausTFGRolTypes rol = NausTFGRolTypes::ArtilleryActionRolType;
 	Cast<UMainMenuController>(presentationController)->SetRoleToArtillery();
 	GetPlayerState<AMainMenuPlayerState>()->SetRolType(rol);
 	
@@ -101,9 +101,9 @@ void AMainMenuPlayerController::SetRoleToArtillery()
 void AMainMenuPlayerController::SetReady_Implementation(bool ready)
 {
 
-	NausTFGRolTypes_Enum rol = GetPlayerState<AMainMenuPlayerState>()->GetRolType();
+	NausTFGRolTypes rol = GetPlayerState<AMainMenuPlayerState>()->GetRolType();
 
-	if(!IsLocalPlayerController() && rol != NausTFGRolTypes_Enum::NoneType)
+	if(!IsLocalPlayerController() && rol != NausTFGRolTypes::NoneType)
 	{
 
 		GetPlayerState<AMainMenuPlayerState>()->SetIsReady(ready);
@@ -128,7 +128,7 @@ void AMainMenuPlayerController::ClientTravelInternal_Implementation(const FStrin
 	bool bSeamless, FGuid MapPackageGuid)
 {
 
-	NausTFGRolTypes_Enum rol = GetPlayerState<AMainMenuPlayerState>()->GetRolType();
+	NausTFGRolTypes rol = GetPlayerState<AMainMenuPlayerState>()->GetRolType();
 
 	FString URLWithParameters = URL + FString::Printf(TEXT("?Role=%d"), rol);
 
@@ -152,6 +152,9 @@ int32 AMainMenuPlayerController::GetId()
 void AMainMenuPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	CreaMenus();
+	BindSignals();
 	
 	LoadMainMenu();
 

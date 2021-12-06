@@ -7,7 +7,7 @@
 
 AInitMenuPlayerController::AInitMenuPlayerController()
 {
-	
+	bReplicates = true;
 	InitializePresentationController();
 }
 
@@ -15,7 +15,9 @@ void AInitMenuPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-
+	CreaMenus();
+	BindSignals();
+	
 	LoadInitMenu();
 	
 }

@@ -34,17 +34,17 @@ UClass* UReferencePawnsFactory::CreateReference()
 	return nullptr;
 }
 
-UReferencePawnsFactory* UReferencePawnsFactory::GetFactory(NausTFGRolTypes_Enum factory)
+UReferencePawnsFactory* UReferencePawnsFactory::GetFactory(NausTFGRolTypes factory)
 {
 
 	UReferencePawnsFactory* resultFactory = nullptr;
 
-	if(factory == NausTFGRolTypes_Enum::PilotActionRolType)
+	if(factory == NausTFGRolTypes::PilotActionRolType)
 	{
 
 		resultFactory = pilotReferenceFactory = UPilotReferenceFactory::GetInstance();
 
-	}else if(factory == NausTFGRolTypes_Enum::ArtilleryActionRolType)
+	}else if(factory == NausTFGRolTypes::ArtilleryActionRolType)
 	{
 
 		resultFactory = artilleryReferenceFactory = UArtilleryReferenceFactory::GetInstance();

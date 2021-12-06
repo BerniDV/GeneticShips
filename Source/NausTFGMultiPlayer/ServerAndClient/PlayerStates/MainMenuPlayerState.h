@@ -7,7 +7,7 @@
 #include "MainMenuPlayerState.generated.h"
 
 
-enum class NausTFGRolTypes_Enum : uint8;
+enum class NausTFGRolTypes : uint8;
 /**
  * 
  */
@@ -28,9 +28,9 @@ public:
 
 
 	UFUNCTION(Server, Reliable)
-	void SetRolType(NausTFGRolTypes_Enum rolType);
+	void SetRolType(NausTFGRolTypes rolType);
 
-	NausTFGRolTypes_Enum GetRolType();
+	NausTFGRolTypes GetRolType();
 
 	void SetIsReady(bool ready);
 
@@ -42,7 +42,7 @@ public:
 private:
 
 	UPROPERTY(Replicated)
-	NausTFGRolTypes_Enum rolSelected;
+	NausTFGRolTypes rolSelected;
 
 	bool isReady;
 

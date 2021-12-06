@@ -6,7 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "ReferencePawnsFactory.generated.h"
 
-enum class NausTFGRolTypes_Enum : uint8;
+enum class NausTFGRolTypes : uint8;
 class UPilotReferenceFactory;
 enum class NausTFGPawnReferencesFactories_Enum : uint8;
 /**
@@ -23,7 +23,7 @@ public:
 
 	virtual UClass* CreateReference();
 
-	UReferencePawnsFactory* GetFactory(NausTFGRolTypes_Enum factory);
+	UReferencePawnsFactory* GetFactory(NausTFGRolTypes factory);
 
 protected:
 

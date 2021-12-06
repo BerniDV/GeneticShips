@@ -3,64 +3,109 @@
 
 #include "ActionPlayerController.h"
 
-#include "NausTFGMultiPlayer/Client/Controllers/MainMenuController.h"
+#include "ArtilleryActionPlayerController.h"
+#include "PilotActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
-#include "NausTFGMultiPlayer/ServerAndClient/Factories/ReferencePawnsFactory.h"
-#include "NausTFGMultiPlayer/ServerAndClient/Pawns/ArtilleryActionPawn.h"
-#include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
 #include "Net/UnrealNetwork.h"
+
+
 
 AActionPlayerController::AActionPlayerController()
 {
-
-	bReplicates = true;
-	defaultPawn = nullptr;
-
+	
 	
 }
 
-void AActionPlayerController::InitializePresentationController()
-{
-
-	if (IsLocalPlayerController())
-	{
-		//Placeholder para no crash, se sustituye por inGameMenu
-		presentationController = NewObject<UMainMenuController>();
-
-		presentationController->Init(this);
-	}
-}
 
 void AActionPlayerController::BindSignals()
 {
-	
+	Super::BindSignals();
 
+	playerControllerImpl->BindSignals();
 }
+
+
 
 UClass* AActionPlayerController::GetDefaultPawn()
 {
 
-	return defaultPawn;
+	return playerControllerImpl->GetDefaultPawn();
 }
 
-void AActionPlayerController::InitializeDefaultPawn(UReferencePawnsFactory* factoryType)
+
+void AActionPlayerController::Initialize(NausTFGRolTypes roleType)
 {
 
+	switch (roleType)
+	{
 
-	defaultPawn = factoryType->CreateReference();
+	case NausTFGRolTypes::ArtilleryActionRolType:
+
+		playerControllerImpl = GetWorld()->SpawnActor<AArtilleryActionPlayerController>();
+
+		break;
+
+	case NausTFGRolTypes::PilotActionRolType:
+
+		playerControllerImpl = GetWorld()->SpawnActor<APilotActionPlayerController>();
+
+		break;
+		
+	default:
+		break;
+	}
+
+	
+	playerControllerImpl->SetOwner(this);
+
 
 }
+
+void AActionPlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+
+	if(playerControllerImpl && IsLocalPlayerController())
+	{
+		
+		InputComponent->BindAxis("Turn", playerControllerImpl, &AActionPlayerControllerImpl::Rotate);
+	}
+	
+}
+
+//Esta funcion es un callback del momento en el que el servidor replica al cliente playerControllerImpl
+void AActionPlayerController::InitializeClientPlayerControllerImpl_Implementation()
+{
+
+	presentationController = playerControllerImpl->GetPresentationController();
+	SetupInputComponent();
+	CreaMenus();
+	BindSignals();
+	HideAndLockMouseCursor();
+
+}
+
 
 void AActionPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(AActionPlayerController, defaultPawn);
+	//A tots o només client owner?
+	DOREPLIFETIME(AActionPlayerController, playerControllerImpl);
 }
+
 
 void AActionPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	HideAndLockMouseCursor();
+
+}
+
+void AActionPlayerController::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if(IsLocalPlayerController() && playerControllerImpl)
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%d"), playerControllerImpl->pruebaReplicate));
 }

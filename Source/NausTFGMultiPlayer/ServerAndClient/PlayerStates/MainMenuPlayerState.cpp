@@ -17,11 +17,11 @@ void AMainMenuPlayerState::OnPlayerReady()
 AMainMenuPlayerState::AMainMenuPlayerState()
 {
 
-	rolSelected = NausTFGRolTypes_Enum::NoneType;
+	rolSelected = NausTFGRolTypes::NoneType;
 	isReady = false;
 }
 
-void AMainMenuPlayerState::SetRolType_Implementation(NausTFGRolTypes_Enum rolType)
+void AMainMenuPlayerState::SetRolType_Implementation(NausTFGRolTypes rolType)
 {
 
 	rolSelected = rolType;
@@ -29,7 +29,7 @@ void AMainMenuPlayerState::SetRolType_Implementation(NausTFGRolTypes_Enum rolTyp
 }
 
 
-NausTFGRolTypes_Enum AMainMenuPlayerState::GetRolType()
+NausTFGRolTypes AMainMenuPlayerState::GetRolType()
 {
 
 	return rolSelected;

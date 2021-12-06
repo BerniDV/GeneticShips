@@ -3,6 +3,8 @@
 
 #include "RotationComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
+#include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
+#include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerControllerImpl.h"
 #include "Net/UnrealNetwork.h"
 
 // Sets default values for this component's properties
@@ -20,8 +22,6 @@ URotationComponent::URotationComponent()
 void URotationComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//owner->InputComponent->BindAxis("Turn", owner, &AActionPawn::AddControllerYawInput);
 	
 }
 
@@ -48,14 +48,15 @@ FRotator URotationComponent::GetRotation()
 	return rotation;
 }
 
-void URotationComponent::CalculateRotation(float value)
+void URotationComponent::ExecuteRotation(float value)
 {
 
 	yawRotation += value;
 
 	rotation = FRotator(0.f, yawRotation, 0.f);
 
-	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::Printf(TEXT("%f"), value));
+	if(!GetOwner()->HasAuthority())
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::Printf(TEXT("%f"), value));
 
 	ApplyRotation();
 
@@ -65,6 +66,10 @@ void URotationComponent::CalculateRotation(float value)
 void URotationComponent::ApplyRotation()
 {
 
-	GetOwner()->SetActorRotation(rotation);
+	AActionPlayerControllerImpl* playerControllerImpl = Cast<AActionPlayerControllerImpl>(GetOwner());
+
+	AActionPlayerController* playerController = Cast<AActionPlayerController>(playerControllerImpl->GetOwner());
+
+	playerController->GetPawn()->SetActorRotation(rotation);
 }
 

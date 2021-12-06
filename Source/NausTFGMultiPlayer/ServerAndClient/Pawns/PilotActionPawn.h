@@ -6,7 +6,6 @@
 #include "ActionPawn.h"
 #include "PilotActionPawn.generated.h"
 
-class URotationComponent;
 /**
  * 
  */
@@ -33,10 +32,5 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
 
-
-protected:
-
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
-	URotationComponent* rotationComponent;
 
 };

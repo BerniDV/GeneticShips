@@ -4,12 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "PlayerControllerDefaultBehaviour.h"
+#include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "ActionPlayerController.generated.h"
 
+class AActionPlayerControllerImpl;
 class UReferencePawnsFactory;
 class AArtilleryActionPawn;
 class APilotActionPawn;
-enum class NausTFGRolTypes_Enum : uint8;
+enum class NausTFGRolTypes : uint8;
 /**
  * 
  */
@@ -22,26 +24,30 @@ public:
 
 	AActionPlayerController();
 
-	virtual void InitializePresentationController() override;
-
-	virtual void BindSignals() override;
+	 virtual void BindSignals() override;
 
 	UClass* GetDefaultPawn();
 
-	void InitializeDefaultPawn(UReferencePawnsFactory* factoryType);
+	void Initialize(NausTFGRolTypes roleType);
+
+	virtual void SetupInputComponent() override;
+
+	UFUNCTION(Client, Reliable)
+	void InitializeClientPlayerControllerImpl();
 
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
+
 
 protected:
 
 	virtual void BeginPlay() override;
 
+	virtual void Tick(float DeltaSeconds) override;
+
+
 private:
 
-	UPROPERTY(Replicated)
-	UClass* defaultPawn;
-
-	TSubclassOf<APilotActionPawn> pilotClass;
-	TSubclassOf<AArtilleryActionPawn> artilleryClass;
+	UPROPERTY(ReplicatedUsing = InitializeClientPlayerControllerImpl)
+	AActionPlayerControllerImpl* playerControllerImpl;
 	
 };
