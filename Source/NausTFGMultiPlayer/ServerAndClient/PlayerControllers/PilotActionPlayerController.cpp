@@ -11,7 +11,7 @@ APilotActionPlayerController::APilotActionPlayerController()
 {
 
 	bReplicates = true;
-	bAlwaysRelevant = true;
+	//bAlwaysRelevant = true;
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Pilot Controller Prepared"));
 

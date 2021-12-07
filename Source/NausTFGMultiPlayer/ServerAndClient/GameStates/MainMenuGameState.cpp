@@ -4,7 +4,6 @@
 #include "MainMenuGameState.h"
 
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
-#include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/MainMenuPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/MainMenuPlayerState.h"
 #include "Net/UnrealNetwork.h"
 
@@ -53,11 +52,15 @@ bool AMainMenuGameState::AllPlayersRolesAreDifferent()
 {
 
 	bool allDifferents = true;
+	bool playersWaiting = false;
 
 	TSet<NausTFGRolTypes> rolTypesUsed;
+	TArray<APlayerState*> myPlayerStates = PlayerArray;
 
-	for (auto playerState : PlayerArray)
+	for (auto playerState : myPlayerStates)
 	{
+		if(!playersWaiting)
+			playersWaiting = true;
 
 		AMainMenuPlayerState* player = Cast<AMainMenuPlayerState>(playerState);
 
@@ -66,7 +69,7 @@ bool AMainMenuGameState::AllPlayersRolesAreDifferent()
 		if (roleSelected == NausTFGRolTypes::NoneType) {
 
 
-			allDifferents = false;
+			return false;
 		}
 
 		if(rolTypesUsed.Find(roleSelected))
@@ -82,7 +85,7 @@ bool AMainMenuGameState::AllPlayersRolesAreDifferent()
 
 	}
 
-	return allDifferents;
+	return allDifferents && playersWaiting;
 
 }
 
