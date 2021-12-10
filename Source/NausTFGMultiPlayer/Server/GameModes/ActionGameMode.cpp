@@ -18,7 +18,6 @@ AActionGameMode::AActionGameMode()
 	PlayerControllerClass = AActionPlayerController::StaticClass();
 	GameStateClass = AActionGameState::StaticClass();
 
-
 }
 
 struct MatchOptions

@@ -26,4 +26,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	virtual void Server_SetRotation(FRotator rotator);
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void Client_SetRotation(FRotator rotator);
+
 };

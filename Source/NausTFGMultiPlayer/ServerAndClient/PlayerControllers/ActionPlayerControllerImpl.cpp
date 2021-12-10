@@ -13,11 +13,9 @@ AActionPlayerControllerImpl::AActionPlayerControllerImpl()
 	PrimaryActorTick.bCanEverTick = true;
 
 	bReplicates = true;
+	bOnlyRelevantToOwner = true;
 
-	//Normas de replicacion, hacer networkmanager para replicar segun proximidad (replicar solo pawns?)
-	//bAlwaysRelevant = true;
 	pruebaReplicate = 0;
-	
 }
 
 void AActionPlayerControllerImpl::InitializePresentationController()

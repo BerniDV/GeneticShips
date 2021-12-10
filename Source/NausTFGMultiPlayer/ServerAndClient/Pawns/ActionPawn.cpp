@@ -6,6 +6,9 @@
 // Sets default values
 AActionPawn::AActionPawn()
 {
+
+	bReplicates = true;
+
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -24,7 +27,7 @@ void AActionPawn::BeginPlay()
 void AActionPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 }
 
 // Called to bind functionality to input
@@ -33,4 +36,30 @@ void AActionPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
+
+void AActionPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+
+}
+
+void AActionPawn::Client_SetRotation_Implementation(FRotator rotator)
+{
+
+	SetActorRotation(rotator);
+}
+
+void AActionPawn::Server_SetRotation_Implementation(FRotator rotator)
+{
+
+	Client_SetRotation(rotator);
+}
+
+bool AActionPawn::Server_SetRotation_Validate(FRotator rotator)
+{
+
+	return true;
+}
+
 

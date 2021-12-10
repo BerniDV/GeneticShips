@@ -9,7 +9,7 @@ APilotActionPawn::APilotActionPawn()
 {
 
 	bReplicates = true;
-
+	
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Pilot Pawn Prepared"));
 	

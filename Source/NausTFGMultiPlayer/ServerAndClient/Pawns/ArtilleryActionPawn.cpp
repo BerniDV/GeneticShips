@@ -6,6 +6,8 @@
 AArtilleryActionPawn::AArtilleryActionPawn()
 {
 
+	bReplicates = true;
+
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Artillery Pawn Prepared"));
 }

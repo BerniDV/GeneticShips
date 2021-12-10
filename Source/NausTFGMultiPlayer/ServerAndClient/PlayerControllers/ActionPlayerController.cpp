@@ -91,7 +91,7 @@ void AActionPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	//A tots o només client owner?
-	DOREPLIFETIME(AActionPlayerController, playerControllerImpl);
+	DOREPLIFETIME_CONDITION(AActionPlayerController, playerControllerImpl, COND_OwnerOnly);
 }
 
 

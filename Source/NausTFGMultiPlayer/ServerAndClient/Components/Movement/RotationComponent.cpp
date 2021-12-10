@@ -70,6 +70,6 @@ void URotationComponent::ApplyRotation()
 
 	AActionPlayerController* playerController = Cast<AActionPlayerController>(playerControllerImpl->GetOwner());
 
-	playerController->GetPawn()->SetActorRotation(rotation);
+	Cast<AActionPawn>(playerController->GetPawn())->Server_SetRotation(rotation);
 }
 
