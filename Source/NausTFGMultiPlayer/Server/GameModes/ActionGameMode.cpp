@@ -17,7 +17,7 @@ AActionGameMode::AActionGameMode()
 	PlayerStateClass = AActionPlayerState::StaticClass();
 	PlayerControllerClass = AActionPlayerController::StaticClass();
 	GameStateClass = AActionGameState::StaticClass();
-
+	
 }
 
 struct MatchOptions
@@ -29,7 +29,7 @@ struct MatchOptions
 		roleSelected = (NausTFGRolTypes)FCString::Atoi(*UGameplayStatics::ParseOption(i_options, TEXT("Role")));
 
 	}
-
+	
 	NausTFGRolTypes roleSelected;
 };
 
@@ -44,6 +44,7 @@ FString AActionGameMode::InitNewPlayer(APlayerController* NewPlayerController, c
 	playerController->Initialize(matchOptions.roleSelected);
 
 	return Super::InitNewPlayer(playerController, UniqueNetId, Options, Portal);
+	
 }
 
 
@@ -67,3 +68,9 @@ UClass* AActionGameMode::GetDefaultPawnClassForController_Implementation(AContro
 
 	return Super::GetDefaultPawnClassForController_Implementation(InController);
 }
+
+
+
+
+
+

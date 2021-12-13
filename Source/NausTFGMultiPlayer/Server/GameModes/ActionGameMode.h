@@ -18,6 +18,7 @@ public:
 
 	AActionGameMode();
 
+	
 	virtual FString InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId, const FString& Options, const FString& Portal) override;
 
 	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
