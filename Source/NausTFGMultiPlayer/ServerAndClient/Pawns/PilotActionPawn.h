@@ -34,4 +34,14 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
 
 
+	virtual void MoveForward(float movement) override;
+
+	virtual void MoveRight(float movement) override;
+
+protected:
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Replicated)
+	UTranslationComponent* translationComponent;
+
+
 };

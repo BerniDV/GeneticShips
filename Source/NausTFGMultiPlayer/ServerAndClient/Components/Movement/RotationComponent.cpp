@@ -55,8 +55,8 @@ void URotationComponent::ExecuteRotation(float value)
 
 	rotation = FRotator(0.f, yawRotation, 0.f);
 
-	if(!GetOwner()->HasAuthority())
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::Printf(TEXT("%f"), value));
+	//if(!GetOwner()->HasAuthority())
+		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::Printf(TEXT("%f"), value));
 
 	ApplyRotation();
 

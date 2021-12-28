@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "ActionPawn.generated.h"
 
+class UTranslationComponent;
 UCLASS()
 class NAUSTFGMULTIPLAYER_API AActionPawn : public APawn
 {
@@ -33,5 +34,11 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void Client_SetRotation(FRotator rotator);
+
+	virtual void MoveForward(float movement);
+
+	virtual void MoveRight(float movement);
+
+
 
 };

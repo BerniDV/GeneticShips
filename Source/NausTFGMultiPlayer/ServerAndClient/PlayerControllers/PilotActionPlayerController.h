@@ -6,6 +6,7 @@
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerControllerImpl.h"
 #include "PilotActionPlayerController.generated.h"
 
+class UTranslationComponent;
 class URotationComponent;
 /**
  * 
@@ -31,15 +32,20 @@ public:
 
 	virtual void Rotate(float turnValue) override;
 
+	void MoveForward(float movement) override;
+
+	void MoveRight(float movement) override;
+
+
 protected:
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
-	URotationComponent* rotationComponent;
+	
 
 private:
 
 	UClass* reference;
-
-	
 	
 };
+
+
+

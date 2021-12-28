@@ -13,7 +13,7 @@
 AActionPlayerController::AActionPlayerController()
 {
 	
-	
+	bReplicates = true;
 }
 
 
@@ -69,6 +69,8 @@ void AActionPlayerController::SetupInputComponent()
 	{
 		
 		InputComponent->BindAxis("Turn", playerControllerImpl, &AActionPlayerControllerImpl::Rotate);
+		InputComponent->BindAxis("MoveForward", playerControllerImpl, &AActionPlayerControllerImpl::MoveForward);
+		InputComponent->BindAxis("MoveRight", playerControllerImpl, &AActionPlayerControllerImpl::MoveRight);
 	}
 	
 }

@@ -60,6 +60,17 @@ void AActionPlayerControllerImpl::Rotate(float turnValue)
 
 }
 
+void AActionPlayerControllerImpl::MoveForward(float movement)
+{
+
+}
+
+void AActionPlayerControllerImpl::MoveRight(float movement)
+{
+
+
+}
+
 
 void AActionPlayerControllerImpl::BeginPlay()
 {

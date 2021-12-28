@@ -5,6 +5,7 @@
 
 #include "ActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/RotationComponent.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/TranslationComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
 
 APilotActionPlayerController::APilotActionPlayerController()
@@ -34,7 +35,6 @@ void APilotActionPlayerController::BeginPlay()
 void APilotActionPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
 	
 	
 }
@@ -51,3 +51,22 @@ void APilotActionPlayerController::Rotate(float turnValue)
 	rotationComponent->ExecuteRotation(turnValue);
 	
 }
+
+void APilotActionPlayerController::MoveForward(float movement)
+{
+
+	AActionPlayerController* playerController = Cast<AActionPlayerController>(GetOwner());
+	Cast<AActionPawn>(playerController->GetPawn())->MoveForward(movement);
+}
+
+void APilotActionPlayerController::MoveRight(float movement)
+{
+
+	AActionPlayerController* playerController = Cast<AActionPlayerController>(GetOwner());
+	Cast<AActionPawn>(playerController->GetPawn())->MoveRight(movement);
+}
+
+
+
+
+

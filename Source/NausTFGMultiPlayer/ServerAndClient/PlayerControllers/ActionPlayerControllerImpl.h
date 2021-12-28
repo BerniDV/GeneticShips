@@ -6,6 +6,8 @@
 #include "PlayerControllerDefaultBehaviour.h"
 #include "ActionPlayerControllerImpl.generated.h"
 
+class URotationComponent;
+class UTranslationComponent;
 class UPresentationController;
 /**
  * 
@@ -32,6 +34,10 @@ public:
 
 	virtual void Rotate(float turnValue);
 
+	virtual void MoveForward(float movement);
+
+	virtual void MoveRight(float movement);
+
 	UPROPERTY(Replicated)
 	int pruebaReplicate;
 
@@ -40,6 +46,11 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaSeconds) override;
+
+protected:
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
+	URotationComponent* rotationComponent;
 
 private:
 

@@ -3,6 +3,8 @@
 
 #include "ActionPawn.h"
 
+#include "Net/UnrealNetwork.h"
+
 // Sets default values
 AActionPawn::AActionPawn()
 {
@@ -41,7 +43,15 @@ void AActionPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	
+}
 
+void AActionPawn::MoveForward(float movement)
+{
+}
+
+void AActionPawn::MoveRight(float movement)
+{
 }
 
 void AActionPawn::Client_SetRotation_Implementation(FRotator rotator)
