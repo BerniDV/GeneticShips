@@ -2,6 +2,8 @@
 
 
 #include "PilotActionPawn.h"
+
+#include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/RotationComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/TranslationComponent.h"
 #include "Net/UnrealNetwork.h"
 
@@ -15,6 +17,9 @@ APilotActionPawn::APilotActionPawn()
 
 	translationComponent = CreateDefaultSubobject<UTranslationComponent>(TEXT("translationComponent"));
 	translationComponent->SetIsReplicated(true);
+
+	rotationComponent = CreateDefaultSubobject<URotationComponent>(TEXT("rotationComponent"));
+	rotationComponent->SetIsReplicated(true);
 
 	NetUpdateFrequency = 2.5f;
 	
@@ -45,6 +50,7 @@ void APilotActionPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(APilotActionPawn, translationComponent);
+	DOREPLIFETIME(APilotActionPawn, rotationComponent);
 	
 }
 
@@ -58,4 +64,10 @@ void APilotActionPawn::MoveRight(float movement)
 {
 
 	translationComponent->MoveRight(movement);
+}
+
+void APilotActionPawn::ExecuteRotation(float turnValue)
+{
+	
+	rotationComponent->ExecuteRotation(turnValue);
 }

@@ -19,8 +19,6 @@ APilotActionPlayerController::APilotActionPlayerController()
 	ConstructorHelpers::FClassFinder <APilotActionPawn> refPilotActionPawnBP(TEXT("/Game/ServerAndClient/Pawns/PilotActionPawn_BP"));
 	reference = refPilotActionPawnBP.Class;
 
-	rotationComponent = CreateDefaultSubobject<URotationComponent>(TEXT("rotationComponent"));
-
 }
 
 void APilotActionPlayerController::BeginPlay()
@@ -48,7 +46,8 @@ UClass* APilotActionPlayerController::GetDefaultPawn()
 void APilotActionPlayerController::Rotate(float turnValue)
 {
 
-	rotationComponent->ExecuteRotation(turnValue);
+	AActionPlayerController* playerController = Cast<AActionPlayerController>(GetOwner());
+	Cast<AActionPawn>(playerController->GetPawn())->ExecuteRotation(turnValue);
 	
 }
 

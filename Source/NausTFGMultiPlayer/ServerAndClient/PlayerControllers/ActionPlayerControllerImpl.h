@@ -49,8 +49,6 @@ protected:
 
 protected:
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite)
-	URotationComponent* rotationComponent;
 
 private:
 

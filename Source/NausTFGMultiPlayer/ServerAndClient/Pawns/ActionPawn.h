@@ -39,6 +39,8 @@ public:
 
 	virtual void MoveRight(float movement);
 
+	virtual void ExecuteRotation(float turnValue);
+
 
 
 };

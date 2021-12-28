@@ -66,10 +66,6 @@ void URotationComponent::ExecuteRotation(float value)
 void URotationComponent::ApplyRotation()
 {
 
-	AActionPlayerControllerImpl* playerControllerImpl = Cast<AActionPlayerControllerImpl>(GetOwner());
-
-	AActionPlayerController* playerController = Cast<AActionPlayerController>(playerControllerImpl->GetOwner());
-
-	Cast<AActionPawn>(playerController->GetPawn())->Server_SetRotation(rotation);
+	Cast<AActionPawn>(GetOwner())->Server_SetRotation(rotation);
 }
 

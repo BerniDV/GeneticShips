@@ -6,6 +6,7 @@
 #include "ActionPawn.h"
 #include "PilotActionPawn.generated.h"
 
+class URotationComponent;
 /**
  * 
  */
@@ -38,10 +39,15 @@ public:
 
 	virtual void MoveRight(float movement) override;
 
+	virtual void ExecuteRotation(float turnValue) override;
+
 protected:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Replicated)
 	UTranslationComponent* translationComponent;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Replicated)
+	URotationComponent* rotationComponent;
 
 
 };
