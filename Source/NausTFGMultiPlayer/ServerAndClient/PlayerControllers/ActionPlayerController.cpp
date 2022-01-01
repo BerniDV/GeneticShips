@@ -108,6 +108,6 @@ void AActionPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if(IsLocalPlayerController() && playerControllerImpl)
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%d"), playerControllerImpl->pruebaReplicate));
+	//if(IsLocalPlayerController() && playerControllerImpl)
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%d"), playerControllerImpl->pruebaReplicate));
 }

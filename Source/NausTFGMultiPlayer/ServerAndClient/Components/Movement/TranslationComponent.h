@@ -6,6 +6,16 @@
 #include "Components/ActorComponent.h"
 #include "TranslationComponent.generated.h"
 
+USTRUCT(BlueprintType)
+struct FMovementPack
+{
+	GENERATED_BODY()
+
+	FVector direction;
+
+	FVector position;
+};
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class NAUSTFGMULTIPLAYER_API UTranslationComponent : public UActorComponent
@@ -20,6 +30,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -31,20 +43,35 @@ public:
 	void MoveRight(float movement);
 
 	UFUNCTION(Server, Unreliable, WithValidation)
-	void MoveForward_Server(FVector movement);
+	void Move_Server(FVector movement, FVector _direction);
 
-	UFUNCTION(Server, Unreliable, WithValidation)
-	void MoveRight_Server(FVector movement);
+	bool SimilarEnough(FVector FPosition, FVector SPosition);
 
 
 private:
 
 	UFUNCTION()
+	void ApplyMovementWithInterpolation();
+
 	void ApplyMovement();
 
-	UPROPERTY(replicatedUsing = ApplyMovement)
+	UPROPERTY(replicatedUsing = ApplyMovementWithInterpolation)
 	FVector position;
 
+	FVector predictedPosition;
+
+	FVector interpolatedPosition;
+
+	UPROPERTY(Replicated)
+	FVector direction;
+
 	float movementSpeedInCm;
+
+	float delay;
+	float current;
+
+	bool bfirstUpdate;
+
+	bool bisMoving;
 		
 };

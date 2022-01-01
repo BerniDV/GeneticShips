@@ -3,10 +3,10 @@
 
 #include "TranslationComponent.h"
 
+#include "Kismet/KismetMathLibrary.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
-#include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerControllerImpl.h"
 #include "Net/UnrealNetwork.h"
 
 
@@ -17,9 +17,8 @@ UTranslationComponent::UTranslationComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	position = FVector::ZeroVector;
-
 	movementSpeedInCm = 140.f;
+
 }
 
 
@@ -29,7 +28,14 @@ void UTranslationComponent::BeginPlay()
 	Super::BeginPlay();
 
 	position = GetOwner()->GetActorLocation();
-	
+	predictedPosition = position;
+	interpolatedPosition = position;
+	direction = FVector::ZeroVector;
+	bfirstUpdate = true;
+	bisMoving = false;
+	delay = 1;
+	current = 0;
+
 }
 
 
@@ -38,8 +44,30 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if(!GetOwner()->HasAuthority())
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%d"), position.X));
+	//interpolation with the predicted position
+
+	current += DeltaTime;
+
+	if (!SimilarEnough(interpolatedPosition, predictedPosition) && bisMoving) {
+		
+		interpolatedPosition = FMath::Lerp(interpolatedPosition, predictedPosition, DeltaTime/(float)delay);
+
+		//interpolatedPosition = position + movementSpeedInCm * direction * current;
+
+	}
+	else if(!SimilarEnough(interpolatedPosition, position))
+	{	//En caso de llegar a una interpolacion completa significa que el jugador ya no se mueve, y por lo tanto rectificamos el ultimo movimiento predicho y lo ponemos en la posición final
+		bisMoving = false;
+		predictedPosition = position;
+		interpolatedPosition = FMath::Lerp(interpolatedPosition, position, DeltaTime/(delay));
+	}
+
+	Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition);
+
+
+	//if (!GetOwner()->HasAuthority())
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, position.ToString() + "  " + predictedPosition.ToString() + "  " + interpolatedPosition.ToString() + "  " + direction.ToString());
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%f"), (float)((float)current / (float)delay)));
 }
 
 void UTranslationComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -47,6 +75,8 @@ void UTranslationComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME_CONDITION(UTranslationComponent, position, COND_SkipOwner);
+	DOREPLIFETIME_CONDITION(UTranslationComponent, direction, COND_SkipOwner);
+
 }
 
 void UTranslationComponent::MoveRight(float movement)
@@ -56,15 +86,35 @@ void UTranslationComponent::MoveRight(float movement)
 
 	AActionPlayerController* playerController = Cast<AActionPlayerController>(myPawn->GetController());
 
-	FVector rightVector = FRotationMatrix(playerController->GetControlRotation()).GetScaledAxis(EAxis::Y);
+	direction = FRotationMatrix(playerController->GetControlRotation()).GetScaledAxis(EAxis::Y);
 
 
-	position += movement * rightVector * GetWorld()->DeltaTimeSeconds * movementSpeedInCm;
+	position += movement * direction * GetWorld()->DeltaTimeSeconds * movementSpeedInCm;
 
 	ApplyMovement();
 
-	MoveRight_Server(position);
+	Move_Server(position, direction);
 }
+
+void UTranslationComponent::Move_Server_Implementation(FVector movement, FVector _direction)
+{
+
+	APilotActionPawn* myPawn = Cast<APilotActionPawn>(GetOwner());
+	AActionPlayerController* playerController = Cast<AActionPlayerController>(myPawn->GetController());
+	direction = _direction;
+	position = movement;
+	
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, direction.ToString());
+
+	ApplyMovement();
+}
+
+bool UTranslationComponent::Move_Server_Validate(FVector movement, FVector _direction)
+{
+
+	return true;
+}
+
 
 void UTranslationComponent::MoveForward(float movement)
 {
@@ -73,49 +123,54 @@ void UTranslationComponent::MoveForward(float movement)
 
 	AActionPlayerController* playerController = Cast<AActionPlayerController>(myPawn->GetController());
 
-	FVector forwardVector = FRotationMatrix(playerController->GetControlRotation()).GetScaledAxis(EAxis::X);
+	direction = FRotationMatrix(playerController->GetControlRotation()).GetScaledAxis(EAxis::X);
 
-	position += movement * forwardVector * GetWorld()->DeltaTimeSeconds * movementSpeedInCm;
+	position += movement * direction * GetWorld()->DeltaTimeSeconds * movementSpeedInCm;
 
 	ApplyMovement();
 
-	MoveForward_Server(position);
+	Move_Server(position, direction);
 }
 
-void UTranslationComponent::MoveForward_Server_Implementation(FVector movement)
+
+bool UTranslationComponent::SimilarEnough(FVector FPosition, FVector SPosition)
 {
 
-	position = movement;
-
+	return UKismetMathLibrary::Abs(FPosition.X - SPosition.X) < 0.1f && UKismetMathLibrary::Abs(FPosition.Y - SPosition.Y) < 0.1f && UKismetMathLibrary::Abs(FPosition.Z - SPosition.Z) < 0.1f;
 }
 
-bool UTranslationComponent::MoveForward_Server_Validate(FVector movement)
+void UTranslationComponent::ApplyMovementWithInterpolation()
 {
+	//Multiplicar velocidad por vector de direccion por tiempo que hemos estado sin updatear
+	
+	if(bfirstUpdate)
+	{
 
-	return true;
+		bfirstUpdate = false;
+		predictedPosition = position;
+
+	}else
+	{
+		//interpolatedPosition = position;
+
+		delay = 0.2f;
+		current = 0;
+		predictedPosition = position + movementSpeedInCm * direction * GetWorld()->DeltaTimeSeconds * delay;
+
+	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Update");
+
+	bisMoving = true;
 }
-
-
-void UTranslationComponent::MoveRight_Server_Implementation(FVector movement)
-{
-
-	position = movement;
-
-}
-
-bool UTranslationComponent::MoveRight_Server_Validate(FVector movement)
-{
-
-	return true;
-}
-
 
 void UTranslationComponent::ApplyMovement()
 {
 
-
+	predictedPosition = position;
+	interpolatedPosition = position;
 	Cast<AActionPawn>(GetOwner())->SetActorLocation(position);
-	
+
 }
 
 
