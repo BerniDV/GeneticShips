@@ -6,16 +6,6 @@
 #include "Components/ActorComponent.h"
 #include "TranslationComponent.generated.h"
 
-USTRUCT(BlueprintType)
-struct FMovementPack
-{
-	GENERATED_BODY()
-
-	FVector direction;
-
-	FVector position;
-};
-
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class NAUSTFGMULTIPLAYER_API UTranslationComponent : public UActorComponent
@@ -43,9 +33,11 @@ public:
 	void MoveRight(float movement);
 
 	UFUNCTION(Server, Unreliable, WithValidation)
-	void Move_Server(FVector movement, FVector _direction);
+	void Move_Server(FVector movement, FVector _direction, float _currentTime);
 
 	bool SimilarEnough(FVector FPosition, FVector SPosition);
+
+	bool DistinctEnough(FVector FPosition, FVector SPosition);
 
 
 private:
@@ -55,23 +47,41 @@ private:
 
 	void ApplyMovement();
 
-	UPROPERTY(replicatedUsing = ApplyMovementWithInterpolation)
+	UPROPERTY(ReplicatedUsing = ApplyMovementWithInterpolation)
 	FVector position;
 
+	FVector lastPosition;
+	FVector currentPosition;
+
 	FVector predictedPosition;
+	FVector lastPredictedPosition;
 
 	FVector interpolatedPosition;
 
 	UPROPERTY(Replicated)
 	FVector direction;
+	FVector lastDirection;
+
+	FVector forwardDirection;
+	FVector rightDirection;
 
 	float movementSpeedInCm;
 
 	float delay;
-	float current;
+	float currentTime;
+	float timeSinceLastInput;
+
+	UPROPERTY(Replicated)
+	float updateTimeStamp;
+	float lastUpdateTimeStamp;
+
+	float interpolationSpeed;
+	float lastInterpolationSpeed;
 
 	bool bfirstUpdate;
 
 	bool bisMoving;
 		
 };
+
+

@@ -21,7 +21,7 @@ APilotActionPawn::APilotActionPawn()
 	rotationComponent = CreateDefaultSubobject<URotationComponent>(TEXT("rotationComponent"));
 	rotationComponent->SetIsReplicated(true);
 
-	NetUpdateFrequency = 5.f;
+	//NetUpdateFrequency = 2.5f;
 	
 }
 
@@ -37,7 +37,7 @@ void APilotActionPawn::Tick(float DeltaTime)
 
 }
 
-void APilotActionPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void APilotActionPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) 
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
