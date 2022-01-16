@@ -21,7 +21,7 @@ APilotActionPawn::APilotActionPawn()
 	rotationComponent = CreateDefaultSubobject<URotationComponent>(TEXT("rotationComponent"));
 	rotationComponent->SetIsReplicated(true);
 
-	//NetUpdateFrequency = 2.5f;
+	NetUpdateFrequency = 5.f;
 	
 }
 

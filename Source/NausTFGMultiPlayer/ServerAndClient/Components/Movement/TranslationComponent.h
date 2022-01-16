@@ -69,18 +69,18 @@ private:
 
 	float delay;
 	float currentTime;
-	float timeSinceLastInput;
 
 	UPROPERTY(Replicated)
 	float updateTimeStamp;
 	float lastUpdateTimeStamp;
 
 	float interpolationSpeed;
-	float lastInterpolationSpeed;
 
 	bool bfirstUpdate;
 
 	bool bisMoving;
+
+	const float startPredictionInMs = 0.15f;
 		
 };
 

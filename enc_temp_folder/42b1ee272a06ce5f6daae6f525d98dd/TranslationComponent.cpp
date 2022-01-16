@@ -35,8 +35,10 @@ void UTranslationComponent::BeginPlay()
 	bisMoving = false;
 	delay = 1;
 	currentTime = 0;
+	timeSinceLastInput = 0;
 	updateTimeStamp = 0;
 	lastUpdateTimeStamp = 0;
+	lastInterpolationSpeed = 0.f;
 	interpolationSpeed = movementSpeedInCm;
 
 }
@@ -64,16 +66,36 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 		Cast<AActionPawn>(GetOwner())->SetActorLocation(position);
 
 	}
+	/*
+	if(DistinctEnough(interpolatedPosition, predictedPosition))
+	{
 
-	//mientras la interpolacion no llegue al destino seguimos interpolando
+		Cast<AActionPawn>(GetOwner())->SetActorLocation(position);
+		lastInterpolationSpeed = movementSpeedInCm;
+		interpolationSpeed = lastInterpolationSpeed;
+	}
+	*/
+	
 	if (!SimilarEnough(interpolatedPosition, predictedPosition) && bisMoving) {
 
+		//poner lastpredicted y no position??
+		//lastInterpolationSpeed = interpolationSpeed;
+		//interpolationSpeed = ((predictedPosition - interpolatedPosition).Size()) / delay;
 
+		//No se para que, no me acuerdo 
+		//interpolationSpeed = (interpolationSpeed + lastInterpolationSpeed) / 2;
+
+		//Barrera de seguridad para controlar correcciones muy graves que puedan desestabilizar la sincronia de velocidades y provocar un movimiento de lag
+		//interpolationSpeed = FMath::Clamp(interpolationSpeed, interpolationSpeed, movementSpeedInCm + 200.f);
+		
+		//comprovar que si es menor que la velocidad minima sea igual a la velocidad minima, en caso contrario puede ser el resultado
 		interpolatedPosition = FMath::VInterpConstantTo(interpolatedPosition, predictedPosition, DeltaTime, interpolationSpeed); 
 
 	}
 	else
 	{	//En caso de llegar a una interpolacion completa significa que el jugador ya no se mueve, y por lo tanto rectificamos el ultimo movimiento predicho y lo ponemos en la posición final
+		//No obstante creo que es mas facil comprovar que se ha terminado de mover replicando la direccion y cuando sea 0 poner a falso el movimiento
+		//bisMoving = false;
 		predictedPosition = position;
 		Cast<AActionPawn>(GetOwner())->SetActorLocation(position);
 	}
@@ -220,7 +242,6 @@ void UTranslationComponent::ApplyMovementWithInterpolation()
 
 		if (delay > startPredictionInMs) {
 
-			//mientras no tenga un reloj sincronizado necesito crear una frontera de delay màximo (en el caso que el jugador no se mueva no quiero delay infinito)
 			if (delay > 0.5f)
 				delay = 0.21f;
 
