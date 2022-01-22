@@ -65,6 +65,41 @@ void APilotActionPlayerController::MoveRight(float movement)
 	Cast<AActionPawn>(playerController->GetPawn())->MoveRight(movement);
 }
 
+void APilotActionPlayerController::ImpulseON()
+{
+
+	AActionPlayerController* playerController = Cast<AActionPlayerController>(GetOwner());
+	Cast<AActionPawn>(playerController->GetPawn())->ImpulseON();
+
+}
+
+void APilotActionPlayerController::ImpulseOFF()
+{
+	AActionPlayerController* playerController = Cast<AActionPlayerController>(GetOwner());
+	Cast<AActionPawn>(playerController->GetPawn())->ImpulseOff();
+}
+
+void APilotActionPlayerController::DecelerationON()
+{
+	AActionPlayerController* playerController = Cast<AActionPlayerController>(GetOwner());
+	Cast<AActionPawn>(playerController->GetPawn())->DecelerationON();
+}
+
+void APilotActionPlayerController::DecelerationOff()
+{
+
+	AActionPlayerController* playerController = Cast<AActionPlayerController>(GetOwner());
+	Cast<AActionPawn>(playerController->GetPawn())->DecelerationOff();
+
+}
+
+void APilotActionPlayerController::BoostSpeed(float value)
+{
+
+	AActionPlayerController* playerController = Cast<AActionPlayerController>(GetOwner());
+	Cast<AActionPawn>(playerController->GetPawn())->BoostSpeed(value);
+}
+
 
 
 

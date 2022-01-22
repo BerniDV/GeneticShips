@@ -33,12 +33,27 @@ public:
 	void MoveRight(float movement);
 
 	UFUNCTION(Server, Unreliable, WithValidation)
-	void Move_Server(FVector movement, FVector _direction, float _currentTime);
+	void Move_Server(FVector movement, FVector _direction, FVector _currentSpeed, float _currentTime, float _accelerationInMs, float _maneuverabilityInPercent);
 
-	bool SimilarEnough(FVector FPosition, FVector SPosition);
+	void SetMaxAcceleration(float _maxAcceleration);
+	void SetCurrentAcceleration(float _currentAcceleration);
 
-	bool DistinctEnough(FVector FPosition, FVector SPosition);
+	void SetMaxSpeed(float _maxSpeed);
+	void SetCurrentSpeed(float _currentSpeed);
 
+	float GetMaxAcceleration();
+
+	float GetMaxSpeed();
+
+	void ResetSpeedAndAcceleration();
+
+	void BoostSpeed(float Value);
+
+	FVector CalculateSpeedNextIteration(float time);
+
+	FVector CalculatePositionNextIteration(float time);
+
+	void Inicialite(float _speedDropRate, float _defaultMaxAcceleration, float _defaultMaxSpeed, float _maxAcceleration, float _maxSpeed, float _accelerationSpeed, float _decelerationSpeed, float _meneuverabilityInPercent);
 
 private:
 
@@ -67,6 +82,12 @@ private:
 
 	float movementSpeedInCm;
 
+	UPROPERTY(Replicated)
+	FVector currentspeed;
+
+	UPROPERTY(Replicated)
+	float accelerationInMS;
+
 	float delay;
 	float currentTime;
 
@@ -81,6 +102,23 @@ private:
 	bool bisMoving;
 
 	const float startPredictionInMs = 0.15f;
+
+	float defaultMaxAcceleration;
+
+	float defaultMaxSpeed;
+
+	float maxAcceleration;
+
+	float maxSpeed;
+
+	float accelerationSpeed;
+
+	float decelerationSpeed;
+
+	UPROPERTY(Replicated)
+	float maneuverabilityInPercent;
+
+	float speedDropRate;
 		
 };
 

@@ -58,6 +58,31 @@ void AActionPawn::ExecuteRotation(float turnValue)
 {
 }
 
+void AActionPawn::ImpulseON()
+{
+
+}
+
+void AActionPawn::ImpulseOff()
+{
+
+}
+
+void AActionPawn::DecelerationON()
+{
+
+}
+
+void AActionPawn::DecelerationOff()
+{
+
+}
+
+void AActionPawn::BoostSpeed(float Value)
+{
+
+}
+
 void AActionPawn::Client_SetRotation_Implementation(FRotator rotator)
 {
 

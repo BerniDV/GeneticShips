@@ -71,6 +71,15 @@ void AActionPlayerController::SetupInputComponent()
 		InputComponent->BindAxis("Turn", playerControllerImpl, &AActionPlayerControllerImpl::Rotate);
 		InputComponent->BindAxis("MoveForward", playerControllerImpl, &AActionPlayerControllerImpl::MoveForward);
 		InputComponent->BindAxis("MoveRight", playerControllerImpl, &AActionPlayerControllerImpl::MoveRight);
+
+		InputComponent->BindAction("Acceleration", EInputEvent::IE_Pressed, playerControllerImpl, &AActionPlayerControllerImpl::ImpulseON);
+		InputComponent->BindAction("Acceleration", EInputEvent::IE_Released, playerControllerImpl, &AActionPlayerControllerImpl::ImpulseOFF);
+
+		InputComponent->BindAction("Deceleration", EInputEvent::IE_Pressed, playerControllerImpl, &AActionPlayerControllerImpl::DecelerationON);
+		InputComponent->BindAction("Deceleration", EInputEvent::IE_Released, playerControllerImpl, &AActionPlayerControllerImpl::DecelerationOff);
+
+		InputComponent->BindAxis("BoostSpeedUp", playerControllerImpl, &AActionPlayerControllerImpl::BoostSpeed);
+		InputComponent->BindAxis("BoostSpeedDown",playerControllerImpl, &AActionPlayerControllerImpl::BoostSpeed);
 	}
 	
 }

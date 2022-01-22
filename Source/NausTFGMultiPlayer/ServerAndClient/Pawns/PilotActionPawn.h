@@ -41,13 +41,35 @@ public:
 
 	virtual void ExecuteRotation(float turnValue) override;
 
+	virtual void ImpulseON() override;
+
+	virtual void ImpulseOff() override;
+
+	virtual void DecelerationON() override;
+
+	virtual void DecelerationOff() override;
+
+	virtual void BoostSpeed(float Value) override;
+
 protected:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Replicated)
-	UTranslationComponent* translationComponent;
+		UTranslationComponent* translationComponent;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Replicated)
-	URotationComponent* rotationComponent;
+		URotationComponent* rotationComponent;
+
+private:
+
+	float movementSpeedInCm;
+	float defaultMaxAcceleration;
+	float defaultMaxSpeed;
+	float maxAcceleration;
+	float maxSpeed;
+	float accelerationSpeed;
+	float decelerationSpeed;
+	float speedDropRate;
+	float maneuverabilityInPercent;
 
 
 };

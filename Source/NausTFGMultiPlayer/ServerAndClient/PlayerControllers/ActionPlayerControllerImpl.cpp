@@ -71,6 +71,33 @@ void AActionPlayerControllerImpl::MoveRight(float movement)
 
 }
 
+void AActionPlayerControllerImpl::ImpulseON()
+{
+
+
+}
+
+void AActionPlayerControllerImpl::ImpulseOFF()
+{
+
+}
+
+void AActionPlayerControllerImpl::DecelerationON()
+{
+
+}
+
+void AActionPlayerControllerImpl::DecelerationOff()
+{
+
+}
+
+void AActionPlayerControllerImpl::BoostSpeed(float value)
+{
+
+
+}
+
 
 void AActionPlayerControllerImpl::BeginPlay()
 {

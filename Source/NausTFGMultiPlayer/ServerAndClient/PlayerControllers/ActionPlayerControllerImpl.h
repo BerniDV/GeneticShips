@@ -38,6 +38,13 @@ public:
 
 	virtual void MoveRight(float movement);
 
+	virtual void ImpulseON();
+	virtual void ImpulseOFF();
+
+	virtual void DecelerationON();
+	virtual void DecelerationOff();
+	virtual void BoostSpeed(float value);
+
 	UPROPERTY(Replicated)
 	int pruebaReplicate;
 

@@ -41,6 +41,9 @@ public:
 
 	virtual void ExecuteRotation(float turnValue);
 
-
-
+	virtual void ImpulseON();
+	virtual void ImpulseOff();
+	virtual void DecelerationON();
+	virtual void DecelerationOff();
+	virtual void BoostSpeed(float Value);
 };

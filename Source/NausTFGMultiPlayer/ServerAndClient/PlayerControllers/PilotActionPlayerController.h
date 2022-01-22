@@ -36,6 +36,15 @@ public:
 
 	void MoveRight(float movement) override;
 
+	virtual void ImpulseON() override;
+
+	virtual void ImpulseOFF() override;
+
+	virtual void DecelerationON() override;
+	virtual void DecelerationOff() override;
+
+	virtual void BoostSpeed(float value) override;
+
 
 protected:
 
