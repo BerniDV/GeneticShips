@@ -7,6 +7,56 @@
 #include "TranslationComponent.generated.h"
 
 
+
+USTRUCT(BlueprintType)
+struct FMovementPack
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY()
+	FVector position;
+
+	UPROPERTY()
+	FVector direction;
+
+	UPROPERTY()
+	FVector currentspeed;
+
+	UPROPERTY()
+	float accelerationInMS;
+
+	UPROPERTY()
+	float updateTimeStamp;
+
+	UPROPERTY()
+	float maneuverabilityInPercent;
+
+
+	FMovementPack()
+	{
+
+		position = FVector::ZeroVector;
+		direction = FVector::ZeroVector;
+		currentspeed = FVector::ZeroVector;
+		accelerationInMS = 0.f;
+		updateTimeStamp = 0.f;
+		maneuverabilityInPercent = 0.f;
+	}
+
+	void Update(FVector _position, FVector _direction, FVector _currentspeed, float _accelerationInMS, float _updateTimeStamp, float _maneuverabilityInPercent)
+	{
+
+		position = _position;
+		direction = _direction;
+		currentspeed = _currentspeed;
+		accelerationInMS = _accelerationInMS;
+		updateTimeStamp = _updateTimeStamp;
+		maneuverabilityInPercent = _maneuverabilityInPercent;
+	}
+
+};
+
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class NAUSTFGMULTIPLAYER_API UTranslationComponent : public UActorComponent
 {
@@ -32,7 +82,7 @@ public:
 
 	void MoveRight(float movement);
 
-	UFUNCTION(Server, Unreliable, WithValidation)
+	UFUNCTION(Server, Reliable, WithValidation)
 	void Move_Server(FVector movement, FVector _direction, FVector _currentSpeed, float _currentTime, float _accelerationInMs, float _maneuverabilityInPercent);
 
 	void SetMaxAcceleration(float _maxAcceleration);
@@ -49,11 +99,13 @@ public:
 
 	void BoostSpeed(float Value);
 
-	FVector CalculateSpeedNextIteration(float time);
+	FVector CalculateSpeedNextIteration(FVector _currentSpeed, float _maneuverabilityInPercent, FVector _direction, float _acelerationInMS, float time);
 
-	FVector CalculatePositionNextIteration(float time);
+	FVector CalculatePositionNextIteration(FVector _position, FVector _currentSpeed, float time);
 
 	void Inicialite(float _speedDropRate, float _defaultMaxAcceleration, float _defaultMaxSpeed, float _maxAcceleration, float _maxSpeed, float _accelerationSpeed, float _decelerationSpeed, float _meneuverabilityInPercent);
+
+	
 
 private:
 
@@ -62,7 +114,6 @@ private:
 
 	void ApplyMovement();
 
-	UPROPERTY(ReplicatedUsing = ApplyMovementWithInterpolation)
 	FVector position;
 
 	FVector lastPosition;
@@ -73,7 +124,6 @@ private:
 
 	FVector interpolatedPosition;
 
-	UPROPERTY(Replicated)
 	FVector direction;
 	FVector lastDirection;
 
@@ -82,26 +132,20 @@ private:
 
 	float movementSpeedInCm;
 
-	UPROPERTY(Replicated)
 	FVector currentspeed;
 
-	UPROPERTY(Replicated)
 	float accelerationInMS;
 
 	float delay;
 	float currentTime;
 
-	UPROPERTY(Replicated)
 	float updateTimeStamp;
-	float lastUpdateTimeStamp;
 
 	float interpolationSpeed;
 
 	bool bfirstUpdate;
 
-	bool bisMoving;
-
-	const float startPredictionInMs = 0.15f;
+	const float startPredictionInMs = 0.05f;
 
 	float defaultMaxAcceleration;
 
@@ -115,10 +159,12 @@ private:
 
 	float decelerationSpeed;
 
-	UPROPERTY(Replicated)
 	float maneuverabilityInPercent;
 
 	float speedDropRate;
+
+	UPROPERTY(ReplicatedUsing = ApplyMovementWithInterpolation)
+	FMovementPack movementReplicatedPack;
 		
 };
 

@@ -90,13 +90,13 @@ void APilotActionPawn::ImpulseON()
 
 	//float maxSpeed = translationComponent->GetMaxSpeed();
 
-	translationComponent->SetMaxSpeed(maxSpeed * 10);
-	translationComponent->SetCurrentSpeed(maxSpeed * 6);
+	translationComponent->SetMaxSpeed(maxSpeed * 7);
+	translationComponent->SetCurrentSpeed(maxSpeed * 3);
 
 	//float maxAcceleration = translationComponent->GetMaxAcceleration();
 
-	translationComponent->SetMaxAcceleration(maxAcceleration * 8);
-	translationComponent->SetCurrentAcceleration(maxAcceleration * 7);
+	translationComponent->SetMaxAcceleration(maxAcceleration * 5);
+	translationComponent->SetCurrentAcceleration(maxAcceleration * 4);
 	
 }
 
