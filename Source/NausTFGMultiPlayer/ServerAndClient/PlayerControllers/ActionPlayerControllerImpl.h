@@ -6,6 +6,7 @@
 #include "PlayerControllerDefaultBehaviour.h"
 #include "ActionPlayerControllerImpl.generated.h"
 
+class AActionCamera;
 class URotationComponent;
 class UTranslationComponent;
 class UPresentationController;
@@ -45,8 +46,12 @@ public:
 	virtual void DecelerationOff();
 	virtual void BoostSpeed(float value);
 
-	UPROPERTY(Replicated)
-	int pruebaReplicate;
+	virtual void PitchCamera(float value);
+	virtual void YawCamera(float value);
+
+	virtual AActionCamera* SpawnActionCamera();
+
+	void SetCameraManager(APlayerCameraManager* _cameraManager);
 
 protected:
 
@@ -56,11 +61,10 @@ protected:
 
 protected:
 
+	APlayerCameraManager* cameraManager;
 
 private:
 
 	UPresentationController* presentationController;
-
-	
 
 };

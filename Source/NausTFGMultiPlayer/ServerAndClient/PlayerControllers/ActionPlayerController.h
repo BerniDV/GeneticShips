@@ -35,8 +35,9 @@ public:
 	UFUNCTION(Client, Reliable)
 	void InitializeClientPlayerControllerImpl();
 
-	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
+	void SpawnActionCamera();
 
+	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
 
 protected:
 
@@ -49,5 +50,7 @@ private:
 
 	UPROPERTY(ReplicatedUsing = InitializeClientPlayerControllerImpl)
 	AActionPlayerControllerImpl* playerControllerImpl;
+
+	
 	
 };

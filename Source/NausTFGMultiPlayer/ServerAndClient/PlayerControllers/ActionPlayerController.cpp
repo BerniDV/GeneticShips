@@ -5,6 +5,9 @@
 
 #include "ArtilleryActionPlayerController.h"
 #include "PilotActionPlayerController.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "NausTFGMultiPlayer/Client/Cameras/ActionCamera.h"
+#include "NausTFGMultiPlayer/Client/Cameras/ActionCameraManager.h"
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "Net/UnrealNetwork.h"
 
@@ -14,6 +17,9 @@ AActionPlayerController::AActionPlayerController()
 {
 	
 	bReplicates = true;
+
+	PlayerCameraManagerClass = AActionCameraManager::StaticClass();
+	bAutoManageActiveCameraTarget = false;
 }
 
 
@@ -68,7 +74,7 @@ void AActionPlayerController::SetupInputComponent()
 	if(playerControllerImpl && IsLocalPlayerController())
 	{
 		
-		InputComponent->BindAxis("Turn", playerControllerImpl, &AActionPlayerControllerImpl::Rotate);
+		//InputComponent->BindAxis("Turn", playerControllerImpl, &AActionPlayerControllerImpl::Rotate);
 		InputComponent->BindAxis("MoveForward", playerControllerImpl, &AActionPlayerControllerImpl::MoveForward);
 		InputComponent->BindAxis("MoveRight", playerControllerImpl, &AActionPlayerControllerImpl::MoveRight);
 
@@ -79,7 +85,10 @@ void AActionPlayerController::SetupInputComponent()
 		InputComponent->BindAction("Deceleration", EInputEvent::IE_Released, playerControllerImpl, &AActionPlayerControllerImpl::DecelerationOff);
 
 		InputComponent->BindAxis("BoostSpeedUp", playerControllerImpl, &AActionPlayerControllerImpl::BoostSpeed);
-		InputComponent->BindAxis("BoostSpeedDown",playerControllerImpl, &AActionPlayerControllerImpl::BoostSpeed);
+		//InputComponent->BindAxis("BoostSpeedDown",playerControllerImpl, &AActionPlayerControllerImpl::BoostSpeed);
+
+		InputComponent->BindAxis("CameraPitch", playerControllerImpl, &AActionPlayerControllerImpl::PitchCamera);
+		InputComponent->BindAxis("CameraYaw", playerControllerImpl, &AActionPlayerControllerImpl::YawCamera);
 	}
 	
 }
@@ -93,15 +102,27 @@ void AActionPlayerController::InitializeClientPlayerControllerImpl_Implementatio
 	CreaMenus();
 	BindSignals();
 	HideAndLockMouseCursor();
+	playerControllerImpl->SetCameraManager(PlayerCameraManager);
+	SpawnActionCamera();
 
 }
 
+
+void AActionPlayerController::SpawnActionCamera()
+{
+
+	AActionCamera* camera = playerControllerImpl->SpawnActionCamera();
+
+	SetCameraActor(camera);
+
+	PlayerCameraManager->SetViewTarget(camera);
+
+}
 
 void AActionPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	//A tots o només client owner?
 	DOREPLIFETIME_CONDITION(AActionPlayerController, playerControllerImpl, COND_OwnerOnly);
 }
 
@@ -117,6 +138,5 @@ void AActionPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	//if(IsLocalPlayerController() && playerControllerImpl)
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%d"), playerControllerImpl->pruebaReplicate));
+	
 }

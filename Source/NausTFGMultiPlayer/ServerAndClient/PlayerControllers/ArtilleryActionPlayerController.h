@@ -26,6 +26,12 @@ public:
 
 	virtual UClass* GetDefaultPawn() override;
 
+	virtual AActionCamera* SpawnActionCamera() override;
+
+	virtual void PitchCamera(float value) override;
+
+	virtual void YawCamera(float value) override;
+
 private:
 
 	UClass* reference;

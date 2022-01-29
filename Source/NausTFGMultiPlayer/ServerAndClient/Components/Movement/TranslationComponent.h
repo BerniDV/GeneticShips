@@ -112,20 +112,16 @@ private:
 	UFUNCTION()
 	void ApplyMovementWithInterpolation();
 
-	void ApplyMovement();
-
 	FVector position;
 
 	FVector lastPosition;
 	FVector currentPosition;
 
 	FVector predictedPosition;
-	FVector lastPredictedPosition;
 
 	FVector interpolatedPosition;
 
 	FVector direction;
-	FVector lastDirection;
 
 	FVector forwardDirection;
 	FVector rightDirection;
@@ -139,13 +135,9 @@ private:
 	float delay;
 	float currentTime;
 
-	float updateTimeStamp;
-
 	float interpolationSpeed;
 
 	bool bfirstUpdate;
-
-	const float startPredictionInMs = 0.05f;
 
 	float defaultMaxAcceleration;
 

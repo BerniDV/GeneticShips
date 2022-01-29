@@ -33,11 +33,9 @@ void UTranslationComponent::BeginPlay()
 	predictedPosition = position;
 	interpolatedPosition = position;
 	direction = FVector::ZeroVector;
-	lastDirection = direction;
 	bfirstUpdate = true;
 	delay = 1;
 	currentTime = 0;
-	updateTimeStamp = 0;
 	accelerationInMS = 0;
 	currentspeed = FVector::ZeroVector;
 	defaultMaxAcceleration = 0.f;
@@ -75,9 +73,6 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 	if(GetOwner()->GetLocalRole() == ENetRole::ROLE_AutonomousProxy)
 	{
-
-		if (direction != FVector::ZeroVector)
-			lastDirection = direction;
 
 		if (accelerationInMS > maxAcceleration)
 			accelerationInMS = maxAcceleration;
@@ -119,7 +114,7 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 		}else
 		{
 
-			currentspeed += CalculateSpeedNextIteration(currentspeed, maneuverabilityInPercent, direction, accelerationInMS, DeltaTime);
+			currentspeed = CalculateSpeedNextIteration(currentspeed, maneuverabilityInPercent, direction, accelerationInMS, DeltaTime);
 		}
 
 		lastPosition = position;
@@ -148,9 +143,8 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 	else
 	{	//En caso de llegar a una interpolacion completa significa que el jugador ya no se mueve, y por lo tanto rectificamos el ultimo movimiento predicho y lo ponemos en la posición final
 		predictedPosition = position;
-		//interpolatedPosition = position;
-		interpolatedPosition = FMath::VInterpConstantTo(interpolatedPosition, position, DeltaTime, interpolationSpeed);
-		Cast<AActionPawn>(GetOwner())->SetActorLocation(position);
+		interpolatedPosition = FMath::VInterpConstantTo(interpolatedPosition, position, DeltaTime, defaultMaxSpeed);
+		Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition);
 	}
 		
 }
@@ -170,7 +164,8 @@ void UTranslationComponent::MoveRight(float movement)
 
 	AActionPlayerController* playerController = Cast<AActionPlayerController>(myPawn->GetController());	   
 
-	rightDirection = FRotationMatrix(playerController->GetControlRotation()).GetScaledAxis(EAxis::Y) * movement;
+	//rightDirection = FRotationMatrix(playerController->GetControlRotation()).GetScaledAxis(EAxis::Y) * movement;
+	rightDirection = GetOwner()->GetActorRightVector() * movement;
 
 }
 
@@ -182,7 +177,8 @@ void UTranslationComponent::MoveForward(float movement)
 
 	AActionPlayerController* playerController = Cast<AActionPlayerController>(myPawn->GetController());
 
-	forwardDirection = FRotationMatrix(playerController->GetControlRotation()).GetScaledAxis(EAxis::X) * movement;
+	//forwardDirection = FRotationMatrix(playerController->GetControlRotation()).GetScaledAxis(EAxis::X) * movement;
+	forwardDirection = GetOwner()->GetActorForwardVector() * movement;
 
 }
 
@@ -231,7 +227,9 @@ void UTranslationComponent::SetMaxSpeed(float _maxSpeed)
 void UTranslationComponent::SetCurrentSpeed(float _currentSpeed)
 {
 
-	currentspeed = _currentSpeed * lastDirection;
+	FVector currentDirection = currentspeed;
+	currentDirection.Normalize();
+	currentspeed = _currentSpeed * currentDirection;
 }
 
 float UTranslationComponent::GetMaxAcceleration()
@@ -279,7 +277,7 @@ FVector UTranslationComponent::CalculateSpeedNextIteration(FVector _currentSpeed
 
 	}
 
-	return speedUp;
+	return speedUp + _currentSpeed;
 
 }
 
@@ -304,7 +302,6 @@ void UTranslationComponent::ApplyMovementWithInterpolation()
 
 		bfirstUpdate = false;
 		predictedPosition = movementReplicatedPack.position;
-		lastPredictedPosition = movementReplicatedPack.position;
 
 		lastPosition = movementReplicatedPack.position;
 		currentPosition = movementReplicatedPack.position;
@@ -318,7 +315,7 @@ void UTranslationComponent::ApplyMovementWithInterpolation()
 		currentspeed = movementReplicatedPack.currentspeed;
 		accelerationInMS = movementReplicatedPack.accelerationInMS;
 		maneuverabilityInPercent = movementReplicatedPack.maneuverabilityInPercent;
-		updateTimeStamp = movementReplicatedPack.updateTimeStamp;
+		float updateTimeStamp = movementReplicatedPack.updateTimeStamp;
 
 		lastPosition = currentPosition;
 		currentPosition = position;
@@ -333,27 +330,14 @@ void UTranslationComponent::ApplyMovementWithInterpolation()
 
 		delay = FMath::Abs(delay);
 
-		//Si el delay es menor a 50 ms no vale la pena predecir nada
-		if (delay > startPredictionInMs) {
+		predictedPosition = CalculatePositionNextIteration(position, currentspeed, delay);
 
-			lastPredictedPosition = predictedPosition;
+		currentspeed = CalculateSpeedNextIteration(currentspeed, maneuverabilityInPercent, direction, accelerationInMS, delay);
 
-			currentspeed += CalculateSpeedNextIteration(currentspeed, maneuverabilityInPercent, direction, accelerationInMS, delay);
+		predictedPosition = CalculatePositionNextIteration(predictedPosition, currentspeed, delay);
 
-			predictedPosition = CalculatePositionNextIteration(position, currentspeed, delay);
+		interpolationSpeed = currentspeed.Size();
 
-			currentspeed += CalculateSpeedNextIteration(currentspeed, maneuverabilityInPercent, direction, accelerationInMS, delay);
-
-			predictedPosition = CalculatePositionNextIteration(predictedPosition, currentspeed, delay);
-
-			interpolationSpeed = ((predictedPosition - interpolatedPosition).Size()) / delay;
-
-		}else
-		{
-
-			predictedPosition = position;
-			interpolationSpeed = (lastPosition - currentPosition).Size() / delay;
-		}
 
 	}
 

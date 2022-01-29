@@ -3,6 +3,8 @@
 
 #include "PilotActionPawn.h"
 
+#include "Components/BoxComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/RotationComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/TranslationComponent.h"
 #include "Net/UnrealNetwork.h"
@@ -22,6 +24,23 @@ APilotActionPawn::APilotActionPawn()
 	rotationComponent = CreateDefaultSubobject<URotationComponent>(TEXT("rotationComponent"));
 	rotationComponent->SetIsReplicated(true);
 
+	collisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("boxComponent"));
+	SetRootComponent(collisionBox);
+
+	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("staticMesh"));
+	meshComponent->SetupAttachment(RootComponent);
+
+	springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	springArm->SetupAttachment(RootComponent);
+	springArm->TargetArmLength = 300.f;
+	springArm->bUsePawnControlRotation = false;
+	springArm->bInheritPitch = false;
+	springArm->bInheritRoll = false;
+	springArm->bInheritYaw = false;
+
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
 	//NetUpdateFrequency = 2.5f;
 	
 }
@@ -109,11 +128,9 @@ void APilotActionPawn::ImpulseOff()
 void APilotActionPawn::DecelerationON()
 {
 
-	//float maxSpeed = translationComponent->GetMaxSpeed();
 
 	translationComponent->SetMaxSpeed(maxSpeed/4);
 
-	//float maxAcceleration = translationComponent->GetMaxAcceleration();
 
 	translationComponent->SetMaxAcceleration(maxAcceleration/4);
 
@@ -129,4 +146,10 @@ void APilotActionPawn::BoostSpeed(float Value)
 {
 
 	translationComponent->BoostSpeed(Value);
+}
+
+USpringArmComponent* APilotActionPawn::GetSpringArmComponent()
+{
+
+	return springArm;
 }

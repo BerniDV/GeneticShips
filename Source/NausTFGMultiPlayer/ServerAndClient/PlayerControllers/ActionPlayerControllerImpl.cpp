@@ -15,7 +15,6 @@ AActionPlayerControllerImpl::AActionPlayerControllerImpl()
 	bReplicates = true;
 	bOnlyRelevantToOwner = true;
 
-	pruebaReplicate = 0;
 }
 
 void AActionPlayerControllerImpl::InitializePresentationController()
@@ -46,7 +45,6 @@ void AActionPlayerControllerImpl::GetLifetimeReplicatedProps(TArray<FLifetimePro
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(AActionPlayerControllerImpl, pruebaReplicate);
 }
 
 UPresentationController* AActionPlayerControllerImpl::GetPresentationController()
@@ -98,6 +96,30 @@ void AActionPlayerControllerImpl::BoostSpeed(float value)
 
 }
 
+void AActionPlayerControllerImpl::PitchCamera(float value)
+{
+
+
+}
+
+void AActionPlayerControllerImpl::YawCamera(float value)
+{
+
+
+}
+
+AActionCamera* AActionPlayerControllerImpl::SpawnActionCamera()
+{
+
+	return nullptr;
+}
+
+void AActionPlayerControllerImpl::SetCameraManager(APlayerCameraManager* _cameraManager)
+{
+
+	cameraManager = _cameraManager;
+}
+
 
 void AActionPlayerControllerImpl::BeginPlay()
 {
@@ -111,9 +133,6 @@ void AActionPlayerControllerImpl::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	//Només prova de replica, en un futur s'ha deliminar
-	if(HasAuthority())
-		pruebaReplicate += 1;
 }
 
 

@@ -6,6 +6,8 @@
 #include "ActionPawn.h"
 #include "PilotActionPawn.generated.h"
 
+class UBoxComponent;
+class USpringArmComponent;
 class URotationComponent;
 /**
  * 
@@ -51,6 +53,8 @@ public:
 
 	virtual void BoostSpeed(float Value) override;
 
+	USpringArmComponent* GetSpringArmComponent();
+
 protected:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Replicated)
@@ -58,6 +62,15 @@ protected:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Replicated)
 		URotationComponent* rotationComponent;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	USpringArmComponent* springArm;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UBoxComponent* collisionBox;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UStaticMeshComponent* meshComponent;
 
 private:
 
@@ -70,6 +83,8 @@ private:
 	float decelerationSpeed;
 	float speedDropRate;
 	float maneuverabilityInPercent;
+
+	
 
 
 };

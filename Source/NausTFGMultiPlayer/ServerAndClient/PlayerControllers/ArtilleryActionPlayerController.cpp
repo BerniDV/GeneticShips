@@ -2,6 +2,8 @@
 
 
 #include "ArtilleryActionPlayerController.h"
+
+#include "NausTFGMultiPlayer/Client/Cameras/ActionCamera.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ArtilleryActionPawn.h"
 
 AArtilleryActionPlayerController::AArtilleryActionPlayerController()
@@ -25,4 +27,26 @@ void AArtilleryActionPlayerController::BeginPlay()
 UClass* AArtilleryActionPlayerController::GetDefaultPawn()
 {
 	return reference;
+}
+
+AActionCamera* AArtilleryActionPlayerController::SpawnActionCamera()
+{
+
+	FVector spawnLocation(-440.0f, -340.0f, 230.0f);
+	FRotator spawnRotation(7.0f, 4.f, 0.f);
+
+	AActionCamera* camera = GetWorld()->SpawnActor<AActionCamera>(spawnLocation, spawnRotation);
+
+	return camera;
+}
+
+void AArtilleryActionPlayerController::PitchCamera(float value)
+{
+	
+}
+
+void AArtilleryActionPlayerController::YawCamera(float value)
+{
+	
+
 }

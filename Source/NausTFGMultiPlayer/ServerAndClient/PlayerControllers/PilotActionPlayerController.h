@@ -45,6 +45,12 @@ public:
 
 	virtual void BoostSpeed(float value) override;
 
+	virtual AActionCamera* SpawnActionCamera() override;
+
+	virtual void PitchCamera(float value) override;
+
+	virtual void YawCamera(float value) override;
+
 
 protected:
 
@@ -53,6 +59,10 @@ protected:
 private:
 
 	UClass* reference;
+
+	FVector2D cameraInput;
+
+	float radiusCamera;
 	
 };
 
