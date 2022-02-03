@@ -29,17 +29,15 @@ public:
 
 	FRotator GetRotation();
 
-	//UFUNCTION(Client, Reliable)
-	void ExecuteRotation(float value);
 
-	//UFUNCTION()
-	void ApplyRotation();
+	void ExecuteRotation(FRotator rotator);
 
+	UFUNCTION(Server, Unreliable, WithValidation)
+	void Server_ExecuteRotation(FRotator rotator);
 
 private:
 
-	float yawRotation;
-
-	//UPROPERTY(ReplicatedUsing = ApplyRotation)
+	UPROPERTY(Replicated)
 	FRotator rotation;
+
 };

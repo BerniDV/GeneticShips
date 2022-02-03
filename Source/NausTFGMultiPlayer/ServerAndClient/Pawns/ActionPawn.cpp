@@ -54,7 +54,7 @@ void AActionPawn::MoveRight(float movement)
 {
 }
 
-void AActionPawn::ExecuteRotation(float turnValue)
+void AActionPawn::ExecuteRotation(FRotator rotator)
 {
 }
 

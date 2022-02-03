@@ -41,7 +41,7 @@ public:
 
 	virtual void MoveRight(float movement) override;
 
-	virtual void ExecuteRotation(float turnValue) override;
+	virtual void ExecuteRotation(FRotator executeRotation) override;
 
 	virtual void ImpulseON() override;
 

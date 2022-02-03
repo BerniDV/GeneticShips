@@ -57,30 +57,12 @@ void APilotActionPlayerController::Tick(float DeltaSeconds)
 
 		myPawn->GetSpringArmComponent()->SetRelativeRotation(newRotation);
 
-		//Esto igual deberia estar en su propia copmponente de rotacion, no obstante no veo mal que el controlador del pawn le diga como rotar
-		FRotator newPawnRotation = myPawn->GetActorRotation();
-		newPawnRotation += FRotator(TestSensibility * DeltaSeconds * cameraInput.Y , TestSensibility * DeltaSeconds * cameraInput.X , 0.f);
-		newPawnRotation.Pitch = FMath::Clamp(newRotation.Pitch, -80.f, 80.f);
 
 		FRotator lookAtCameraDirectionVector = camera->GetActorForwardVector().Rotation();
 
 		FRotator newPawnRotator = FMath::RInterpConstantTo(myPawn->GetActorRotation(), lookAtCameraDirectionVector, DeltaSeconds, 90.f);
 
-		myPawn->SetActorRotation(newPawnRotator);
-
-		//Justo abajo esta comentada la manera de dar mas dinamismo a la camara en caso que consiga desvincularla del pawn y hacer que orbite y lo siga de forma independiente
-		/*
-		  FVector directionLookAt = PC->GetPawn()->GetActorLocation() - camera->GetActorLocation();
-		  FRotator cameraRotation = directionLookAt.Rotation();
-
-		  FRotator newCameraRotator = FMath::RInterpConstantTo(camera->GetActorRotation(), cameraRotation, DeltaSeconds, 70.f);
-
-		  camera->SetActorRotation(newCameraRotator);
-		*/
-
-		GEngine->AddOnScreenDebugMessage(-1, -5, FColor::Red, myPawn->GetActorForwardVector().ToString());
-		GEngine->AddOnScreenDebugMessage(-1, -5, FColor::Blue, newPawnRotation.ToString());
-		GEngine->AddOnScreenDebugMessage(-1, -5, FColor::Emerald, myPawn->GetActorRotation().ToString());
+		myPawn->ExecuteRotation(newPawnRotator);
 
 	}
 
@@ -96,7 +78,7 @@ void APilotActionPlayerController::Rotate(float turnValue)
 {
 
 	AActionPlayerController* playerController = Cast<AActionPlayerController>(GetOwner());
-	Cast<AActionPawn>(playerController->GetPawn())->ExecuteRotation(turnValue);
+	//Cast<AActionPawn>(playerController->GetPawn())->ExecuteRotation(turnValue);
 	
 }
 

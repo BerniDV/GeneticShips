@@ -39,7 +39,7 @@ public:
 
 	virtual void MoveRight(float movement);
 
-	virtual void ExecuteRotation(float turnValue);
+	virtual void ExecuteRotation(FRotator rotator);
 
 	virtual void ImpulseON();
 	virtual void ImpulseOff();

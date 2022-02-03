@@ -40,7 +40,7 @@ APilotActionPawn::APilotActionPawn()
 
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationPitch = false;
-	bUseControllerRotationRoll = false;
+	bUseControllerRotationRoll = false; 
 	//NetUpdateFrequency = 2.5f;
 	
 }
@@ -98,10 +98,10 @@ void APilotActionPawn::MoveRight(float movement)
 	translationComponent->MoveRight(movement);
 }
 
-void APilotActionPawn::ExecuteRotation(float turnValue)
+void APilotActionPawn::ExecuteRotation(FRotator rotator)
 {
 	
-	rotationComponent->ExecuteRotation(turnValue);
+	rotationComponent->ExecuteRotation(rotator);
 }
 
 void APilotActionPawn::ImpulseON()

@@ -3,6 +3,7 @@
 
 #include "RotationComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerControllerImpl.h"
 #include "Net/UnrealNetwork.h"
@@ -14,7 +15,7 @@ URotationComponent::URotationComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	rotation = FRotator::ZeroRotator;
-	yawRotation = 0.f;
+
 }
 
 
@@ -31,7 +32,16 @@ void URotationComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	if(GetOwnerRole() == ROLE_SimulatedProxy)
+	{
 
+		FRotator currentRotation = GetOwner()->GetActorRotation();
+
+		currentRotation = FMath::RInterpConstantTo(currentRotation, rotation, DeltaTime, 0.01);
+
+		GetOwner()->SetActorRotation(currentRotation);
+
+	}
 	
 }
 
@@ -39,7 +49,7 @@ void URotationComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	//DOREPLIFETIME(URotationComponent, rotation);
+	DOREPLIFETIME(URotationComponent, rotation);
 }
 
 FRotator URotationComponent::GetRotation()
@@ -48,24 +58,32 @@ FRotator URotationComponent::GetRotation()
 	return rotation;
 }
 
-void URotationComponent::ExecuteRotation(float value)
+void URotationComponent::ExecuteRotation(FRotator rotator)
 {
 
-	yawRotation += value;
+	AActionPawn* myPawn = Cast<AActionPawn>(GetOwner());
 
-	rotation = FRotator(0.f, yawRotation, 0.f);
+	rotation = rotator;
+	myPawn->SetActorRotation(rotator);
 
-	//if(!GetOwner()->HasAuthority())
-		//GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Yellow, FString::Printf(TEXT("%f"), value));
-
-	ApplyRotation();
+	Server_ExecuteRotation(rotator);
 
 }
 
 
-void URotationComponent::ApplyRotation()
+void URotationComponent::Server_ExecuteRotation_Implementation(FRotator rotator)
 {
 
-	Cast<AActionPawn>(GetOwner())->Server_SetRotation(rotation);
+	rotation = rotator;
+
+	GetOwner()->SetActorRotation(rotator);
 }
+
+bool URotationComponent::Server_ExecuteRotation_Validate(FRotator rotator)
+{
+
+	return true;
+}
+
+
 
