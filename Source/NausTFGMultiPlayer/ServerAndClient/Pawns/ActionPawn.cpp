@@ -16,6 +16,9 @@ AActionPawn::AActionPawn()
 
 	if(GEngine)
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Pawn Prepared"));
+
+	maxHealth = 100.f;
+	health = maxHealth;
 }
 
 // Called when the game starts or when spawned
@@ -43,6 +46,7 @@ void AActionPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	DOREPLIFETIME(AActionPawn, health);
 	
 }
 
@@ -86,6 +90,31 @@ void AActionPawn::BoostSpeed(float Value)
 void AActionPawn::Fire()
 {
 
+}
+
+float AActionPawn::GetHealth()
+{
+
+	return health;
+}
+
+void AActionPawn::SetHealth(float value)
+{
+
+	if(value <= maxHealth)
+		health = value;
+}
+
+void AActionPawn::AddHealth(float value)
+{
+	if(health + value <= maxHealth)
+		health += value;
+}
+
+void AActionPawn::OnHealthUpdate()
+{
+
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("Tu vida es: %f"), health));
 }
 
 void AActionPawn::Client_SetRotation_Implementation(FRotator rotator)

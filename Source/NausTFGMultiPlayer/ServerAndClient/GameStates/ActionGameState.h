@@ -13,5 +13,10 @@ UCLASS()
 class NAUSTFGMULTIPLAYER_API AActionGameState : public AGameState
 {
 	GENERATED_BODY()
-	
+
+public:
+
+	AActionGameState();
+
+
 };

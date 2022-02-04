@@ -48,4 +48,18 @@ public:
 	virtual void BoostSpeed(float Value);
 
 	virtual void Fire();
+
+	float GetHealth();
+	void SetHealth(float value);
+	void AddHealth(float value);
+
+	UFUNCTION()
+	void OnHealthUpdate();
+
+private:
+
+	float maxHealth;
+
+	UPROPERTY(ReplicatedUsing = OnHealthUpdate)
+	float health;
 };

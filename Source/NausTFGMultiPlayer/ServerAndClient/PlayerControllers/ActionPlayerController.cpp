@@ -9,6 +9,8 @@
 #include "NausTFGMultiPlayer/Client/Cameras/ActionCamera.h"
 #include "NausTFGMultiPlayer/Client/Cameras/ActionCameraManager.h"
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
+#include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/ActionPlayerState.h"
 #include "Net/UnrealNetwork.h"
 
 
@@ -126,6 +128,28 @@ void AActionPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME_CONDITION(AActionPlayerController, playerControllerImpl, COND_OwnerOnly);
+}
+
+float AActionPlayerController::GetPlayerHealth()
+{
+
+	return GetPlayerState<AActionPlayerState>()->GetHealth();
+}
+
+void AActionPlayerController::SetPlayerHealth(float value)
+{
+	if (GetLocalRole() == ROLE_Authority)
+		GetPlayerState<AActionPlayerState>()->SetHealth(value);
+		
+}
+
+float AActionPlayerController::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+	AController* EventInstigator, AActor* DamageCauser)
+{
+
+	float currentHealth = GetPlayerHealth() - DamageAmount;
+	SetPlayerHealth(currentHealth);
+	return currentHealth;
 }
 
 

@@ -49,7 +49,7 @@ void URotationComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(URotationComponent, rotation);
+	DOREPLIFETIME_CONDITION(URotationComponent, rotation, COND_SkipOwner);
 }
 
 FRotator URotationComponent::GetRotation()

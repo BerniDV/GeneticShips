@@ -3,3 +3,12 @@
 
 #include "ActionGameState.h"
 
+#include "Net/UnrealNetwork.h"
+
+AActionGameState::AActionGameState()
+{
+
+	
+}
+
+

@@ -5,6 +5,7 @@
 
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ABasicProjectile::ABasicProjectile()
@@ -27,6 +28,14 @@ ABasicProjectile::ABasicProjectile()
 	projectileMovementComponent->MaxSpeed = 1500.0f;
 	projectileMovementComponent->bRotationFollowsVelocity = true;
 	projectileMovementComponent->ProjectileGravityScale = 0.0f;
+
+	damage = 10.f;
+	damageType = UDamageType::StaticClass();
+
+	if (GetLocalRole() == ROLE_Authority)
+	{
+		projectileSphereComponent->OnComponentHit.AddDynamic(this, &ABasicProjectile::OnProjectileImpact);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -36,10 +45,28 @@ void ABasicProjectile::BeginPlay()
 	
 }
 
+void ABasicProjectile::Destroyed()
+{
+	Super::Destroyed();
+
+}
+
 // Called every frame
 void ABasicProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ABasicProjectile::OnProjectileImpact(UPrimitiveComponent* HitComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	
+	if (OtherActor)
+	{
+		UGameplayStatics::ApplyPointDamage(OtherActor->GetInstigatorController(), damage, NormalImpulse, Hit, GetOwner()->GetInstigatorController(), this, damageType);
+	}
+
+	Destroy();
 }
 

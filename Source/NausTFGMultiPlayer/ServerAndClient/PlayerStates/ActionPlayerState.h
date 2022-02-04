@@ -13,5 +13,26 @@ UCLASS()
 class NAUSTFGMULTIPLAYER_API AActionPlayerState : public APlayerState
 {
 	GENERATED_BODY()
+
+
+public:
+
+	AActionPlayerState();
+
+	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
+
+	UFUNCTION(Client, Reliable)
+	void OnHealthUpdate();
+
+	float GetHealth();
+	void SetHealth(float value);
+	void AddHealth(float value);
+
+private:
+
+	float maxHealth;
+
+	UPROPERTY(ReplicatedUsing = OnHealthUpdate)
+	float health;
 	
 };
