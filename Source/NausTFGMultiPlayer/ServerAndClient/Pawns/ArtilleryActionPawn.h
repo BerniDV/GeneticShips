@@ -6,6 +6,8 @@
 #include "ActionPawn.h"
 #include "ArtilleryActionPawn.generated.h"
 
+
+class ABasicProjectile;
 /**
  * 
  */
@@ -17,5 +19,16 @@ class NAUSTFGMULTIPLAYER_API AArtilleryActionPawn : public AActionPawn
 public:
 
 	AArtilleryActionPawn();
+
+	virtual void Fire() override;
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_Fire();
+
+protected:
+
+	UPROPERTY(VisibleAnywhere)
+	TSubclassOf<ABasicProjectile> projectile;
+
 	
 };

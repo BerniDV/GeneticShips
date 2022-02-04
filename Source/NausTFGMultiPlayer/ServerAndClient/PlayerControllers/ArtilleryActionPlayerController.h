@@ -32,6 +32,8 @@ public:
 
 	virtual void YawCamera(float value) override;
 
+	virtual void Fire() override;
+
 private:
 
 	UClass* reference;

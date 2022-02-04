@@ -3,6 +3,7 @@
 
 #include "ArtilleryActionPlayerController.h"
 
+#include "ActionPlayerController.h"
 #include "NausTFGMultiPlayer/Client/Cameras/ActionCamera.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ArtilleryActionPawn.h"
 
@@ -49,4 +50,11 @@ void AArtilleryActionPlayerController::YawCamera(float value)
 {
 	
 
+}
+
+void AArtilleryActionPlayerController::Fire()
+{
+
+	AActionPlayerController* playerController = Cast<AActionPlayerController>(GetOwner());
+	Cast<AActionPawn>(playerController->GetPawn())->Fire();
 }

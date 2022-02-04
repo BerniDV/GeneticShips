@@ -83,6 +83,11 @@ void AActionPawn::BoostSpeed(float Value)
 
 }
 
+void AActionPawn::Fire()
+{
+
+}
+
 void AActionPawn::Client_SetRotation_Implementation(FRotator rotator)
 {
 

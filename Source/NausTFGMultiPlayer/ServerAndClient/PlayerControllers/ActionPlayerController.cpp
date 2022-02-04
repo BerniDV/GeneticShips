@@ -84,6 +84,8 @@ void AActionPlayerController::SetupInputComponent()
 		InputComponent->BindAction("Deceleration", EInputEvent::IE_Pressed, playerControllerImpl, &AActionPlayerControllerImpl::DecelerationON);
 		InputComponent->BindAction("Deceleration", EInputEvent::IE_Released, playerControllerImpl, &AActionPlayerControllerImpl::DecelerationOff);
 
+		InputComponent->BindAction("Fire", EInputEvent::IE_Pressed, playerControllerImpl, &AActionPlayerControllerImpl::Fire);
+
 		InputComponent->BindAxis("BoostSpeedUp", playerControllerImpl, &AActionPlayerControllerImpl::BoostSpeed);
 		//InputComponent->BindAxis("BoostSpeedDown",playerControllerImpl, &AActionPlayerControllerImpl::BoostSpeed);
 

@@ -46,4 +46,6 @@ public:
 	virtual void DecelerationON();
 	virtual void DecelerationOff();
 	virtual void BoostSpeed(float Value);
+
+	virtual void Fire();
 };

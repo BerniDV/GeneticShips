@@ -120,6 +120,12 @@ void AActionPlayerControllerImpl::SetCameraManager(APlayerCameraManager* _camera
 	cameraManager = _cameraManager;
 }
 
+void AActionPlayerControllerImpl::Fire()
+{
+
+
+}
+
 
 void AActionPlayerControllerImpl::BeginPlay()
 {

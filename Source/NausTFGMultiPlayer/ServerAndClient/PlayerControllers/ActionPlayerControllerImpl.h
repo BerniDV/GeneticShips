@@ -53,6 +53,8 @@ public:
 
 	void SetCameraManager(APlayerCameraManager* _cameraManager);
 
+	virtual void Fire();
+
 protected:
 
 	virtual void BeginPlay() override;
