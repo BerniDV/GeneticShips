@@ -93,7 +93,8 @@ void AActionPlayerController::SetupInputComponent()
 		InputComponent->BindAction("Deceleration", EInputEvent::IE_Pressed, playerControllerImpl, &AActionPlayerControllerImpl::DecelerationON);
 		InputComponent->BindAction("Deceleration", EInputEvent::IE_Released, playerControllerImpl, &AActionPlayerControllerImpl::DecelerationOff);
 
-		InputComponent->BindAction("Fire", EInputEvent::IE_Pressed, playerControllerImpl, &AActionPlayerControllerImpl::Fire);
+		InputComponent->BindAction("Fire", EInputEvent::IE_Pressed, playerControllerImpl, &AActionPlayerControllerImpl::StartShooting);
+		InputComponent->BindAction("Fire", EInputEvent::IE_Released, playerControllerImpl, &AActionPlayerControllerImpl::StopShooting);
 
 		InputComponent->BindAxis("BoostSpeedUp", playerControllerImpl, &AActionPlayerControllerImpl::BoostSpeed);
 		//InputComponent->BindAxis("BoostSpeedDown",playerControllerImpl, &AActionPlayerControllerImpl::BoostSpeed);
@@ -168,6 +169,17 @@ int AActionPlayerController::GetTeamId()
 	return myPlayerState->GetTeamID();
 }
 
+float AActionPlayerController::GetCadency()
+{
+
+	return playerControllerImpl->GetCadency();
+}
+
+float AActionPlayerController::GetTimeSinceLastProjectile()
+{
+
+	return playerControllerImpl->GetTimeSinceLastProjectile();
+}
 
 
 void AActionPlayerController::BeginPlay()

@@ -53,7 +53,11 @@ public:
 
 	void SetCameraManager(APlayerCameraManager* _cameraManager);
 
-	virtual void Fire();
+	virtual void StartShooting();
+	virtual void StopShooting();
+
+	virtual float GetCadency();
+	virtual float GetTimeSinceLastProjectile();
 
 protected:
 

@@ -94,6 +94,10 @@ void AActionPawn::Fire()
 
 }
 
+void AActionPawn::StopFire()
+{
+}
+
 float AActionPawn::GetHealth()
 {
 

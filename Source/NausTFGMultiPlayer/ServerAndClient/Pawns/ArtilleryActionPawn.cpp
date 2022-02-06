@@ -3,11 +3,13 @@
 
 #include "ArtilleryActionPawn.h"
 
+#include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Projectiles/BasicProjectile.h"
 
 AArtilleryActionPawn::AArtilleryActionPawn()
 {
 
+	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 
 	if (GEngine)
@@ -23,6 +25,19 @@ void AArtilleryActionPawn::Fire()
 {
 
 	Server_Fire();
+
+}
+
+void AArtilleryActionPawn::StopFire()
+{
+
+
+}
+
+void AArtilleryActionPawn::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
 
 }
 
@@ -42,7 +57,9 @@ void AArtilleryActionPawn::Server_Fire_Implementation()
 bool AArtilleryActionPawn::Server_Fire_Validate()
 {
 
-	return true;
+	AActionPlayerController* PC = Cast<AActionPlayerController>(GetOwner());
+
+	return PC->GetTimeSinceLastProjectile() >= PC->GetCadency();
 
 }
 

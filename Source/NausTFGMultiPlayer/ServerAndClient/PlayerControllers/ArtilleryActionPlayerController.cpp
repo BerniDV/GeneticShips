@@ -16,6 +16,10 @@ AArtilleryActionPlayerController::AArtilleryActionPlayerController()
 
 	ConstructorHelpers::FClassFinder <AArtilleryActionPawn> refArtilleryActionPawnBP(TEXT("/Game/ServerAndClient/Pawns/ArtilleryActionPawn_BP"));
 	reference = refArtilleryActionPawnBP.Class;
+
+	cadencyOfTheGunInSeconds = 0.1f;
+	bIsShooting = false;
+	timeSinceLastProjectile = 0.f;
 }
 
 void AArtilleryActionPlayerController::BeginPlay()
@@ -24,6 +28,20 @@ void AArtilleryActionPlayerController::BeginPlay()
 
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Artillery Controller PreparedB"));
+}
+
+void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	timeSinceLastProjectile += DeltaSeconds;
+
+	if(bIsShooting && timeSinceLastProjectile >= cadencyOfTheGunInSeconds)
+	{
+
+		timeSinceLastProjectile = 0.f;
+		Fire();
+	}
 }
 
 UClass* AArtilleryActionPlayerController::GetDefaultPawn()
@@ -58,7 +76,34 @@ void AArtilleryActionPlayerController::YawCamera(float value)
 
 void AArtilleryActionPlayerController::Fire()
 {
-
+	
 	AActionPlayerController* playerController = Cast<AActionPlayerController>(GetOwner());
 	Cast<AActionPawn>(playerController->GetPawn())->Fire();
+	
+}
+
+void AArtilleryActionPlayerController::StopShooting()
+{
+
+	bIsShooting = false;
+	AActionPlayerController* playerController = Cast<AActionPlayerController>(GetOwner());
+	Cast<AActionPawn>(playerController->GetPawn())->StopFire();
+}
+
+float AArtilleryActionPlayerController::GetCadency()
+{
+
+	return cadencyOfTheGunInSeconds;
+}
+
+float AArtilleryActionPlayerController::GetTimeSinceLastProjectile()
+{
+
+	return timeSinceLastProjectile;
+}
+
+void AArtilleryActionPlayerController::StartShooting()
+{
+
+	bIsShooting = true;
 }

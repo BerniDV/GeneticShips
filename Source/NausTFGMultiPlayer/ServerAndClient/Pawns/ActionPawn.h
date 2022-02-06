@@ -48,6 +48,7 @@ public:
 	virtual void BoostSpeed(float Value);
 
 	virtual void Fire();
+	virtual void StopFire();
 
 	float GetHealth();
 	void SetHealth(float value);

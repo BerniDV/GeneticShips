@@ -48,6 +48,9 @@ public:
 
 	int GetTeamId();
 
+	float GetCadency();
+	float GetTimeSinceLastProjectile();
+
 protected:
 
 	virtual void BeginPlay() override;

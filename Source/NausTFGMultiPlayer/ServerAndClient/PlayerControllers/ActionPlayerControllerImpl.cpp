@@ -120,10 +120,27 @@ void AActionPlayerControllerImpl::SetCameraManager(APlayerCameraManager* _camera
 	cameraManager = _cameraManager;
 }
 
-void AActionPlayerControllerImpl::Fire()
+void AActionPlayerControllerImpl::StartShooting()
 {
 
 
+}
+
+void AActionPlayerControllerImpl::StopShooting()
+{
+
+
+}
+
+float AActionPlayerControllerImpl::GetCadency()
+{
+	return TNumericLimits<float>::Max();
+}
+
+float AActionPlayerControllerImpl::GetTimeSinceLastProjectile()
+{
+
+	return 0;
 }
 
 

@@ -22,6 +22,8 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	virtual void Tick(float DeltaSeconds) override;
+
 public:
 
 	virtual UClass* GetDefaultPawn() override;
@@ -32,9 +34,20 @@ public:
 
 	virtual void YawCamera(float value) override;
 
-	virtual void Fire() override;
+	void Fire();
+
+	virtual void StartShooting() override;
+	virtual void StopShooting() override;
+
+	float GetCadency() override;
+	float GetTimeSinceLastProjectile() override;
 
 private:
 
 	UClass* reference;
+
+	float cadencyOfTheGunInSeconds;
+
+	bool bIsShooting;
+	float timeSinceLastProjectile;
 };
