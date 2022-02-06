@@ -17,6 +17,7 @@ void AActionPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AActionPlayerState, health);
+	DOREPLIFETIME(AActionPlayerState, teamID);
 }
 
 float AActionPlayerState::GetHealth()
@@ -36,6 +37,18 @@ void AActionPlayerState::AddHealth(float value)
 
 	if (health + value <= maxHealth)
 		health += value;
+}
+
+void AActionPlayerState::SetTeamID(int value)
+{
+
+	teamID = value;
+}
+
+int AActionPlayerState::GetTeamID()
+{
+
+	return teamID;
 }
 
 void AActionPlayerState::OnHealthUpdate_Implementation()

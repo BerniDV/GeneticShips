@@ -20,28 +20,18 @@ AActionGameMode::AActionGameMode()
 	
 }
 
-struct MatchOptions
-{
-
-	MatchOptions(const FString& i_options)
-	{
-
-		roleSelected = (NausTFGRolTypes)FCString::Atoi(*UGameplayStatics::ParseOption(i_options, TEXT("Role")));
-
-	}
-	
-	NausTFGRolTypes roleSelected;
-};
 
 FString AActionGameMode::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueNetId,
 	const FString& Options, const FString& Portal)
 {
 
-	MatchOptions matchOptions(Options);
+	int teamIdTest = 1;
+
+	MatchOptions matchOptions(Options, teamIdTest);
 
 	AActionPlayerController* playerController = Cast<AActionPlayerController>(NewPlayerController);
 
-	playerController->Initialize(matchOptions.roleSelected);
+	playerController->Initialize(matchOptions);
 
 	return Super::InitNewPlayer(playerController, UniqueNetId, Options, Portal);
 	

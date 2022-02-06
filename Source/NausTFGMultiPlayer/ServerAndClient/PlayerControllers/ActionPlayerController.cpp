@@ -5,6 +5,7 @@
 
 #include "ArtilleryActionPlayerController.h"
 #include "PilotActionPlayerController.h"
+#include "GameFramework/GameStateBase.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "NausTFGMultiPlayer/Client/Cameras/ActionCamera.h"
 #include "NausTFGMultiPlayer/Client/Cameras/ActionCameraManager.h"
@@ -41,32 +42,38 @@ UClass* AActionPlayerController::GetDefaultPawn()
 }
 
 
-void AActionPlayerController::Initialize(NausTFGRolTypes roleType)
+void AActionPlayerController::Initialize(MatchOptions matchOptions)
 {
 
-	switch (roleType)
+	AActionPlayerState* playerState = GetPlayerState<AActionPlayerState>();
+
+	playerState->SetTeamID(matchOptions.teamID);
+	GetWorld()->GetGameState()->GetPlayerStateFromUniqueNetId(FUniqueNetIdWrapper());
+
+	FActorSpawnParameters spawnParameters;
+	spawnParameters.Instigator = GetInstigator();
+	spawnParameters.Owner = this;
+
+
+	switch (matchOptions.roleSelected)
 	{
 
 	case NausTFGRolTypes::ArtilleryActionRolType:
 
-		playerControllerImpl = GetWorld()->SpawnActor<AArtilleryActionPlayerController>();
+		playerControllerImpl = GetWorld()->SpawnActor<AArtilleryActionPlayerController>(spawnParameters);
 
 		break;
 
 	case NausTFGRolTypes::PilotActionRolType:
 
-		playerControllerImpl = GetWorld()->SpawnActor<APilotActionPlayerController>();
+		playerControllerImpl = GetWorld()->SpawnActor<APilotActionPlayerController>(spawnParameters);
 
 		break;
 		
 	default:
 		break;
 	}
-
 	
-	playerControllerImpl->SetOwner(this);
-
-
 }
 
 void AActionPlayerController::SetupInputComponent()
@@ -98,9 +105,10 @@ void AActionPlayerController::SetupInputComponent()
 }
 
 //Esta funcion es un callback del momento en el que el servidor replica al cliente playerControllerImpl
-void AActionPlayerController::InitializeClientPlayerControllerImpl_Implementation()
+void AActionPlayerController::Client_InitializeClientPlayerControllerImpl_Implementation()
 {
 
+	
 	presentationController = playerControllerImpl->GetPresentationController();
 	SetupInputComponent();
 	CreaMenus();
@@ -151,6 +159,15 @@ float AActionPlayerController::TakeDamage(float DamageAmount, FDamageEvent const
 	SetPlayerHealth(currentHealth);
 	return currentHealth;
 }
+
+int AActionPlayerController::GetTeamId()
+{
+
+	AActionPlayerState* myPlayerState = Cast<AActionPlayerState>(PlayerState);
+	
+	return myPlayerState->GetTeamID();
+}
+
 
 
 void AActionPlayerController::BeginPlay()

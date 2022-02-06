@@ -56,10 +56,13 @@ public:
 	UFUNCTION()
 	void OnHealthUpdate();
 
+	TOptional<int> GetPawnTeamId();
+
 private:
 
 	float maxHealth;
 
 	UPROPERTY(ReplicatedUsing = OnHealthUpdate)
 	float health;
+
 };

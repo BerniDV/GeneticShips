@@ -25,6 +25,7 @@ APilotActionPawn::APilotActionPawn()
 	rotationComponent->SetIsReplicated(true);
 
 	collisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("boxComponent"));
+	collisionBox->SetCollisionProfileName("BlockAllDynamic");
 	SetRootComponent(collisionBox);
 
 	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("staticMesh"));

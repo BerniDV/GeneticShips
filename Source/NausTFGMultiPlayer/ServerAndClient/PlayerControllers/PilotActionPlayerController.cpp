@@ -138,8 +138,7 @@ AActionCamera* APilotActionPlayerController::SpawnActionCamera()
 	APilotActionPawn* pawn = Cast<APilotActionPawn>(PC->GetPawn());
 
 	FVector spawnLocation = pawn->GetSpringArmComponent()->GetSocketLocation(USpringArmComponent::SocketName);
-	//spawnLocation -= PC->GetPawn()->GetActorForwardVector() * 400.f;
-	//spawnLocation += PC->GetPawn()->GetActorUpVector() * 150.f;
+
 
 	FRotator spawnRotation = PC->GetPawn()->GetActorRotation();
 	

@@ -7,6 +7,7 @@
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "ActionPlayerController.generated.h"
 
+struct MatchOptions;
 class AActionPlayerControllerImpl;
 class UReferencePawnsFactory;
 class AArtilleryActionPawn;
@@ -28,12 +29,12 @@ public:
 
 	UClass* GetDefaultPawn();
 
-	void Initialize(NausTFGRolTypes roleType);
+	void Initialize(MatchOptions matchOptions);
 
 	virtual void SetupInputComponent() override;
 
 	UFUNCTION(Client, Reliable)
-	void InitializeClientPlayerControllerImpl();
+	void Client_InitializeClientPlayerControllerImpl();
 
 	void SpawnActionCamera();
 
@@ -45,6 +46,8 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+	int GetTeamId();
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -54,9 +57,7 @@ protected:
 
 private:
 
-	UPROPERTY(ReplicatedUsing = InitializeClientPlayerControllerImpl)
+	UPROPERTY(ReplicatedUsing = Client_InitializeClientPlayerControllerImpl)
 	AActionPlayerControllerImpl* playerControllerImpl;
-
-	
 	
 };

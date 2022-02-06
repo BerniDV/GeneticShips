@@ -28,11 +28,17 @@ public:
 	void SetHealth(float value);
 	void AddHealth(float value);
 
+	void SetTeamID(int value);
+	int GetTeamID();
+
 private:
 
 	float maxHealth;
 
 	UPROPERTY(ReplicatedUsing = OnHealthUpdate)
 	float health;
+
+	UPROPERTY(Replicated)
+	int  teamID;
 	
 };

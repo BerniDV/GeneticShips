@@ -3,6 +3,8 @@
 
 #include "ActionPawn.h"
 
+#include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
+#include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/ActionPlayerState.h"
 #include "Net/UnrealNetwork.h"
 
 // Sets default values
@@ -115,6 +117,28 @@ void AActionPawn::OnHealthUpdate()
 {
 
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("Tu vida es: %f"), health));
+}
+
+TOptional<int> AActionPawn::GetPawnTeamId()
+{
+	TOptional<int> id;
+
+	
+	if(IsBotControlled() || IsPlayerControlled())
+	{
+
+		AActionPlayerState* playerState = Cast<AActionPlayerState>(GetPlayerState());
+
+		if(playerState != nullptr)
+		{
+
+			id = Cast<AActionPlayerState>(GetPlayerState())->GetTeamID();
+		}
+
+	}
+		
+
+	return id;
 }
 
 void AActionPawn::Client_SetRotation_Implementation(FRotator rotator)

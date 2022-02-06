@@ -4,8 +4,10 @@
 #include "BasicProjectile.h"
 
 #include "Components/SphereComponent.h"
+#include "GameFramework/GameStateBase.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
 
 // Sets default values
 ABasicProjectile::ABasicProjectile()
@@ -16,7 +18,7 @@ ABasicProjectile::ABasicProjectile()
 
 	projectileSphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("sphereComponent"));
 	projectileSphereComponent->InitSphereRadius(37.5f);
-	projectileSphereComponent->SetCollisionProfileName(TEXT("BlockAllDynamic"));
+	projectileSphereComponent->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 	RootComponent = projectileSphereComponent;
 
 	projectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("staticMesh"));
@@ -34,8 +36,10 @@ ABasicProjectile::ABasicProjectile()
 
 	if (GetLocalRole() == ROLE_Authority)
 	{
-		projectileSphereComponent->OnComponentHit.AddDynamic(this, &ABasicProjectile::OnProjectileImpact);
+		//projectileSphereComponent->OnComponentHit.AddDynamic(this, &ABasicProjectile::OnProjectileImpact);
+		projectileSphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ABasicProjectile::OnProjectileImpact);
 	}
+	
 }
 
 // Called when the game starts or when spawned
@@ -58,15 +62,28 @@ void ABasicProjectile::Tick(float DeltaTime)
 
 }
 
-void ABasicProjectile::OnProjectileImpact(UPrimitiveComponent* HitComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void ABasicProjectile::OnProjectileImpact(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	
-	if (OtherActor)
+	AActionPawn* myPawn = Cast<AActionPawn>(GetInstigator());
+	AActionPawn* otherPawn = Cast<AActionPawn>(OtherActor);
+
+	//En caso de ser del mismo equipo no hacemos nada
+	if(myPawn != nullptr && otherPawn != nullptr && myPawn->GetPawnTeamId().IsSet() && otherPawn->GetPawnTeamId().IsSet() && myPawn->GetPawnTeamId().GetValue() == otherPawn->GetPawnTeamId().GetValue())
 	{
-		UGameplayStatics::ApplyPointDamage(OtherActor->GetInstigatorController(), damage, NormalImpulse, Hit, GetOwner()->GetInstigatorController(), this, damageType);
+
+		return;
 	}
 
-	Destroy();
+
+
+	if (OtherActor && OtherActor->GetInstigatorController() != GetOwner()->GetInstigatorController())
+	{
+		UGameplayStatics::ApplyPointDamage(OtherActor->GetInstigatorController(), damage, FVector::ZeroVector, FHitResult(), GetOwner()->GetInstigatorController(), this, damageType);
+
+		Destroy();
+	}
+
+	
 }
 
