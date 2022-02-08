@@ -64,6 +64,29 @@ void UTranslationComponent::Inicialite(float _speedDropRate, float _defaultMaxAc
 
 }
 
+bool UTranslationComponent::SimilarEnough(FVector v1, FVector v2)
+{
+
+	return FMath::Abs(v1.X - v2.X) < 0.5f && FMath::Abs(v1.Y - v2.Y) < 0.5f && FMath::Abs(v1.Y - v2.Y) < 0.5f;
+}
+
+float UTranslationComponent::GetCurrenntSpeed()
+{
+	return currentspeed.Size();
+}
+
+FVector UTranslationComponent::GetPredictedPosition()
+{
+
+	return predictedPosition;
+}
+
+float UTranslationComponent::GetInterpolationSpeed()
+{
+
+	return interpolationSpeed;
+}
+
 
 // Called every frame
 
@@ -134,7 +157,7 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 	//Si nos hemos parado corregimos a la ultima posiciopn confirmada conocida, en caso contrario seguimos interpolando entre la actual y la que hemos predecido
 	//Como siempre predecimos segun la ultima confirmada las pequeñas correciones se hacen implicitamente
-	if (position != lastPosition && GetOwner()->GetLocalRole() != ENetRole::ROLE_AutonomousProxy) {
+	if (!SimilarEnough(position, lastPosition) && GetOwner()->GetLocalRole() != ENetRole::ROLE_AutonomousProxy) {
 
 
 		interpolatedPosition = FMath::VInterpConstantTo(interpolatedPosition, predictedPosition, DeltaTime, interpolationSpeed); 

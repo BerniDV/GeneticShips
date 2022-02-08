@@ -57,7 +57,11 @@ public:
 	UFUNCTION()
 	void OnHealthUpdate();
 
+	virtual bool HasPredictedMovement();
+
 	TOptional<int> GetPawnTeamId();
+
+	virtual bool IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const override;
 
 private:
 

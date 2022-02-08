@@ -53,7 +53,16 @@ public:
 
 	virtual void BoostSpeed(float Value) override;
 
+	virtual bool HasPredictedMovement() override;
+
 	USpringArmComponent* GetSpringArmComponent();
+
+	float GetCurrentSpeed();
+	float GetMaxSpeed();
+	FVector GetPredictedPosition();
+	float GetInterpolationSpeed();
+
+	virtual bool IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const override;
 
 protected:
 

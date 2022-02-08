@@ -6,6 +6,7 @@
 #include "PlayerControllerDefaultBehaviour.h"
 #include "ActionPlayerControllerImpl.generated.h"
 
+class AActionPawn;
 class AActionCamera;
 class URotationComponent;
 class UTranslationComponent;
@@ -59,6 +60,12 @@ public:
 	virtual float GetCadency();
 	virtual float GetTimeSinceLastProjectile();
 
+	virtual void SetTeamMate(AActionPawn* _teamMate);
+	AActionPawn* GetTeamMate();
+
+	UFUNCTION(Client, Reliable)
+	void Client_HideTeamMateActor();
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -69,8 +76,12 @@ protected:
 
 	APlayerCameraManager* cameraManager;
 
+	UPROPERTY(ReplicatedUsing = Client_HideTeamMateActor)
+	AActionPawn* teamMate;
+
 private:
 
 	UPresentationController* presentationController;
+
 
 };

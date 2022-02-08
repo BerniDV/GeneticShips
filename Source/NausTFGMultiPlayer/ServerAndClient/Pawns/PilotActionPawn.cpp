@@ -43,6 +43,8 @@ APilotActionPawn::APilotActionPawn()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false; 
 	//NetUpdateFrequency = 2.5f;
+
+	NetCullDistanceSquared = 1000000.f;
 	
 }
 
@@ -149,8 +151,44 @@ void APilotActionPawn::BoostSpeed(float Value)
 	translationComponent->BoostSpeed(Value);
 }
 
+bool APilotActionPawn::HasPredictedMovement()
+{
+	
+	return true;
+}
+
 USpringArmComponent* APilotActionPawn::GetSpringArmComponent()
 {
 
 	return springArm;
+}
+
+float APilotActionPawn::GetCurrentSpeed()
+{
+
+	return translationComponent->GetCurrenntSpeed();
+}
+
+float APilotActionPawn::GetMaxSpeed()
+{
+
+	return translationComponent->GetMaxSpeed();
+}
+
+FVector APilotActionPawn::GetPredictedPosition()
+{
+
+	return translationComponent->GetPredictedPosition();
+}
+
+float APilotActionPawn::GetInterpolationSpeed()
+{
+
+	return translationComponent->GetInterpolationSpeed();
+}
+
+bool APilotActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget,
+	const FVector& SrcLocation) const
+{
+	return Super::IsNetRelevantFor(RealViewer, ViewTarget, SrcLocation);
 }

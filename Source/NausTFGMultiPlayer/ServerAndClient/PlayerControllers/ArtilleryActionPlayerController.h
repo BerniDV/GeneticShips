@@ -6,6 +6,7 @@
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerControllerImpl.h"
 #include "ArtilleryActionPlayerController.generated.h"
 
+class AActionPawn;
 /**
  * 
  */
@@ -41,6 +42,8 @@ public:
 
 	float GetCadency() override;
 	float GetTimeSinceLastProjectile() override;
+
+	virtual void SetTeamMate(AActionPawn* _teamMate) override;
 
 private:
 

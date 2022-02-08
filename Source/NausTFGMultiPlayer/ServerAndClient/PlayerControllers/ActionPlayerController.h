@@ -51,6 +51,8 @@ public:
 	float GetCadency();
 	float GetTimeSinceLastProjectile();
 
+	AActionPlayerControllerImpl* GetPlayerControllerImpl();
+
 protected:
 
 	virtual void BeginPlay() override;

@@ -4,9 +4,11 @@
 #include "ArtilleryActionPlayerController.h"
 
 #include "ActionPlayerController.h"
+#include "GameFramework/GameStateBase.h"
 #include "NausTFGMultiPlayer/Client/Cameras/ActionCamera.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ArtilleryActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
+#include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/ActionPlayerState.h"
 
 AArtilleryActionPlayerController::AArtilleryActionPlayerController()
 {
@@ -28,6 +30,8 @@ void AArtilleryActionPlayerController::BeginPlay()
 
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Artillery Controller PreparedB"));
+
+	
 }
 
 void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
@@ -41,6 +45,47 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 
 		timeSinceLastProjectile = 0.f;
 		Fire();
+	}
+	
+	if(teamMate)
+	{
+		APilotActionPawn* pilotMate = Cast<APilotActionPawn>(teamMate);
+
+		AActor* myPawn = Cast<AActionPlayerController>(GetOwner())->GetPawn();
+
+		if (myPawn) {
+
+			if ((myPawn->GetActorLocation() - pilotMate->GetActorLocation()).Size() > 2000.f)
+			{
+
+				myPawn->SetActorLocation(pilotMate->GetActorLocation());
+			}
+
+			FVector nextLocationPawn = FMath::VInterpConstantTo(myPawn->GetActorLocation(), pilotMate->GetPredictedPosition(), DeltaSeconds, pilotMate->GetInterpolationSpeed());
+
+			myPawn->SetActorLocation(nextLocationPawn);
+			
+		}
+
+		if(cameraManager && cameraManager->GetViewTarget())
+		{
+
+			AActionCamera* camera = Cast<AActionCamera>(cameraManager->GetViewTarget());
+
+			
+			if((camera->GetActorLocation() - pilotMate->GetActorLocation()).Size() > 2000.f)
+			{
+
+				camera->SetActorLocation(pilotMate->GetActorLocation());
+			}
+			
+
+			FVector nextLocation = FMath::VInterpConstantTo(camera->GetActorLocation(), pilotMate->GetPredictedPosition(), DeltaSeconds, pilotMate->GetInterpolationSpeed());
+
+			camera->SetActorLocation(nextLocation);
+
+		}
+		
 	}
 }
 
@@ -100,6 +145,13 @@ float AArtilleryActionPlayerController::GetTimeSinceLastProjectile()
 {
 
 	return timeSinceLastProjectile;
+}
+
+void AArtilleryActionPlayerController::SetTeamMate(AActionPawn* _teamMate)
+{
+	Super::SetTeamMate(_teamMate);
+
+	
 }
 
 void AArtilleryActionPlayerController::StartShooting()

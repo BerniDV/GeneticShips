@@ -46,6 +46,8 @@ ABasicProjectile::ABasicProjectile()
 void ABasicProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SetLifeSpan(10.f);
 	
 }
 
@@ -77,7 +79,7 @@ void ABasicProjectile::OnProjectileImpact(UPrimitiveComponent* OverlappedCompone
 
 
 
-	if (OtherActor && OtherActor->GetInstigatorController() != GetOwner()->GetInstigatorController())
+	if (OtherActor && OtherActor->GetInstigatorController() != nullptr && GetOwner()->GetInstigatorController() != nullptr && OtherActor->GetInstigatorController() != GetOwner()->GetInstigatorController())
 	{
 		UGameplayStatics::ApplyPointDamage(OtherActor->GetInstigatorController(), damage, FVector::ZeroVector, FHitResult(), GetOwner()->GetInstigatorController(), this, damageType);
 
@@ -85,5 +87,12 @@ void ABasicProjectile::OnProjectileImpact(UPrimitiveComponent* OverlappedCompone
 	}
 
 	
+}
+
+bool ABasicProjectile::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget,
+	const FVector& SrcLocation) const
+{
+
+	return Super::IsNetRelevantFor(RealViewer, this, SrcLocation);;
 }
 

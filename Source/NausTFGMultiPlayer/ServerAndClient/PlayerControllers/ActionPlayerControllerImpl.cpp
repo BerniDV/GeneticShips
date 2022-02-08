@@ -2,7 +2,11 @@
 
 
 #include "ActionPlayerControllerImpl.h"
+
+#include "ActionPlayerController.h"
 #include "NausTFGMultiPlayer/Client/Controllers/InitMenuController.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
+#include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/ActionPlayerState.h"
 
 #include "Net/UnrealNetwork.h"
 
@@ -45,6 +49,7 @@ void AActionPlayerControllerImpl::GetLifetimeReplicatedProps(TArray<FLifetimePro
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	DOREPLIFETIME_CONDITION(AActionPlayerControllerImpl, teamMate, COND_InitialOnly);
 }
 
 UPresentationController* AActionPlayerControllerImpl::GetPresentationController()
@@ -143,18 +148,51 @@ float AActionPlayerControllerImpl::GetTimeSinceLastProjectile()
 	return 0;
 }
 
+void AActionPlayerControllerImpl::SetTeamMate(AActionPawn* _teamMate)
+{
+
+	teamMate = _teamMate;
+
+}
+
+AActionPawn* AActionPlayerControllerImpl::GetTeamMate()
+{
+
+	return teamMate;
+}
+
+void AActionPlayerControllerImpl::Client_HideTeamMateActor_Implementation()
+{
+
+	if (!HasAuthority() && teamMate)
+	{
+
+		teamMate->SetActorHiddenInGame(true);
+		
+	}
+}
+
 
 void AActionPlayerControllerImpl::BeginPlay()
 {
 	Super::BeginPlay();
 
 	InitializePresentationController();
+
+	
 	
 }
 
 void AActionPlayerControllerImpl::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+
+	if(teamMate)
+	{
+
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, teamMate->GetActorLocation().ToString());
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("%d"), teamMate->HasPredictedMovement()));
+	}
 
 }
 

@@ -12,6 +12,10 @@ AArtilleryActionPawn::AArtilleryActionPawn()
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 
+	//bNetUseOwnerRelevancy = true;
+	NetCullDistanceSquared = 1000000.f;
+	bOnlyRelevantToOwner = false;
+
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Artillery Pawn Prepared"));
 
@@ -34,11 +38,18 @@ void AArtilleryActionPawn::StopFire()
 
 }
 
+bool AArtilleryActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget,
+	const FVector& SrcLocation) const
+{
+
+	return Super::IsNetRelevantFor(RealViewer, ViewTarget, SrcLocation);
+}
+
 void AArtilleryActionPawn::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-
+	
 }
 
 void AArtilleryActionPawn::Server_Fire_Implementation()
@@ -52,6 +63,7 @@ void AArtilleryActionPawn::Server_Fire_Implementation()
 	spawnParameters.Owner = this;
 
 	ABasicProjectile* BasicProjectile =  GetWorld()->SpawnActor<ABasicProjectile>(projectile, spawnLocation, spawnRotation, spawnParameters);
+
 }
 
 bool AArtilleryActionPawn::Server_Fire_Validate()

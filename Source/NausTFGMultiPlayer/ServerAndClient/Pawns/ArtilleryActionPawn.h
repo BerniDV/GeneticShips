@@ -26,6 +26,8 @@ public:
 	UFUNCTION(Server, Reliable, WithValidation)
 	void Server_Fire();
 
+	virtual bool IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const override;
+
 protected:
 
 	virtual void Tick(float DeltaSeconds) override;

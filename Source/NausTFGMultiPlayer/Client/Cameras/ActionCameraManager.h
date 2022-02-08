@@ -17,6 +17,5 @@ class NAUSTFGMULTIPLAYER_API AActionCameraManager : public APlayerCameraManager
 public:
 
 	AActionCameraManager();
-
 	
 };

@@ -29,7 +29,7 @@ AActionPlayerController::AActionPlayerController()
 void AActionPlayerController::BindSignals()
 {
 	Super::BindSignals();
-
+	
 	playerControllerImpl->BindSignals();
 }
 
@@ -127,9 +127,8 @@ void AActionPlayerController::SpawnActionCamera()
 	AActionCamera* camera = playerControllerImpl->SpawnActionCamera();
 
 	SetCameraActor(camera);
-
-	PlayerCameraManager->SetViewTarget(camera);
-
+	
+	SetViewTarget(camera);
 }
 
 void AActionPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -179,6 +178,12 @@ float AActionPlayerController::GetTimeSinceLastProjectile()
 {
 
 	return playerControllerImpl->GetTimeSinceLastProjectile();
+}
+
+AActionPlayerControllerImpl* AActionPlayerController::GetPlayerControllerImpl()
+{
+
+	return playerControllerImpl;
 }
 
 

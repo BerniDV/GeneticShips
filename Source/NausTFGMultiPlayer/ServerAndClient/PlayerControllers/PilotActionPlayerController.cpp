@@ -4,11 +4,13 @@
 #include "PilotActionPlayerController.h"
 
 #include "ActionPlayerController.h"
+#include "DrawDebugHelpers.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "NausTFGMultiPlayer/Client/Cameras/PilotActionCamera.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/RotationComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/TranslationComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
+
 
 APilotActionPlayerController::APilotActionPlayerController()
 {
@@ -67,6 +69,7 @@ void APilotActionPlayerController::Tick(float DeltaSeconds)
 	}
 
 }
+
 
 UClass* APilotActionPlayerController::GetDefaultPawn()
 {

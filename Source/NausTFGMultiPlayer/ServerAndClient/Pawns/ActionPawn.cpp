@@ -123,6 +123,11 @@ void AActionPawn::OnHealthUpdate()
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("Tu vida es: %f"), health));
 }
 
+bool AActionPawn::HasPredictedMovement()
+{
+	return false;
+}
+
 TOptional<int> AActionPawn::GetPawnTeamId()
 {
 	TOptional<int> id;
@@ -143,6 +148,13 @@ TOptional<int> AActionPawn::GetPawnTeamId()
 		
 
 	return id;
+}
+
+bool AActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const
+{
+
+
+	return Super::IsNetRelevantFor(RealViewer, this, SrcLocation);
 }
 
 void AActionPawn::Client_SetRotation_Implementation(FRotator rotator)

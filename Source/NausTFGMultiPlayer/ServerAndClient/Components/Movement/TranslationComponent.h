@@ -105,7 +105,13 @@ public:
 
 	void Inicialite(float _speedDropRate, float _defaultMaxAcceleration, float _defaultMaxSpeed, float _maxAcceleration, float _maxSpeed, float _accelerationSpeed, float _decelerationSpeed, float _meneuverabilityInPercent);
 
-	
+	bool SimilarEnough(FVector v1, FVector v2);
+
+	float GetCurrenntSpeed();
+
+	FVector GetPredictedPosition();
+
+	float GetInterpolationSpeed();
 
 private:
 
@@ -125,8 +131,6 @@ private:
 
 	FVector forwardDirection;
 	FVector rightDirection;
-
-	float movementSpeedInCm;
 
 	FVector currentspeed;
 
