@@ -61,6 +61,7 @@ public:
 	float GetMaxSpeed();
 	FVector GetPredictedPosition();
 	float GetInterpolationSpeed();
+	FVector GetLastPosition();
 
 	virtual bool IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const override;
 

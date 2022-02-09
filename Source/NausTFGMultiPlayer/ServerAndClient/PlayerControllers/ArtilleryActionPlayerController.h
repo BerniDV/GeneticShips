@@ -58,4 +58,6 @@ private:
 	float timeSinceLastProjectile;
 
 	FVector2D cameraInput;
+
+	FVector lastTeamMatePosition;
 };

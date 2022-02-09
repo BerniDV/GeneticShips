@@ -25,7 +25,7 @@ public:
 	virtual void StopFire() override;
 
 	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_Fire();
+	void Server_Fire(FVector locationToFire);
 
 	virtual bool IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const override;
 

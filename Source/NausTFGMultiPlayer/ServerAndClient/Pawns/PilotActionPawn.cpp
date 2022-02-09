@@ -110,12 +110,8 @@ void APilotActionPawn::ExecuteRotation(FRotator rotator)
 void APilotActionPawn::ImpulseON()
 {
 
-	//float maxSpeed = translationComponent->GetMaxSpeed();
-
 	translationComponent->SetMaxSpeed(maxSpeed * 7);
 	translationComponent->SetCurrentSpeed(maxSpeed * 3);
-
-	//float maxAcceleration = translationComponent->GetMaxAcceleration();
 
 	translationComponent->SetMaxAcceleration(maxAcceleration * 5);
 	translationComponent->SetCurrentAcceleration(maxAcceleration * 4);
@@ -187,8 +183,14 @@ float APilotActionPawn::GetInterpolationSpeed()
 	return translationComponent->GetInterpolationSpeed();
 }
 
+FVector APilotActionPawn::GetLastPosition()
+{
+
+	return translationComponent->GetLastPosition();
+}
+
 bool APilotActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget,
-	const FVector& SrcLocation) const
+                                        const FVector& SrcLocation) const
 {
 	return Super::IsNetRelevantFor(RealViewer, ViewTarget, SrcLocation);
 }

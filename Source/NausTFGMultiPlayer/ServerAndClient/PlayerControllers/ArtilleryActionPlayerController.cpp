@@ -23,6 +23,7 @@ AArtilleryActionPlayerController::AArtilleryActionPlayerController()
 	cadencyOfTheGunInSeconds = 0.1f;
 	bIsShooting = false;
 	timeSinceLastProjectile = 0.f;
+	lastTeamMatePosition = FVector::ZeroVector;
 }
 
 void AArtilleryActionPlayerController::BeginPlay()
@@ -57,7 +58,10 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 
 		AActionPlayerController* myPC = Cast<AActionPlayerController>(GetOwner());
 
-		AArtilleryActionPawn* myPawn = Cast<AArtilleryActionPawn>(myPC->GetPawn());
+		AArtilleryActionPawn* myPawn = nullptr;
+
+		if(myPC)
+			myPawn = Cast<AArtilleryActionPawn>(myPC->GetPawn());
 
 		if (myPawn) {
 
@@ -67,15 +71,25 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 				myPawn->SetActorLocation(pilotMate->GetActorLocation());
 			}
 
-			FVector nextLocationPawn = FMath::VInterpConstantTo(myPawn->GetActorLocation(), pilotMate->GetPredictedPosition(), DeltaSeconds, pilotMate->GetInterpolationSpeed());
+			if(pilotMate->GetActorLocation() != lastTeamMatePosition)
+			{
 
-			myPawn->SetActorLocation(nextLocationPawn);
+				FVector nextLocationPawn = FMath::VInterpConstantTo(myPawn->GetActorLocation(), pilotMate->GetPredictedPosition(), DeltaSeconds, pilotMate->GetInterpolationSpeed());
+
+				myPawn->SetActorLocation(nextLocationPawn);
+			}else
+			{
+				FVector nextLocationPawn = FMath::VInterpConstantTo(myPawn->GetActorLocation(), pilotMate->GetActorLocation(), DeltaSeconds, pilotMate->GetMaxSpeed());
+				myPawn->SetActorLocation(nextLocationPawn);
+			}
+
+			lastTeamMatePosition = pilotMate->GetActorLocation();
 
 			FRotator newRotation = myPawn->GetActorRotation();
 
 			newRotation += FRotator(TestSensibility * DeltaSeconds * cameraInput.Y, TestSensibility * DeltaSeconds * cameraInput.X, 0.f);
 
-			newRotation.Pitch = FMath::Clamp(newRotation.Pitch, -80.f, 80.f);
+			newRotation.Pitch = FMath::Clamp(newRotation.Pitch, -45.f, 45.f);
 
 			myPawn->ExecuteRotation(newRotation);
 			
@@ -96,7 +110,7 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 
 			FVector nextLocation = FMath::VInterpConstantTo(camera->GetActorLocation(), pilotMate->GetPredictedPosition(), DeltaSeconds, pilotMate->GetInterpolationSpeed());
 
-			camera->SetActorLocation(nextLocation);
+			camera->SetActorLocation(myPawn->GetActorLocation());
 			camera->SetActorRotation(myPawn->GetActorRotation());
 		}
 		

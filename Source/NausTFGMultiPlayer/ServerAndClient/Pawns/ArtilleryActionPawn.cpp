@@ -33,7 +33,7 @@ AArtilleryActionPawn::AArtilleryActionPawn()
 void AArtilleryActionPawn::Fire()
 {
 
-	Server_Fire();
+	Server_Fire(GetActorLocation());
 
 }
 
@@ -70,10 +70,10 @@ void AArtilleryActionPawn::Tick(float DeltaSeconds)
 	
 }
 
-void AArtilleryActionPawn::Server_Fire_Implementation()
+void AArtilleryActionPawn::Server_Fire_Implementation(FVector locationToFire)
 {
 
-	const FVector spawnLocation = GetActorLocation();
+	const FVector spawnLocation = locationToFire + GetActorRotation().Vector() * 100.f;
 	const FRotator spawnRotation = GetActorRotation();
 
 	FActorSpawnParameters spawnParameters;
@@ -84,7 +84,7 @@ void AArtilleryActionPawn::Server_Fire_Implementation()
 
 }
 
-bool AArtilleryActionPawn::Server_Fire_Validate()
+bool AArtilleryActionPawn::Server_Fire_Validate(FVector locationToFire)
 {
 
 	AActionPlayerController* PC = Cast<AActionPlayerController>(GetOwner());

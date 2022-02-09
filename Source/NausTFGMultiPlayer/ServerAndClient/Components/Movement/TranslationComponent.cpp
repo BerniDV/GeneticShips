@@ -87,6 +87,12 @@ float UTranslationComponent::GetInterpolationSpeed()
 	return interpolationSpeed;
 }
 
+FVector UTranslationComponent::GetLastPosition()
+{
+
+	return lastPosition;
+}
+
 
 // Called every frame
 
@@ -152,7 +158,7 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 			Move_Server(position, direction, currentspeed, currentTime, accelerationInMS, maneuverabilityInPercent);
 
 		Cast<AActionPawn>(GetOwner())->SetActorLocation(position);
-
+		
 	}
 
 	//Si nos hemos parado corregimos a la ultima posiciopn confirmada conocida, en caso contrario seguimos interpolando entre la actual y la que hemos predecido

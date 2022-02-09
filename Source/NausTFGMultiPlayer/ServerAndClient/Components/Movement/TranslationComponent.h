@@ -113,6 +113,8 @@ public:
 
 	float GetInterpolationSpeed();
 
+	FVector GetLastPosition();
+
 private:
 
 	UFUNCTION()
