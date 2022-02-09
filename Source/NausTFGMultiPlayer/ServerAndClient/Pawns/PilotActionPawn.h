@@ -67,10 +67,10 @@ public:
 protected:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Replicated)
-		UTranslationComponent* translationComponent;
+	UTranslationComponent* translationComponent;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Replicated)
-		URotationComponent* rotationComponent;
+	URotationComponent* rotationComponent;
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	USpringArmComponent* springArm;

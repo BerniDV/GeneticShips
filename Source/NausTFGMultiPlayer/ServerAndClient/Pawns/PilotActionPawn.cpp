@@ -44,7 +44,7 @@ APilotActionPawn::APilotActionPawn()
 	bUseControllerRotationRoll = false; 
 	//NetUpdateFrequency = 2.5f;
 
-	NetCullDistanceSquared = 1000000.f;
+	//NetCullDistanceSquared = 1000000.f;
 	
 }
 

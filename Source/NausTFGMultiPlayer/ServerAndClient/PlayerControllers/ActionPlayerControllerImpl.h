@@ -79,9 +79,15 @@ protected:
 	UPROPERTY(ReplicatedUsing = Client_HideTeamMateActor)
 	AActionPawn* teamMate;
 
-private:
+	virtual void CreaMenus();
+
+	virtual void LoadHUD();
+
+	const float TestSensibility = 100.f;
 
 	UPresentationController* presentationController;
 
+private:
+	
 
 };

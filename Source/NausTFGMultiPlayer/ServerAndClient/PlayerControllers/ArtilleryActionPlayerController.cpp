@@ -8,6 +8,7 @@
 #include "NausTFGMultiPlayer/Client/Cameras/ActionCamera.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ArtilleryActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
+#include "NausTFGMultiPlayer/Client/Controllers/ActionGameController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/ActionPlayerState.h"
 
 AArtilleryActionPlayerController::AArtilleryActionPlayerController()
@@ -31,6 +32,9 @@ void AArtilleryActionPlayerController::BeginPlay()
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Artillery Controller PreparedB"));
 
+	CreaMenus();
+	BindSignals();
+	LoadHUD();
 	
 }
 
@@ -51,7 +55,9 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 	{
 		APilotActionPawn* pilotMate = Cast<APilotActionPawn>(teamMate);
 
-		AActor* myPawn = Cast<AActionPlayerController>(GetOwner())->GetPawn();
+		AActionPlayerController* myPC = Cast<AActionPlayerController>(GetOwner());
+
+		AArtilleryActionPawn* myPawn = Cast<AArtilleryActionPawn>(myPC->GetPawn());
 
 		if (myPawn) {
 
@@ -64,6 +70,14 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 			FVector nextLocationPawn = FMath::VInterpConstantTo(myPawn->GetActorLocation(), pilotMate->GetPredictedPosition(), DeltaSeconds, pilotMate->GetInterpolationSpeed());
 
 			myPawn->SetActorLocation(nextLocationPawn);
+
+			FRotator newRotation = myPawn->GetActorRotation();
+
+			newRotation += FRotator(TestSensibility * DeltaSeconds * cameraInput.Y, TestSensibility * DeltaSeconds * cameraInput.X, 0.f);
+
+			newRotation.Pitch = FMath::Clamp(newRotation.Pitch, -80.f, 80.f);
+
+			myPawn->ExecuteRotation(newRotation);
 			
 		}
 
@@ -83,7 +97,7 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 			FVector nextLocation = FMath::VInterpConstantTo(camera->GetActorLocation(), pilotMate->GetPredictedPosition(), DeltaSeconds, pilotMate->GetInterpolationSpeed());
 
 			camera->SetActorLocation(nextLocation);
-
+			camera->SetActorRotation(myPawn->GetActorRotation());
 		}
 		
 	}
@@ -110,13 +124,15 @@ AActionCamera* AArtilleryActionPlayerController::SpawnActionCamera()
 
 void AArtilleryActionPlayerController::PitchCamera(float value)
 {
-	
+
+	cameraInput.Y = value;
+
 }
 
 void AArtilleryActionPlayerController::YawCamera(float value)
 {
 	
-
+	cameraInput.X = value;
 }
 
 void AArtilleryActionPlayerController::Fire()
@@ -147,10 +163,31 @@ float AArtilleryActionPlayerController::GetTimeSinceLastProjectile()
 	return timeSinceLastProjectile;
 }
 
-void AArtilleryActionPlayerController::SetTeamMate(AActionPawn* _teamMate)
+void AArtilleryActionPlayerController::CreaMenus()
 {
-	Super::SetTeamMate(_teamMate);
 
+	bool bIsLocalPlayerContropller = Cast<AActionPlayerController>(GetOwner())->IsLocalPlayerController();
+
+	if (bIsLocalPlayerContropller && presentationController)
+	{
+		presentationController->CreaMenus();
+
+	}
+}
+
+void AArtilleryActionPlayerController::LoadHUD()
+{
+	bool bIsLocalPlayerContropller = Cast<AActionPlayerController>(GetOwner())->IsLocalPlayerController();
+	if (bIsLocalPlayerContropller)
+	{
+
+		Cast<UActionGameController>(presentationController)->LoadHUD();
+
+	}
+}
+
+void AArtilleryActionPlayerController::BindSignals()
+{
 	
 }
 

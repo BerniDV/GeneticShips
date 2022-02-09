@@ -5,6 +5,8 @@
 
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Projectiles/BasicProjectile.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/RotationComponent.h"
+#include "Net/UnrealNetwork.h"
 
 AArtilleryActionPawn::AArtilleryActionPawn()
 {
@@ -13,7 +15,7 @@ AArtilleryActionPawn::AArtilleryActionPawn()
 	bReplicates = true;
 
 	//bNetUseOwnerRelevancy = true;
-	NetCullDistanceSquared = 1000000.f;
+	//NetCullDistanceSquared = 1000000.f;
 	bOnlyRelevantToOwner = false;
 
 	if (GEngine)
@@ -22,6 +24,9 @@ AArtilleryActionPawn::AArtilleryActionPawn()
 
 	ConstructorHelpers::FClassFinder <ABasicProjectile> refBasicProjectileBP(TEXT("/Game/ServerAndClient/Projectiles/BasicProjectile_BP"));
 	projectile = refBasicProjectileBP.Class;
+
+	rotationComponent = CreateDefaultSubobject<URotationComponent>(TEXT("rotationComponent"));
+	rotationComponent->SetIsReplicated(true);
 	
 }
 
@@ -45,6 +50,19 @@ bool AArtilleryActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AAct
 	return Super::IsNetRelevantFor(RealViewer, ViewTarget, SrcLocation);
 }
 
+void AArtilleryActionPawn::ExecuteRotation(FRotator rotator)
+{
+
+	rotationComponent->ExecuteRotation(rotator);
+}
+
+void AArtilleryActionPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AArtilleryActionPawn, rotationComponent);
+}
+
 void AArtilleryActionPawn::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
@@ -55,7 +73,7 @@ void AArtilleryActionPawn::Tick(float DeltaSeconds)
 void AArtilleryActionPawn::Server_Fire_Implementation()
 {
 
-	const FVector spawnLocation = GetActorLocation() + (GetActorRotation().Vector() * 100.0f) + (GetActorUpVector() * 50.0f);
+	const FVector spawnLocation = GetActorLocation();
 	const FRotator spawnRotation = GetActorRotation();
 
 	FActorSpawnParameters spawnParameters;

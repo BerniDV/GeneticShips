@@ -49,8 +49,6 @@ void APilotActionPlayerController::Tick(float DeltaSeconds)
 
 		APilotActionPawn* myPawn = Cast<APilotActionPawn>(PC->GetPawn());
 
-		float TestSensibility = 100.f;
-
 		FRotator newRotation = myPawn->GetSpringArmComponent()->GetRelativeRotation();
 
 		newRotation += FRotator(TestSensibility * DeltaSeconds * cameraInput.Y, TestSensibility * DeltaSeconds * cameraInput.X, 0.f);
@@ -81,7 +79,6 @@ void APilotActionPlayerController::Rotate(float turnValue)
 {
 
 	AActionPlayerController* playerController = Cast<AActionPlayerController>(GetOwner());
-	//Cast<AActionPawn>(playerController->GetPawn())->ExecuteRotation(turnValue);
 	
 }
 

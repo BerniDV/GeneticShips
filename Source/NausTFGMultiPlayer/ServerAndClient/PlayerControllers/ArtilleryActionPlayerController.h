@@ -43,7 +43,10 @@ public:
 	float GetCadency() override;
 	float GetTimeSinceLastProjectile() override;
 
-	virtual void SetTeamMate(AActionPawn* _teamMate) override;
+
+	virtual void CreaMenus() override;
+	virtual void LoadHUD() override;
+	virtual void BindSignals() override;
 
 private:
 
@@ -53,4 +56,6 @@ private:
 
 	bool bIsShooting;
 	float timeSinceLastProjectile;
+
+	FVector2D cameraInput;
 };

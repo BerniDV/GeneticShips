@@ -7,6 +7,7 @@
 #include "ArtilleryActionPawn.generated.h"
 
 
+class URotationComponent;
 class ABasicProjectile;
 /**
  * 
@@ -28,6 +29,10 @@ public:
 
 	virtual bool IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const override;
 
+	virtual void ExecuteRotation(FRotator rotator) override;
+
+	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
+
 protected:
 
 	virtual void Tick(float DeltaSeconds) override;
@@ -36,5 +41,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	TSubclassOf<ABasicProjectile> projectile;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Replicated)
+	URotationComponent* rotationComponent;
 
 };

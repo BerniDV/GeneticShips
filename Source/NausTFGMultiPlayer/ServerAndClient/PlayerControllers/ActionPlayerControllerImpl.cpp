@@ -4,10 +4,9 @@
 #include "ActionPlayerControllerImpl.h"
 
 #include "ActionPlayerController.h"
-#include "NausTFGMultiPlayer/Client/Controllers/InitMenuController.h"
+#include "NausTFGMultiPlayer/Client/Controllers/ActionGameController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/ActionPlayerState.h"
-
 #include "Net/UnrealNetwork.h"
 
 
@@ -27,9 +26,9 @@ void AActionPlayerControllerImpl::InitializePresentationController()
 	if (!HasAuthority())
 	{
 		//Placeholder para no crash, se sustituye por inGameMenu
-		presentationController = NewObject<UInitMenuController>();
+		presentationController = NewObject<UActionGameController>();
 
-		presentationController->Init(Cast<APlayerController>(GetOwner()));
+		presentationController->Init(Cast<AActionPlayerController>(GetOwner()));
 	}
 
 }
@@ -193,6 +192,17 @@ void AActionPlayerControllerImpl::Tick(float DeltaSeconds)
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, teamMate->GetActorLocation().ToString());
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("%d"), teamMate->HasPredictedMovement()));
 	}
+
+}
+
+void AActionPlayerControllerImpl::CreaMenus()
+{
+
+
+}
+
+void AActionPlayerControllerImpl::LoadHUD()
+{
 
 }
 
