@@ -32,6 +32,12 @@ public:
 
 	virtual bool IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const override;
 
+
+protected:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+		class UParticleSystem* explosionEffect;
+
 private:
 
 	UPROPERTY(VisibleAnywhere)
@@ -47,5 +53,6 @@ private:
 	TSubclassOf<UDamageType> damageType;
 
 	UProjectileMovementComponent* projectileMovementComponent;
+
 
 };

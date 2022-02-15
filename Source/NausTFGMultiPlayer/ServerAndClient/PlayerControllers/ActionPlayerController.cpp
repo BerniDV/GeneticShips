@@ -5,12 +5,14 @@
 
 #include "ArtilleryActionPlayerController.h"
 #include "PilotActionPlayerController.h"
+#include "Engine/World.h"
 #include "GameFramework/GameStateBase.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "NausTFGMultiPlayer/Client/Cameras/ActionCamera.h"
 #include "NausTFGMultiPlayer/Client/Cameras/ActionCameraManager.h"
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/ActionPlayerState.h"
 #include "Net/UnrealNetwork.h"
 
@@ -37,8 +39,16 @@ void AActionPlayerController::BindSignals()
 
 UClass* AActionPlayerController::GetDefaultPawn()
 {
+	if(playerControllerImpl)
+	{
 
-	return playerControllerImpl->GetDefaultPawn();
+		return playerControllerImpl->GetDefaultPawn();
+	}else
+	{
+
+		return nullptr;
+	}
+	
 }
 
 
@@ -109,7 +119,6 @@ void AActionPlayerController::SetupInputComponent()
 void AActionPlayerController::Client_InitializeClientPlayerControllerImpl_Implementation()
 {
 
-	
 	presentationController = playerControllerImpl->GetPresentationController();
 	SetupInputComponent();
 	CreaMenus();
@@ -136,11 +145,12 @@ void AActionPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME_CONDITION(AActionPlayerController, playerControllerImpl, COND_OwnerOnly);
+
 }
 
 float AActionPlayerController::GetPlayerHealth()
 {
-
+	
 	return GetPlayerState<AActionPlayerState>()->GetHealth();
 }
 
@@ -151,11 +161,18 @@ void AActionPlayerController::SetPlayerHealth(float value)
 		
 }
 
-float AActionPlayerController::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+float AActionPlayerController::ApplyDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	AController* EventInstigator, AActor* DamageCauser)
 {
 
 	float currentHealth = GetPlayerHealth() - DamageAmount;
+
+	if(currentHealth <= 0)
+	{
+		currentHealth = 0.f;
+		Cast<APilotActionPawn>(GetPawn())->PlayDeath();
+	}
+
 	SetPlayerHealth(currentHealth);
 	return currentHealth;
 }
@@ -184,6 +201,18 @@ AActionPlayerControllerImpl* AActionPlayerController::GetPlayerControllerImpl()
 {
 
 	return playerControllerImpl;
+}
+
+void AActionPlayerController::SetInputEnabled(bool enable)
+{
+	if(enable)
+	{
+		EnableInput(this);
+	}else
+	{
+		DisableInput(this);
+	}
+	
 }
 
 

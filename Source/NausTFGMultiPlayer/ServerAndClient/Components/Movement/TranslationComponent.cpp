@@ -157,7 +157,7 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 		if (currentspeed.Size() != 0)
 			Move_Server(position, direction, currentspeed, currentTime, accelerationInMS, maneuverabilityInPercent);
 
-		Cast<AActionPawn>(GetOwner())->SetActorLocation(position);
+		Cast<AActionPawn>(GetOwner())->SetActorLocation(position, true);
 		
 	}
 
@@ -167,13 +167,13 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 
 		interpolatedPosition = FMath::VInterpConstantTo(interpolatedPosition, predictedPosition, DeltaTime, interpolationSpeed); 
-		Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition);
+		Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
 	}
 	else
 	{	//En caso de llegar a una interpolacion completa significa que el jugador ya no se mueve, y por lo tanto rectificamos el ultimo movimiento predicho y lo ponemos en la posición final
 		predictedPosition = position;
 		interpolatedPosition = FMath::VInterpConstantTo(interpolatedPosition, position, DeltaTime, defaultMaxSpeed);
-		Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition);
+		Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
 	}
 		
 }

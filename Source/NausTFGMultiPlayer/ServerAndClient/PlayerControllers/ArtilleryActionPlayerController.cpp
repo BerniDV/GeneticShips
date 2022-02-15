@@ -77,9 +77,9 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 				FVector nextLocationPawn = FMath::VInterpConstantTo(myPawn->GetActorLocation(), pilotMate->GetPredictedPosition(), DeltaSeconds, pilotMate->GetInterpolationSpeed());
 
 				myPawn->SetActorLocation(nextLocationPawn);
-			}else
+			}else if(FMath::Abs((pilotMate->GetActorLocation() - lastTeamMatePosition).Size()) > 20.f)
 			{
-				FVector nextLocationPawn = FMath::VInterpConstantTo(myPawn->GetActorLocation(), pilotMate->GetActorLocation(), DeltaSeconds, pilotMate->GetMaxSpeed());
+				FVector nextLocationPawn = FMath::VInterpConstantTo(myPawn->GetActorLocation(), pilotMate->GetActorLocation(), DeltaSeconds, pilotMate->GetMaxSpeed()/2);
 				myPawn->SetActorLocation(nextLocationPawn);
 			}
 
@@ -89,13 +89,13 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 
 			newRotation += FRotator(TestSensibility * DeltaSeconds * cameraInput.Y, TestSensibility * DeltaSeconds * cameraInput.X, 0.f);
 
-			newRotation.Pitch = FMath::Clamp(newRotation.Pitch, -45.f, 45.f);
+			newRotation.Pitch = FMath::Clamp(newRotation.Pitch, -30.f, 30.f);
 
 			myPawn->ExecuteRotation(newRotation);
 			
 		}
 
-		if(cameraManager && cameraManager->GetViewTarget())
+		if(cameraManager && Cast<AActionCamera>(cameraManager->GetViewTarget()))
 		{
 
 			AActionCamera* camera = Cast<AActionCamera>(cameraManager->GetViewTarget());

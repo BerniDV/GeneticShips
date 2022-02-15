@@ -40,13 +40,13 @@ void AArtilleryActionPawn::Fire()
 void AArtilleryActionPawn::StopFire()
 {
 
-
+	
 }
 
 bool AArtilleryActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget,
 	const FVector& SrcLocation) const
 {
-
+	
 	return Super::IsNetRelevantFor(RealViewer, ViewTarget, SrcLocation);
 }
 

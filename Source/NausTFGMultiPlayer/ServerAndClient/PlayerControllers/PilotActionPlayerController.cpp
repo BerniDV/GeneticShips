@@ -40,7 +40,7 @@ void APilotActionPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if(cameraManager && cameraManager->GetViewTarget())
+	if(cameraManager && Cast<AActionCamera>(cameraManager->GetViewTarget()))
 	{
 
 		APilotActionCamera* camera = Cast<APilotActionCamera>(cameraManager->GetViewTarget());

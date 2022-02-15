@@ -7,6 +7,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/RotationComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/TranslationComponent.h"
+#include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Projectiles/BasicProjectile.h"
 #include "Net/UnrealNetwork.h"
 
 APilotActionPawn::APilotActionPawn()
@@ -18,18 +20,24 @@ APilotActionPawn::APilotActionPawn()
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Pilot Pawn Prepared"));
 
 
+	collisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("boxComponent"));
+	collisionBox->SetCollisionProfileName("BlockAllDynamic");
+	SetRootComponent(collisionBox);
+
+	//if (GetLocalRole() == ROLE_Authority)
+	//{
+		collisionBox->OnComponentHit.AddDynamic(this, &APilotActionPawn::OnPilotImpact);
+		collisionBox->OnComponentBeginOverlap.AddDynamic(this, &APilotActionPawn::OnPilotOverlap);
+	//}
+
+	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("staticMesh"));
+	meshComponent->SetupAttachment(RootComponent);
+
 	translationComponent = CreateDefaultSubobject<UTranslationComponent>(TEXT("translationComponent"));
 	translationComponent->SetIsReplicated(true);
 
 	rotationComponent = CreateDefaultSubobject<URotationComponent>(TEXT("rotationComponent"));
 	rotationComponent->SetIsReplicated(true);
-
-	collisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("boxComponent"));
-	collisionBox->SetCollisionProfileName("BlockAllDynamic");
-	SetRootComponent(collisionBox);
-
-	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("staticMesh"));
-	meshComponent->SetupAttachment(RootComponent);
 
 	springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	springArm->SetupAttachment(RootComponent);
@@ -63,6 +71,7 @@ void APilotActionPawn::BeginPlay()
 	maneuverabilityInPercent = 100.f;
 
 	translationComponent->Inicialite(speedDropRate, defaultMaxAcceleration, defaultMaxSpeed, maxAcceleration, maxSpeed, accelerationSpeed, decelerationSpeed, maneuverabilityInPercent);
+	
 }
 
 void APilotActionPawn::Tick(float DeltaTime)
@@ -153,6 +162,42 @@ bool APilotActionPawn::HasPredictedMovement()
 	return true;
 }
 
+void APilotActionPawn::OnPilotImpact(UPrimitiveComponent* HitComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+
+	FVector normal = Hit.Normal;
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Hit Detected");
+}
+
+void APilotActionPawn::OnPilotOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Overlap Detected");
+	
+}
+
+float APilotActionPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+
+	float currentHealth = 100.f;
+
+	if(AActionPlayerController* PC = Cast<AActionPlayerController>(GetOwner()))
+	{
+
+		currentHealth = PC->ApplyDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+
+	}
+	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Current Health: %f"), currentHealth));
+
+	return currentHealth;
+}
+
 USpringArmComponent* APilotActionPawn::GetSpringArmComponent()
 {
 
@@ -193,4 +238,12 @@ bool APilotActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AActor* 
                                         const FVector& SrcLocation) const
 {
 	return Super::IsNetRelevantFor(RealViewer, ViewTarget, SrcLocation);
+}
+
+void APilotActionPawn::PlayDeath()
+{
+
+	UGameplayStatics::SpawnEmitterAtLocation(this, destoyedParticles, GetActorLocation(), FRotator::ZeroRotator, FVector(7), true, EPSCPoolMethod::AutoRelease);
+	SetHidden(true);
+	Cast<AActionPlayerController>(GetOwner())->SetInputEnabled(false);
 }

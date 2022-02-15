@@ -7,6 +7,7 @@
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "ActionPlayerController.generated.h"
 
+class AActionPawn;
 struct MatchOptions;
 class AActionPlayerControllerImpl;
 class UReferencePawnsFactory;
@@ -44,7 +45,8 @@ public:
 
 	void SetPlayerHealth(float value);
 
-	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	float ApplyDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+		AController* EventInstigator, AActor* DamageCauser);
 
 	int GetTeamId();
 
@@ -52,6 +54,9 @@ public:
 	float GetTimeSinceLastProjectile();
 
 	AActionPlayerControllerImpl* GetPlayerControllerImpl();
+
+	void SetInputEnabled(bool enable);
+
 
 protected:
 

@@ -26,8 +26,8 @@ ABasicProjectile::ABasicProjectile()
 
 	projectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	projectileMovementComponent->SetUpdatedComponent(projectileSphereComponent);
-	projectileMovementComponent->InitialSpeed = 1500.0f;
-	projectileMovementComponent->MaxSpeed = 1500.0f;
+	projectileMovementComponent->InitialSpeed = 3000.0f;
+	projectileMovementComponent->MaxSpeed = 3000.0f;
 	projectileMovementComponent->bRotationFollowsVelocity = true;
 	projectileMovementComponent->ProjectileGravityScale = 0.0f;
 
@@ -70,6 +70,7 @@ void ABasicProjectile::OnProjectileImpact(UPrimitiveComponent* OverlappedCompone
 	AActionPawn* myPawn = Cast<AActionPawn>(GetInstigator());
 	AActionPawn* otherPawn = Cast<AActionPawn>(OtherActor);
 
+
 	//En caso de ser del mismo equipo no hacemos nada
 	if(myPawn != nullptr && otherPawn != nullptr && myPawn->GetPawnTeamId().IsSet() && otherPawn->GetPawnTeamId().IsSet() && myPawn->GetPawnTeamId().GetValue() == otherPawn->GetPawnTeamId().GetValue())
 	{
@@ -77,22 +78,26 @@ void ABasicProjectile::OnProjectileImpact(UPrimitiveComponent* OverlappedCompone
 		return;
 	}
 
-
-
-	if (OtherActor && OtherActor->GetInstigatorController() != nullptr && GetOwner()->GetInstigatorController() != nullptr && OtherActor->GetInstigatorController() != GetOwner()->GetInstigatorController())
+	if(Cast<ABasicProjectile>(OtherActor))
 	{
-		UGameplayStatics::ApplyPointDamage(OtherActor->GetInstigatorController(), damage, FVector::ZeroVector, FHitResult(), GetOwner()->GetInstigatorController(), this, damageType);
 
-		Destroy();
+		return;
 	}
 
-	
+	if (OtherActor && GetOwner()->GetInstigatorController() != nullptr && OtherActor->GetInstigatorController() != GetOwner()->GetInstigatorController())
+	{
+		UGameplayStatics::ApplyPointDamage(OtherActor, damage, FVector::ZeroVector, FHitResult(), GetOwner()->GetInstigatorController(), this, damageType);
+		
+	}
+
+	UGameplayStatics::SpawnEmitterAtLocation(this, explosionEffect, GetActorLocation(), FRotator::ZeroRotator, true, EPSCPoolMethod::AutoRelease);
+	Destroy();
 }
 
 bool ABasicProjectile::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget,
 	const FVector& SrcLocation) const
 {
 
-	return Super::IsNetRelevantFor(RealViewer, this, SrcLocation);;
+	return Super::IsNetRelevantFor(RealViewer, this, SrcLocation);
 }
 

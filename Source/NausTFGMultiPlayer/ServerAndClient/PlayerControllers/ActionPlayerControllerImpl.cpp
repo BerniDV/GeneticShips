@@ -186,16 +186,6 @@ void AActionPlayerControllerImpl::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if(cameraManager && cameraManager->GetViewTarget())
-	{
-
-		AActionPlayerController* PC = Cast<AActionPlayerController>(GetOwner());
-
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, "Yo: " + PC->GetPawn()->GetActorLocation().ToString());
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, "Camera: " + cameraManager->GetViewTarget()->GetActorLocation().ToString());
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Compi: " + teamMate->GetActorLocation().ToString());
-	}
-
 }
 
 void AActionPlayerControllerImpl::CreaMenus()
