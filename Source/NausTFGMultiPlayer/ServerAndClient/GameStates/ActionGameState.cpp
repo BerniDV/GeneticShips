@@ -11,4 +11,10 @@ AActionGameState::AActionGameState()
 	
 }
 
+void AActionGameState::PlayerDead()
+{
+
+	signalPlayerDead.Broadcast();
+}
+
 

@@ -48,6 +48,8 @@ public:
 	virtual void LoadHUD() override;
 	virtual void BindSignals() override;
 
+	virtual void PlayDeath() override;
+
 private:
 
 	UClass* reference;

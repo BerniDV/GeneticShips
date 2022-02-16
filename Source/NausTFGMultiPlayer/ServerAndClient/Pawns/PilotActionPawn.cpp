@@ -176,6 +176,12 @@ void APilotActionPawn::OnPilotOverlap(UPrimitiveComponent* OverlappedComponent, 
 {
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Overlap Detected");
+
+	if(!Cast<ABasicProjectile>(OtherActor))
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(this, destoyedParticles, GetActorLocation(), FRotator::ZeroRotator, FVector(7), true, EPSCPoolMethod::AutoRelease);
+		UGameplayStatics::ApplyDamage(OtherActor, 100.f, Cast<AActionPlayerController>(GetOwner()), this, damageType);
+	}
 	
 }
 
@@ -243,7 +249,7 @@ bool APilotActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AActor* 
 void APilotActionPawn::PlayDeath()
 {
 
-	UGameplayStatics::SpawnEmitterAtLocation(this, destoyedParticles, GetActorLocation(), FRotator::ZeroRotator, FVector(7), true, EPSCPoolMethod::AutoRelease);
-	SetHidden(true);
+	UGameplayStatics::SpawnEmitterAtLocation(this, fireParticles, GetActorLocation(), FRotator::ZeroRotator, FVector(7), false, EPSCPoolMethod::AutoRelease);
+	UGameplayStatics::SpawnEmitterAttached(fireParticles, collisionBox, NAME_None, FVector(ForceInit), FRotator::ZeroRotator, FVector(7), EAttachLocation::KeepRelativeOffset, true, EPSCPoolMethod::None, true);
 	Cast<AActionPlayerController>(GetOwner())->SetInputEnabled(false);
 }

@@ -172,6 +172,11 @@ void AActionPlayerControllerImpl::Client_HideTeamMateActor_Implementation()
 }
 
 
+void AActionPlayerControllerImpl::PlayDeath()
+{
+
+}
+
 void AActionPlayerControllerImpl::BeginPlay()
 {
 	Super::BeginPlay();

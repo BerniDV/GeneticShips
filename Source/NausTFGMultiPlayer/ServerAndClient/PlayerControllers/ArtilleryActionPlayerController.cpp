@@ -205,6 +205,12 @@ void AArtilleryActionPlayerController::BindSignals()
 	
 }
 
+void AArtilleryActionPlayerController::PlayDeath()
+{
+
+
+}
+
 void AArtilleryActionPlayerController::StartShooting()
 {
 

@@ -21,7 +21,7 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
 
-	UFUNCTION(Client, Reliable)
+	UFUNCTION()
 	void OnHealthUpdate();
 
 	float GetHealth();

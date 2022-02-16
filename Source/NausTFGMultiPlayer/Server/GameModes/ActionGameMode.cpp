@@ -105,6 +105,19 @@ void AActionGameMode::PostLogin(APlayerController* NewPlayer)
 	}
 }
 
+void AActionGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	Cast<AActionGameState>(GameState)->signalPlayerDead.AddDynamic(this, &AActionGameMode::EndGame);
+}
+
+void AActionGameMode::EndGame()
+{
+	
+	GetWorld()->ServerTravel("/Game/Levels/MenuLevels/MainMenuLevel");
+}
+
 
 
 

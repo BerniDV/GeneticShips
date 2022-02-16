@@ -157,6 +157,11 @@ bool AActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewT
 	return Super::IsNetRelevantFor(RealViewer, this, SrcLocation);
 }
 
+void AActionPawn::PlayDeath()
+{
+
+}
+
 void AActionPawn::Client_SetRotation_Implementation(FRotator rotator)
 {
 

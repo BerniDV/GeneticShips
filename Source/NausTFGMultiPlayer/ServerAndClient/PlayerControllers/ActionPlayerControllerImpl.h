@@ -66,6 +66,8 @@ public:
 	UFUNCTION(Client, Reliable)
 	void Client_HideTeamMateActor();
 
+	virtual void PlayDeath();
+
 protected:
 
 	virtual void BeginPlay() override;

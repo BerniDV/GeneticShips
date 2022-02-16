@@ -33,6 +33,8 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
 
+	virtual void PlayDeath() override;
+
 protected:
 
 	virtual void Tick(float DeltaSeconds) override;

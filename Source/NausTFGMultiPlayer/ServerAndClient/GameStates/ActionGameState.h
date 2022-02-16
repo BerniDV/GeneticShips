@@ -16,7 +16,15 @@ class NAUSTFGMULTIPLAYER_API AActionGameState : public AGameState
 
 public:
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerDead);
+	FOnPlayerDead signalPlayerDead;
+
 	AActionGameState();
+
+	UFUNCTION()
+	void PlayerDead();
+
+
 
 
 };

@@ -154,27 +154,41 @@ float AActionPlayerController::GetPlayerHealth()
 	return GetPlayerState<AActionPlayerState>()->GetHealth();
 }
 
-void AActionPlayerController::SetPlayerHealth(float value)
+void AActionPlayerController::SetPlayerHealth_Implementation(float value)
 {
+
 	if (GetLocalRole() == ROLE_Authority)
 		GetPlayerState<AActionPlayerState>()->SetHealth(value);
-		
 }
+
+bool AActionPlayerController::SetPlayerHealth_Validate(float value)
+{
+
+	return true;
+}
+
 
 float AActionPlayerController::ApplyDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	AController* EventInstigator, AActor* DamageCauser)
 {
 
-	float currentHealth = GetPlayerHealth() - DamageAmount;
 
-	if(currentHealth <= 0)
+	float currentHealt = GetPlayerHealth();
+	float newHealth = currentHealt - DamageAmount;
+
+	if(newHealth <= 0)
 	{
-		currentHealth = 0.f;
+		newHealth = 0.f;
 		Cast<APilotActionPawn>(GetPawn())->PlayDeath();
+
+		AActionPawn* teamMate = playerControllerImpl->GetTeamMate();
+
+		if(teamMate)
+			teamMate->PlayDeath();
 	}
 
-	SetPlayerHealth(currentHealth);
-	return currentHealth;
+	SetPlayerHealth(newHealth);
+	return newHealth;
 }
 
 int AActionPlayerController::GetTeamId()

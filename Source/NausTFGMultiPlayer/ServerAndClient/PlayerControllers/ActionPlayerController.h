@@ -43,6 +43,7 @@ public:
 
 	float GetPlayerHealth();
 
+	UFUNCTION(Server, WithValidation, Reliable)
 	void SetPlayerHealth(float value);
 
 	float ApplyDamage(float DamageAmount, FDamageEvent const& DamageEvent,
