@@ -70,5 +70,11 @@ private:
 
 	UPROPERTY(ReplicatedUsing = Client_InitializeClientPlayerControllerImpl)
 	AActionPlayerControllerImpl* playerControllerImpl;
+
+	NausTFGRolTypes playerRole;
+
+	UClass* pilotReference;
+	UClass* artilleryReference;
+
 	
 };

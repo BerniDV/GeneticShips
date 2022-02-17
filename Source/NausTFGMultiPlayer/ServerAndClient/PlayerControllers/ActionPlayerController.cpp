@@ -13,6 +13,7 @@
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Pawns/ArtilleryActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/ActionPlayerState.h"
 #include "Net/UnrealNetwork.h"
 
@@ -25,6 +26,12 @@ AActionPlayerController::AActionPlayerController()
 
 	PlayerCameraManagerClass = AActionCameraManager::StaticClass();
 	bAutoManageActiveCameraTarget = false;
+
+	ConstructorHelpers::FClassFinder <APilotActionPawn> refPilotActionPawnBP(TEXT("/Game/ServerAndClient/Pawns/PilotActionPawn_BP"));
+	pilotReference = refPilotActionPawnBP.Class;
+
+	ConstructorHelpers::FClassFinder <AArtilleryActionPawn> refArtilleryActionPawnBP(TEXT("/Game/ServerAndClient/Pawns/ArtilleryActionPawn_BP"));
+	artilleryReference = refArtilleryActionPawnBP.Class;
 }
 
 
@@ -45,8 +52,18 @@ UClass* AActionPlayerController::GetDefaultPawn()
 		return playerControllerImpl->GetDefaultPawn();
 	}else
 	{
+		//No me gusta pero hasta no encontrar otra solucion se queda así
+		//Problema: El patron state requiere que se haga spawn del actor en UE4, si lo hago así puede ser que unreal intente ver qual es el pawn que queremos antes de que se termine de spawnear
+		if(playerRole == NausTFGRolTypes::PilotActionRolType)
+		{
 
-		return nullptr;
+			return pilotReference;
+
+		}else
+		{
+
+			return artilleryReference;
+		}
 	}
 	
 }
@@ -64,6 +81,7 @@ void AActionPlayerController::Initialize(MatchOptions matchOptions)
 	spawnParameters.Instigator = GetInstigator();
 	spawnParameters.Owner = this;
 
+	playerRole = matchOptions.roleSelected;
 
 	switch (matchOptions.roleSelected)
 	{

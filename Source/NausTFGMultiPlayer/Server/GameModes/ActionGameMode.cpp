@@ -65,22 +65,7 @@ UClass* AActionGameMode::GetDefaultPawnClassForController_Implementation(AContro
 void AActionGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
-	/*
-	AActor* myDefaultPawn = NewPlayer->GetPawn();
-
-	FTransform myDefaultTransform = myDefaultPawn->GetTransform();
-
-	if(myDefaultPawn)
-	{
-		myDefaultPawn->Destroy();
-	}
-
-	UClass* pawnClass = GetDefaultPawnClassForController_Implementation(NewPlayer);
-
-	APawn* newPawn = GetWorld()->SpawnActor<APawn>(pawnClass, myDefaultTransform);
-
-	NewPlayer->Possess(newPawn);
-	*/
+	
 	AActionPlayerController* PC = Cast<AActionPlayerController>(NewPlayer);
 
 	int teamId = PC->GetTeamId();
