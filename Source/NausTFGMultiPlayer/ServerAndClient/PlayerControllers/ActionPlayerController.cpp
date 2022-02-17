@@ -32,6 +32,8 @@ AActionPlayerController::AActionPlayerController()
 
 	ConstructorHelpers::FClassFinder <AArtilleryActionPawn> refArtilleryActionPawnBP(TEXT("/Game/ServerAndClient/Pawns/ArtilleryActionPawn_BP"));
 	artilleryReference = refArtilleryActionPawnBP.Class;
+
+	playerHealth = 100.f;
 }
 
 
@@ -163,7 +165,7 @@ void AActionPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME_CONDITION(AActionPlayerController, playerControllerImpl, COND_OwnerOnly);
-
+	DOREPLIFETIME(AActionPlayerController, playerHealth);
 }
 
 float AActionPlayerController::GetPlayerHealth()
@@ -177,6 +179,8 @@ void AActionPlayerController::SetPlayerHealth_Implementation(float value)
 
 	if (GetLocalRole() == ROLE_Authority)
 		GetPlayerState<AActionPlayerState>()->SetHealth(value);
+
+	playerHealth = value;
 }
 
 bool AActionPlayerController::SetPlayerHealth_Validate(float value)
@@ -191,8 +195,8 @@ float AActionPlayerController::ApplyDamage(float DamageAmount, FDamageEvent cons
 {
 
 
-	float currentHealt = GetPlayerHealth();
-	float newHealth = currentHealt - DamageAmount;
+	//float currentHealt = GetPlayerHealth();
+	float newHealth = playerHealth - DamageAmount;
 
 	if(newHealth <= 0)
 	{
@@ -251,7 +255,7 @@ void AActionPlayerController::SetInputEnabled(bool enable)
 void AActionPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
+	SetPlayerHealth(playerHealth);
 
 }
 
@@ -259,5 +263,5 @@ void AActionPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, FString::Printf(TEXT("%f"), playerHealth));
 }

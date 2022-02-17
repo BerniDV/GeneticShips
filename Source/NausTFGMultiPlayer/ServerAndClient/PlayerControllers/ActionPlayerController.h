@@ -76,5 +76,8 @@ private:
 	UClass* pilotReference;
 	UClass* artilleryReference;
 
+	UPROPERTY(Replicated)
+	float playerHealth;
+
 	
 };

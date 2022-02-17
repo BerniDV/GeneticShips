@@ -27,7 +27,15 @@ public:
 
 	virtual void BeginPlay() override;
 
+	void SetTeam(APlayerController* PlayerController);
+
 	UFUNCTION()
 	void EndGame();
-	
+
+private:
+
+	TMap<int32, APlayerController*> playersInGame;
+
+	const uint32 maxplayers = 2;
+
 };

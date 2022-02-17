@@ -9,7 +9,7 @@
 AActionPlayerState::AActionPlayerState()
 {
 
-	maxHealth = 100.f;
+	
 	health = maxHealth;
 }
 

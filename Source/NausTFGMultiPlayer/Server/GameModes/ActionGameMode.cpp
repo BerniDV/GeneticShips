@@ -66,14 +66,41 @@ void AActionGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 	
-	AActionPlayerController* PC = Cast<AActionPlayerController>(NewPlayer);
+	if(! playersInGame.Find(NewPlayer->GetUniqueID()))
+	{
+
+		playersInGame.Add(NewPlayer->GetUniqueID(), NewPlayer);
+	}
+
+	if(playersInGame.Num() == maxplayers)
+	{
+
+		for(auto x : playersInGame)
+		{
+
+			SetTeam(x.Value);
+		}
+	}
+}
+
+void AActionGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	Cast<AActionGameState>(GameState)->signalPlayerDead.AddDynamic(this, &AActionGameMode::EndGame);
+}
+
+void AActionGameMode::SetTeam(APlayerController* PlayerController)
+{
+
+	AActionPlayerController* PC = Cast<AActionPlayerController>(PlayerController);
 
 	int teamId = PC->GetTeamId();
-	
+
 	for (auto x : GameState->PlayerArray)
 	{
 		//Si no somos nosotras mismos y somos del mismo equipo nos asignamos como compañero
-		if (x->GetPlayerId() != NewPlayer->GetPlayerState<AActionPlayerState>()->GetPlayerId() && Cast<AActionPlayerState>(x)->GetTeamID() == teamId)
+		if (x->GetPlayerId() != PlayerController->GetPlayerState<AActionPlayerState>()->GetPlayerId() && Cast<AActionPlayerState>(x)->GetTeamID() == teamId)
 		{
 
 			AActionPawn* teamMate = Cast<AActionPawn>(x->GetPawn());
@@ -84,17 +111,10 @@ void AActionGameMode::PostLogin(APlayerController* NewPlayer)
 			AActionPlayerController* PCTeamMate = Cast<AActionPlayerController>(teamMate->GetOwner());
 
 			//Nos asignamos como compañero
-			AActionPawn* myPawn = Cast<AActionPawn>(NewPlayer->GetPawn());
+			AActionPawn* myPawn = Cast<AActionPawn>(PlayerController->GetPawn());
 			PCTeamMate->GetPlayerControllerImpl()->SetTeamMate(myPawn);
 		}
 	}
-}
-
-void AActionGameMode::BeginPlay()
-{
-	Super::BeginPlay();
-
-	Cast<AActionGameState>(GameState)->signalPlayerDead.AddDynamic(this, &AActionGameMode::EndGame);
 }
 
 void AActionGameMode::EndGame()
