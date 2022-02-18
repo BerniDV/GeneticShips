@@ -66,13 +66,19 @@ void UTranslationComponent::Inicialite(float _speedDropRate, float _defaultMaxAc
 
 bool UTranslationComponent::SimilarEnough(FVector v1, FVector v2)
 {
-
-	return FMath::Abs(v1.X - v2.X) < 0.5f && FMath::Abs(v1.Y - v2.Y) < 0.5f && FMath::Abs(v1.Y - v2.Y) < 0.5f;
+	FVector diff = v2 - v1;
+	return diff.Size() < 50.f;
 }
 
 float UTranslationComponent::GetCurrenntSpeed()
 {
 	return currentspeed.Size();
+}
+
+FVector UTranslationComponent::GetReplicatedPosition()
+{
+
+	return position;
 }
 
 FVector UTranslationComponent::GetPredictedPosition()
@@ -92,6 +98,8 @@ FVector UTranslationComponent::GetLastPosition()
 
 	return lastPosition;
 }
+
+
 
 
 // Called every frame
@@ -160,21 +168,27 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 		Cast<AActionPawn>(GetOwner())->SetActorLocation(position, true);
 		
 	}
-
+	
 	//Si nos hemos parado corregimos a la ultima posiciopn confirmada conocida, en caso contrario seguimos interpolando entre la actual y la que hemos predecido
 	//Como siempre predecimos segun la ultima confirmada las pequeñas correciones se hacen implicitamente
-	if (!SimilarEnough(position, lastPosition) && GetOwner()->GetLocalRole() != ENetRole::ROLE_AutonomousProxy) {
-
+	if (GetOwner()->GetLocalRole() != ENetRole::ROLE_AutonomousProxy && !SimilarEnough(position, lastPosition)) {
 
 		interpolatedPosition = FMath::VInterpConstantTo(interpolatedPosition, predictedPosition, DeltaTime, interpolationSpeed); 
 		Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Prediction");
 	}
 	else
-	{	//En caso de llegar a una interpolacion completa significa que el jugador ya no se mueve, y por lo tanto rectificamos el ultimo movimiento predicho y lo ponemos en la posición final
+	{	//En caso de llegar a una interpolacion casi completa significa que el jugador ya no se mueve, y por lo tanto rectificamos el ultimo movimiento predicho y lo ponemos en la posición final
 		predictedPosition = position;
-		interpolatedPosition = FMath::VInterpConstantTo(interpolatedPosition, position, DeltaTime, defaultMaxSpeed);
+		//interpolationSpeed = (GetOwner()->GetActorLocation() - position).Size() / delay;
+		
+		//interpolatedPosition = FMath::VInterpConstantTo(GetOwner()->GetActorLocation(), position, DeltaTime, interpolationSpeed);
+		interpolatedPosition = FMath::Lerp(GetOwner()->GetActorLocation(), position, 0.3);
 		Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Correction");
 	}
+
+	lastPosition = position;
 		
 }
 
@@ -333,7 +347,7 @@ void UTranslationComponent::ApplyMovementWithInterpolation()
 		predictedPosition = movementReplicatedPack.position;
 
 		lastPosition = movementReplicatedPack.position;
-		currentPosition = movementReplicatedPack.position;
+		currentPosition = movementReplicatedPack.position;	
 		interpolatedPosition = movementReplicatedPack.position;
 
 	}else
@@ -366,7 +380,6 @@ void UTranslationComponent::ApplyMovementWithInterpolation()
 		predictedPosition = CalculatePositionNextIteration(predictedPosition, currentspeed, delay);
 
 		interpolationSpeed = currentspeed.Size();
-
 
 	}
 

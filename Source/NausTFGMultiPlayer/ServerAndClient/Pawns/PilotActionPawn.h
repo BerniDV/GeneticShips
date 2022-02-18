@@ -70,6 +70,7 @@ public:
 	FVector GetPredictedPosition();
 	float GetInterpolationSpeed();
 	FVector GetLastPosition();
+	FVector GetReplicatedPosition();
 
 	virtual bool IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const override;
 

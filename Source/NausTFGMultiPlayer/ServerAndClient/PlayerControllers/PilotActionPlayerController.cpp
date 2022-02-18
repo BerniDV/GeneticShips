@@ -64,6 +64,7 @@ void APilotActionPlayerController::Tick(float DeltaSeconds)
 
 		myPawn->ExecuteRotation(newPawnRotator);
 
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, myPawn->GetActorLocation().ToString());
 	}
 
 }

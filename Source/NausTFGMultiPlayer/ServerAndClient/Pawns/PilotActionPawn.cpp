@@ -240,6 +240,12 @@ FVector APilotActionPawn::GetLastPosition()
 	return translationComponent->GetLastPosition();
 }
 
+FVector APilotActionPawn::GetReplicatedPosition()
+{
+
+	return translationComponent->GetReplicatedPosition();
+}
+
 bool APilotActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget,
                                         const FVector& SrcLocation) const
 {

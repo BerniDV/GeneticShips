@@ -109,6 +109,8 @@ public:
 
 	float GetCurrenntSpeed();
 
+	FVector GetReplicatedPosition();
+
 	FVector GetPredictedPosition();
 
 	float GetInterpolationSpeed();
@@ -160,6 +162,7 @@ private:
 	float maneuverabilityInPercent;
 
 	float speedDropRate;
+
 
 	UPROPERTY(ReplicatedUsing = ApplyMovementWithInterpolation)
 	FMovementPack movementReplicatedPack;
