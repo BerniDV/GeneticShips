@@ -19,6 +19,8 @@ public:
 
 	AEnemyActionPawn();
 
+	void SetID(int32 newEnemyID);
+
 protected:
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
@@ -26,5 +28,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	UStaticMeshComponent* meshComponent;
+
+private:
+
+	int32 id;
 	
 };

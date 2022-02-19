@@ -33,6 +33,11 @@ private:
 
 	TSubclassOf<AEnemyActionPawn> enemyClass;
 
+	int32 nextEnemyID;
+
+	UPROPERTY()
+	TMap<int32, AEnemyActionPawn*> EnemyMap;
+
 };
 
 

@@ -15,4 +15,12 @@ AEnemyActionPawn::AEnemyActionPawn()
 
 	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("staticMesh"));
 	meshComponent->SetupAttachment(RootComponent);
+
+	id = -1;
+}
+
+void AEnemyActionPawn::SetID(int32 newEnemyID)
+{
+
+	id = newEnemyID;
 }
