@@ -8,6 +8,7 @@
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Factories/ReferencePawnsFactory.h"
 #include "NausTFGMultiPlayer/ServerAndClient/GameStates/ActionGameState.h"
+#include "NausTFGMultiPlayer/ServerAndClient/IA/Controllers/GeneticManager.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerControllerImpl.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/ActionPlayerState.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
@@ -86,6 +87,8 @@ void AActionGameMode::PostLogin(APlayerController* NewPlayer)
 void AActionGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+
+	geneticManager = GetWorld()->SpawnActor<AGeneticManager>();
 
 	Cast<AActionGameState>(GameState)->signalPlayerDead.AddDynamic(this, &AActionGameMode::EndGame);
 }

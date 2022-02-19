@@ -6,6 +6,7 @@
 #include "GameFramework/GameMode.h"
 #include "ActionGameMode.generated.h"
 
+class AGeneticManager;
 /**
  * 
  */
@@ -37,5 +38,7 @@ private:
 	TMap<int32, APlayerController*> playersInGame;
 
 	const uint32 maxplayers = 2;
+
+	AGeneticManager* geneticManager;
 
 };

@@ -175,7 +175,7 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 		interpolatedPosition = FMath::VInterpConstantTo(interpolatedPosition, predictedPosition, DeltaTime, interpolationSpeed); 
 		Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Prediction");
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Prediction");
 	}
 	else
 	{	//En caso de llegar a una interpolacion casi completa significa que el jugador ya no se mueve, y por lo tanto rectificamos el ultimo movimiento predicho y lo ponemos en la posición final
@@ -185,7 +185,7 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 		//interpolatedPosition = FMath::VInterpConstantTo(GetOwner()->GetActorLocation(), position, DeltaTime, interpolationSpeed);
 		interpolatedPosition = FMath::Lerp(GetOwner()->GetActorLocation(), position, 0.3);
 		Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Correction");
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Correction");
 	}
 
 	lastPosition = position;

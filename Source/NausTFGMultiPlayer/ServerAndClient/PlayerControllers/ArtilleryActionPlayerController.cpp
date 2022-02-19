@@ -81,15 +81,15 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 
 				myPawn->SetActorLocation(nextLocationPawn);
 
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, pilotMate->GetReplicatedPosition().ToString() + " y " + pilotMate->GetLastPosition().ToString());
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("%f"), pilotMate->GetCurrentSpeed()));
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, pilotMate->GetReplicatedPosition().ToString() + " y " + pilotMate->GetLastPosition().ToString());
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("%f"), pilotMate->GetCurrentSpeed()));
 			}else 
 			{
 				
 				FVector nextLocationPawn = FMath::VInterpConstantTo(myPawn->GetActorLocation(), pilotMate->GetActorLocation(), DeltaSeconds, 300.f);
 				//FVector nextLocationPawn = FMath::Lerp(myPawn->GetActorLocation(), pilotMate->GetActorLocation(), 0.02);
 				myPawn->SetActorLocation(nextLocationPawn);
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, "lerp");
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, "lerp");
 			}
 			
 
