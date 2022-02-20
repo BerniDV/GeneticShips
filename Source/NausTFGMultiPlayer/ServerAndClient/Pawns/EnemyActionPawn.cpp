@@ -55,11 +55,10 @@ void AEnemyActionPawn::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if(enemyChromosome != nullptr && !HasAuthority())
+	if(enemyChromosome != nullptr)
 	{
 		
 		FVector size = enemyChromosome->GetSizeGene();
-		bool isReplicated = enemyChromosome->GetIsReplicated();
 		SetActorScale3D(size);
 	}
 		

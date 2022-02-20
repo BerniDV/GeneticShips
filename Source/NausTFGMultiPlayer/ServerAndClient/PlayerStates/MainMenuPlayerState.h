@@ -30,6 +30,9 @@ public:
 	UFUNCTION(Server, Reliable)
 	void SetRolType(NausTFGRolTypes rolType);
 
+	UFUNCTION(Client, Reliable)
+	void ClientSetRolType(NausTFGRolTypes rolType);
+
 	NausTFGRolTypes GetRolType();
 
 	void SetIsReady(bool ready);

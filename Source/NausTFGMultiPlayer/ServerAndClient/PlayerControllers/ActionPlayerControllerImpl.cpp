@@ -183,8 +183,6 @@ void AActionPlayerControllerImpl::BeginPlay()
 
 	InitializePresentationController();
 
-	
-	
 }
 
 void AActionPlayerControllerImpl::Tick(float DeltaSeconds)

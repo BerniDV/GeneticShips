@@ -25,9 +25,15 @@ void AMainMenuPlayerState::SetRolType_Implementation(NausTFGRolTypes rolType)
 {
 
 	rolSelected = rolType;
-	
+	ClientSetRolType(rolType);
 }
 
+
+void AMainMenuPlayerState::ClientSetRolType_Implementation(NausTFGRolTypes rolType)
+{
+
+	rolSelected = rolType;
+}
 
 NausTFGRolTypes AMainMenuPlayerState::GetRolType()
 {
@@ -37,9 +43,13 @@ NausTFGRolTypes AMainMenuPlayerState::GetRolType()
 
 void AMainMenuPlayerState::SetIsReady(bool ready)
 {
+	if(rolSelected != NausTFGRolTypes::NoneType)
+	{
 
-	isReady = ready;
-	OnPlayerReady();
+		isReady = ready;
+		OnPlayerReady();
+	}
+	
 }
 
 bool AMainMenuPlayerState::GetIsReady()
