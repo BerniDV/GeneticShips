@@ -7,6 +7,7 @@
 #include "EnemyActionPawn.generated.h"
 
 class UBoxComponent;
+class AChromosome;
 /**
  * 
  */
@@ -21,6 +22,16 @@ public:
 
 	void SetID(int32 newEnemyID);
 
+	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
+
+protected:
+
+	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaSeconds) override;
+
+	virtual void Destroyed() override;
+
 protected:
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
@@ -32,5 +43,8 @@ protected:
 private:
 
 	int32 id;
+
+	UPROPERTY(Replicated)
+	AChromosome* enemyChromosome;
 	
 };

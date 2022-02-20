@@ -4,6 +4,8 @@
 #include "EnemyActionPawn.h"
 
 #include "Components/BoxComponent.h"
+#include "NausTFGMultiPlayer/ServerAndClient/IA/Chromosome.h"
+#include "Net/UnrealNetwork.h"
 
 AEnemyActionPawn::AEnemyActionPawn()
 {
@@ -16,6 +18,8 @@ AEnemyActionPawn::AEnemyActionPawn()
 	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("staticMesh"));
 	meshComponent->SetupAttachment(RootComponent);
 
+	enemyChromosome = nullptr;
+
 	id = -1;
 }
 
@@ -23,4 +27,49 @@ void AEnemyActionPawn::SetID(int32 newEnemyID)
 {
 
 	id = newEnemyID;
+}
+
+void AEnemyActionPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AEnemyActionPawn, enemyChromosome);
+}
+
+void AEnemyActionPawn::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (HasAuthority())
+	{
+
+		enemyChromosome = GetWorld()->SpawnActor<AChromosome>();
+		enemyChromosome->SetOwner(this);
+
+	}
+		
+
+}
+
+void AEnemyActionPawn::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if(enemyChromosome != nullptr && !HasAuthority())
+	{
+		
+		FVector size = enemyChromosome->GetSizeGene();
+		bool isReplicated = enemyChromosome->GetIsReplicated();
+		SetActorScale3D(size);
+	}
+		
+}
+
+void AEnemyActionPawn::Destroyed()
+{
+	if (HasAuthority() && enemyChromosome != nullptr)
+		enemyChromosome->Destroy();
+
+	Super::Destroyed();
+
 }

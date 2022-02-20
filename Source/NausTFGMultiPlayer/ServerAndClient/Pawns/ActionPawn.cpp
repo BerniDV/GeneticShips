@@ -16,8 +16,8 @@ AActionPawn::AActionPawn()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	if(GEngine)
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Pawn Prepared"));
+	//if(GEngine)
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Pawn Prepared"));
 
 	maxHealth = 100.f;
 	health = maxHealth;

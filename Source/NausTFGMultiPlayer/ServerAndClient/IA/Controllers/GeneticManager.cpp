@@ -35,7 +35,7 @@ void AGeneticManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if(EnemyMap.Num() == 300)
+	if(EnemyMap.Num() == 100 && HasAuthority())
 	{
 		
 		for(auto x: EnemyMap)
@@ -67,8 +67,9 @@ void AGeneticManager::SpawnEnemy()
 
 		AEnemyActionPawn* Enemy = Cast<AEnemyActionPawn>(spawnedActor);
 		Enemy->SetID(nextEnemyID);
+		Enemy->SetReplicates(true);
 		++nextEnemyID;
-
+		
 		EnemyMap.Add(nextEnemyID, Enemy);
 
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Emerald, "EnemySpawned At: " + spawnLocation.ToString());
