@@ -73,15 +73,8 @@ void AActionGameMode::PostLogin(APlayerController* NewPlayer)
 		playersInGame.Add(NewPlayer->GetUniqueID(), NewPlayer);
 	}
 
-	if(playersInGame.Num() == maxplayers)
-	{
+	SetTeam(NewPlayer);
 
-		for(auto x : playersInGame)
-		{
-
-			SetTeam(x.Value);
-		}
-	}
 }
 
 void AActionGameMode::BeginPlay()
@@ -102,7 +95,7 @@ void AActionGameMode::SetTeam(APlayerController* PlayerController)
 
 	for (auto x : GameState->PlayerArray)
 	{
-		//Si no somos nosotras mismos y somos del mismo equipo nos asignamos como compañero
+		//Si no somos nosotros mismos y somos del mismo equipo nos asignamos como compañero
 		if (x->GetPlayerId() != PlayerController->GetPlayerState<AActionPlayerState>()->GetPlayerId() && Cast<AActionPlayerState>(x)->GetTeamID() == teamId)
 		{
 
@@ -125,9 +118,3 @@ void AActionGameMode::EndGame()
 	
 	GetWorld()->ServerTravel("/Game/Levels/MenuLevels/MainMenuLevel");
 }
-
-
-
-
-
-

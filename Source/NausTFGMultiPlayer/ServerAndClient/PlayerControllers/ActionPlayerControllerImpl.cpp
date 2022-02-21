@@ -48,7 +48,7 @@ void AActionPlayerControllerImpl::GetLifetimeReplicatedProps(TArray<FLifetimePro
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME_CONDITION(AActionPlayerControllerImpl, teamMate, COND_InitialOnly);
+	DOREPLIFETIME(AActionPlayerControllerImpl, teamMate);
 }
 
 UPresentationController* AActionPlayerControllerImpl::GetPresentationController()
