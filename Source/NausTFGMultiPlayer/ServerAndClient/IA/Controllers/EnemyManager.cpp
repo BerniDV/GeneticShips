@@ -4,6 +4,7 @@
 #include "EnemyManager.h"
 
 #include "AIBaseController.h"
+#include "NausTFGMultiPlayer/ServerAndClient/IA/Chromosome.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/EnemyActionPawn.h"
 
@@ -24,13 +25,13 @@ AEnemyManager::AEnemyManager()
 
 }
 
-void AEnemyManager::SpawnEnemies()
+void AEnemyManager::SpawnEnemies(TArray<AChromosome*> generationDNA)
 {
 
 	DeleteAllEnemies();
 
 
-	for(int i = 0; i < 100; i++)
+	for(int i = 0; i < generationDNA.Num(); i++)
 	{
 
 		FVector spawnLocation(FMath::RandRange(-5000.f, 5000.f), FMath::RandRange(-5000.f, 5000.f), FMath::RandRange(-5000.f, 5000.f));
@@ -48,15 +49,11 @@ void AEnemyManager::SpawnEnemies()
 
 			Enemy->SetID(nextEnemyID);
 			Enemy->SetReplicates(true);
+			Enemy->SetChromosome(generationDNA[i]);
+			generationDNA[i]->SetOwner(Enemy);
 
 			EnemyMap.Add(nextEnemyID, Enemy);
 			++nextEnemyID;
-
-			//Aqui introduciré el adn en los enemigos
-			Enemy->SetRandomGenes();
-
-			//Esto lo haré de forma interna en el enemigo al aplicar un adn
-			Enemy->ApplyFenotipe();
 
 		}
 	}
@@ -70,7 +67,7 @@ void AEnemyManager::DeleteAllEnemies()
 
 		for (auto x : EnemyMap)
 		{
-			x.Value->GetController()->Destroy();
+			//x.Value->GetController()->Destroy();
 			x.Value->Destroy();
 		}
 

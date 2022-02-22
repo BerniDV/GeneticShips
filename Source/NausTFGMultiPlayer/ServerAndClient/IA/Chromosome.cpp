@@ -50,7 +50,9 @@ void AChromosome::ApplyFenotipe()
 {
 
 	AActor* myOwner = GetOwner();
-	myOwner->SetActorScale3D(sizeGene);
+
+	if(myOwner)
+		myOwner->SetActorScale3D(sizeGene);
 }
 
 // Called when the game starts or when spawned

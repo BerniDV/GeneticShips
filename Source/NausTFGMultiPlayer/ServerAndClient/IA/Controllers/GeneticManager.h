@@ -37,6 +37,8 @@ private:
 
 	AEnemyManager* enemyManager;
 
+	TArray<AChromosome*> nextGenerationDNA;
+
 };
 
 

@@ -29,7 +29,7 @@ void AGeneticManager::BeginPlay()
 	{
 
 		GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AGeneticManager::SpawnEnemies, 20.f, true);
-		
+
 	}
 		
 	
@@ -46,8 +46,22 @@ void AGeneticManager::Tick(float DeltaTime)
 
 void AGeneticManager::SpawnEnemies()
 {
+	int numEnemies = 100.f;
+
+	nextGenerationDNA.Empty();
+
+	for (int i = 0; i < numEnemies; i++)
+	{
+
+		AChromosome* DNA = GetWorld()->SpawnActor<AChromosome>();
+		DNA->SetRandomGenes();
+
+		nextGenerationDNA.Add(DNA);
+
+	}
+
 	//Pasar como parametro el array de adn de todos los nuevos enemigos
-	enemyManager->SpawnEnemies();
+	enemyManager->SpawnEnemies(nextGenerationDNA);
 
 }
 

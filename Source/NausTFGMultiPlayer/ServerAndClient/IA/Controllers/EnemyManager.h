@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "EnemyManager.generated.h"
 
+class AChromosome;
 class AEnemyActionPawn;
 UCLASS()
 class NAUSTFGMULTIPLAYER_API AEnemyManager : public AActor
@@ -16,7 +17,7 @@ public:
 	// Sets default values for this actor's properties
 	AEnemyManager();
 
-	void SpawnEnemies();
+	void SpawnEnemies(TArray<AChromosome*> generationDNA);
 
 	void DeleteAllEnemies();
 

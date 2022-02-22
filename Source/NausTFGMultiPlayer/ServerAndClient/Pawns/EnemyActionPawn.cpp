@@ -50,17 +50,17 @@ void AEnemyActionPawn::ApplyFenotipe()
 	enemyChromosome->ApplyFenotipe();
 }
 
+void AEnemyActionPawn::SetChromosome(AChromosome* newChromosome)
+{
+
+	enemyChromosome = newChromosome;
+
+	ApplyFenotipe();
+}
+
 void AEnemyActionPawn::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (HasAuthority())
-	{
-
-		enemyChromosome = GetWorld()->SpawnActor<AChromosome>();
-		enemyChromosome->SetOwner(this);
-
-	}
 		
 
 }
@@ -69,12 +69,6 @@ void AEnemyActionPawn::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if(enemyChromosome != nullptr)
-	{
-		
-		FVector size = enemyChromosome->GetSizeGene();
-		SetActorScale3D(size);
-	}
 		
 }
 
