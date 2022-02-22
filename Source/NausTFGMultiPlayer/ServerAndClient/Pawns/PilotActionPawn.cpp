@@ -78,7 +78,7 @@ void APilotActionPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, "Location: " + GetActorLocation().ToString());
 }
 
 void APilotActionPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) 

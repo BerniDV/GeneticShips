@@ -28,6 +28,10 @@ public:
 	virtual void Destroyed() override;
 
 	FVector GetSizeGene();
+	void SetSizeGene(FVector SizeGene);
+
+	void ApplyFenotipe();
+	void SetRandomGenes();
 
 private:
 

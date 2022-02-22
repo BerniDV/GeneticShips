@@ -4,19 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "GeneticManager.generated.h"
+#include "EnemyManager.generated.h"
 
-class AEnemyManager;
-class AChromosome;
 class AEnemyActionPawn;
 UCLASS()
-class NAUSTFGMULTIPLAYER_API AGeneticManager : public AActor
+class NAUSTFGMULTIPLAYER_API AEnemyManager : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AGeneticManager();
+	AEnemyManager();
+
+	void SpawnEnemies();
+
+	void DeleteAllEnemies();
 
 protected:
 	// Called when the game starts or when spawned
@@ -26,19 +28,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION()
-	void SpawnEnemies();
-
-	void SetEnemyManager(AEnemyManager* enemyMG);
-
 private:
 
-	FTimerHandle timerHandler;
+	TSubclassOf<AEnemyActionPawn> enemyClass;
 
-	AEnemyManager* enemyManager;
+	int32 nextEnemyID;
+
+	UPROPERTY()
+	TMap<int32, AEnemyActionPawn*> EnemyMap;
 
 };
-
-
-
-

@@ -9,7 +9,7 @@
 
 AEnemyActionPawn::AEnemyActionPawn()
 {
-
+	
 	bReplicates = true;
 
 	boxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("boxComponent"));
@@ -29,11 +29,25 @@ void AEnemyActionPawn::SetID(int32 newEnemyID)
 	id = newEnemyID;
 }
 
+
+
 void AEnemyActionPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AEnemyActionPawn, enemyChromosome);
+}
+
+void AEnemyActionPawn::SetRandomGenes()
+{
+
+	enemyChromosome->SetRandomGenes();
+}
+
+void AEnemyActionPawn::ApplyFenotipe()
+{
+
+	enemyChromosome->ApplyFenotipe();
 }
 
 void AEnemyActionPawn::BeginPlay()
@@ -67,7 +81,11 @@ void AEnemyActionPawn::Tick(float DeltaSeconds)
 void AEnemyActionPawn::Destroyed()
 {
 	if (HasAuthority() && enemyChromosome != nullptr)
+	{
 		enemyChromosome->Destroy();
+
+	}
+		
 
 	Super::Destroyed();
 

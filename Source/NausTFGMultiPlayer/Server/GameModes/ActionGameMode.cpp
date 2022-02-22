@@ -8,6 +8,7 @@
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Factories/ReferencePawnsFactory.h"
 #include "NausTFGMultiPlayer/ServerAndClient/GameStates/ActionGameState.h"
+#include "NausTFGMultiPlayer/ServerAndClient/IA/Controllers/EnemyManager.h"
 #include "NausTFGMultiPlayer/ServerAndClient/IA/Controllers/GeneticManager.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerControllerImpl.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/ActionPlayerState.h"
@@ -82,6 +83,9 @@ void AActionGameMode::BeginPlay()
 	Super::BeginPlay();
 
 	geneticManager = GetWorld()->SpawnActor<AGeneticManager>();
+	enemyManager = GetWorld()->SpawnActor<AEnemyManager>();
+
+	geneticManager->SetEnemyManager(enemyManager);
 
 	Cast<AActionGameState>(GameState)->signalPlayerDead.AddDynamic(this, &AActionGameMode::EndGame);
 }

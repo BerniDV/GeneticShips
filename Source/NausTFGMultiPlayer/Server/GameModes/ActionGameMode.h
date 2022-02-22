@@ -6,6 +6,7 @@
 #include "GameFramework/GameMode.h"
 #include "ActionGameMode.generated.h"
 
+class AEnemyManager;
 class AGeneticManager;
 /**
  * 
@@ -40,5 +41,6 @@ private:
 	const uint32 maxplayers = 2;
 
 	AGeneticManager* geneticManager;
+	AEnemyManager* enemyManager;
 
 };

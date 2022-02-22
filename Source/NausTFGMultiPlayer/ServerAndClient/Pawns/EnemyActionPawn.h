@@ -24,6 +24,10 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
 
+	void SetRandomGenes();
+
+	void ApplyFenotipe();
+
 protected:
 
 	virtual void BeginPlay() override;

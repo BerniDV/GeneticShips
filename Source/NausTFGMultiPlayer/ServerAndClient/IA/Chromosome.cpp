@@ -34,13 +34,30 @@ FVector AChromosome::GetSizeGene()
 	return sizeGene;
 }
 
+void AChromosome::SetSizeGene(FVector SizeGene)
+{
+
+	sizeGene = SizeGene;
+	
+}
+
+void AChromosome::SetRandomGenes()
+{
+	sizeGene = FVector(FMath::RandRange(1, 4));
+}
+
+void AChromosome::ApplyFenotipe()
+{
+
+	AActor* myOwner = GetOwner();
+	myOwner->SetActorScale3D(sizeGene);
+}
+
 // Called when the game starts or when spawned
 void AChromosome::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (HasAuthority())
-		sizeGene = FVector(FMath::RandRange(1, 4));
 
 }
 
@@ -49,7 +66,5 @@ void AChromosome::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if(HasAuthority())
-		sizeGene = FVector(FMath::RandRange(1, 4));
 }
 

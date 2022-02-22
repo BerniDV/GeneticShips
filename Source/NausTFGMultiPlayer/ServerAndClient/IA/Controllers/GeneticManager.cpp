@@ -2,6 +2,10 @@
 
 
 #include "GeneticManager.h"
+
+#include "AIBaseController.h"
+#include "EnemyManager.h"
+#include "NausTFGMultiPlayer/ServerAndClient/IA/Chromosome.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/EnemyActionPawn.h"
 
 // Sets default values
@@ -14,10 +18,6 @@ AGeneticManager::AGeneticManager()
 
 	bAlwaysRelevant = true;
 
-	ConstructorHelpers::FClassFinder <AEnemyActionPawn> refEnemyActionPawnBP(TEXT("/Game/ServerAndClient/Pawns/EnemyActionPawn_BP"));
-	enemyClass = refEnemyActionPawnBP.Class;
-
-	nextEnemyID = 0;
 }
 
 // Called when the game starts or when spawned
@@ -26,7 +26,12 @@ void AGeneticManager::BeginPlay()
 	Super::BeginPlay();
 
 	if(HasAuthority())
-		GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AGeneticManager::SpawnEnemy, 0.1f, true);
+	{
+
+		GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AGeneticManager::SpawnEnemies, 20.f, true);
+		
+	}
+		
 	
 }
 
@@ -35,46 +40,20 @@ void AGeneticManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if(EnemyMap.Num() == 100 && HasAuthority())
-	{
-		
-		for(auto x: EnemyMap)
-		{
 
-			x.Value->Destroy();
-		}
-
-		for (auto It = EnemyMap.CreateConstIterator(); It; ++It)
-		{
-
-			EnemyMap.Remove(It.Key());
-
-		}
-	}
 
 }
 
-void AGeneticManager::SpawnEnemy()
+void AGeneticManager::SpawnEnemies()
+{
+	//Pasar como parametro el array de adn de todos los nuevos enemigos
+	enemyManager->SpawnEnemies();
+
+}
+
+void AGeneticManager::SetEnemyManager(AEnemyManager* enemyMG)
 {
 
-	FVector spawnLocation(FMath::RandRange(-5000.f, 5000.f), FMath::RandRange(-5000.f, 5000.f), FMath::RandRange(-5000.f, 5000.f));
-	
-	AActor* spawnedActor = nullptr;
-	spawnedActor = GetWorld()->SpawnActor<AActionPawn>(enemyClass, spawnLocation, FRotator::ZeroRotator);
-
-	if(spawnedActor != nullptr)
-	{
-
-		AEnemyActionPawn* Enemy = Cast<AEnemyActionPawn>(spawnedActor);
-		Enemy->SetID(nextEnemyID);
-		Enemy->SetReplicates(true);
-		++nextEnemyID;
-		
-		EnemyMap.Add(nextEnemyID, Enemy);
-
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Emerald, "EnemySpawned At: " + spawnLocation.ToString());
-
-	}
-
+	enemyManager = enemyMG;
 }
 
