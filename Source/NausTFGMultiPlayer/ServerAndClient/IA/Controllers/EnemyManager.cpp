@@ -49,8 +49,9 @@ void AEnemyManager::SpawnEnemies(TArray<AChromosome*> generationDNA)
 
 			Enemy->SetID(nextEnemyID);
 			Enemy->SetReplicates(true);
-			Enemy->SetChromosome(generationDNA[i]);
 			generationDNA[i]->SetOwner(Enemy);
+			Enemy->SetChromosome(generationDNA[i]);
+			
 
 			EnemyMap.Add(nextEnemyID, Enemy);
 			++nextEnemyID;

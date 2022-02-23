@@ -74,12 +74,8 @@ void AEnemyActionPawn::Tick(float DeltaSeconds)
 
 void AEnemyActionPawn::Destroyed()
 {
-	if (HasAuthority() && enemyChromosome != nullptr)
-	{
-		enemyChromosome->Destroy();
-
-	}
-		
+	
+	//enemyChromosome->Destroy();
 
 	Super::Destroyed();
 

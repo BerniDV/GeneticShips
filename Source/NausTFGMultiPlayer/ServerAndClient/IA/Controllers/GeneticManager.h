@@ -31,6 +31,8 @@ public:
 
 	void SetEnemyManager(AEnemyManager* enemyMG);
 
+	void DestroyAllADN();
+
 private:
 
 	FTimerHandle timerHandler;

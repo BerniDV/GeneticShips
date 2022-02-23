@@ -55,3 +55,9 @@ void AAIBaseController::Tick(float DeltaSeconds)
 	}
 	
 }
+
+void AAIBaseController::Destroyed()
+{
+
+	Super::Destroyed();
+}

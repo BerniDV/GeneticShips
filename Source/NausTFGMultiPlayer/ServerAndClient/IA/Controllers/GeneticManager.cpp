@@ -48,7 +48,7 @@ void AGeneticManager::SpawnEnemies()
 {
 	int numEnemies = 100.f;
 
-	nextGenerationDNA.Empty();
+	DestroyAllADN();
 
 	for (int i = 0; i < numEnemies; i++)
 	{
@@ -69,5 +69,17 @@ void AGeneticManager::SetEnemyManager(AEnemyManager* enemyMG)
 {
 
 	enemyManager = enemyMG;
+}
+
+void AGeneticManager::DestroyAllADN()
+{
+
+	for(auto x: nextGenerationDNA)
+	{
+
+		x->Destroy();
+	}
+
+	nextGenerationDNA.Empty();
 }
 
