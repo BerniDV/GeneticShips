@@ -74,8 +74,6 @@ void AEnemyActionPawn::Tick(float DeltaSeconds)
 
 void AEnemyActionPawn::Destroyed()
 {
-	
-	//enemyChromosome->Destroy();
 
 	Super::Destroyed();
 

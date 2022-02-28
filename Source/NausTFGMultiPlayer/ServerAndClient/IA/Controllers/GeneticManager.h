@@ -26,20 +26,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION()
-	void SpawnEnemies();
-
-	void SetEnemyManager(AEnemyManager* enemyMG);
-
-	void DestroyAllADN();
+	TArray<AChromosome*> GenerateNextGenerationDna(TArray<AChromosome*> actualGenerationDNA);
 
 private:
 
-	FTimerHandle timerHandler;
-
-	AEnemyManager* enemyManager;
-
-	TArray<AChromosome*> nextGenerationDNA;
 
 };
 

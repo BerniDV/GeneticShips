@@ -8,7 +8,7 @@
 AActionGameState::AActionGameState()
 {
 
-	
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 void AActionGameState::PlayerDead()

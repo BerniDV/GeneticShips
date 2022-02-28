@@ -12,7 +12,7 @@
 AGeneticManager::AGeneticManager()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	bReplicates = true;
 
@@ -25,13 +25,6 @@ void AGeneticManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if(HasAuthority())
-	{
-
-		GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AGeneticManager::SpawnEnemies, 20.f, true);
-
-	}
-		
 	
 }
 
@@ -44,42 +37,21 @@ void AGeneticManager::Tick(float DeltaTime)
 
 }
 
-void AGeneticManager::SpawnEnemies()
+TArray<AChromosome*> AGeneticManager::GenerateNextGenerationDna(TArray<AChromosome*> actualGenerationDNA)
 {
-	int numEnemies = 100.f;
 
-	DestroyAllADN();
+	TArray<AChromosome*> DNAResult;
 
-	for (int i = 0; i < numEnemies; i++)
+	for (int i = 0; i < 50; i++)
 	{
 
 		AChromosome* DNA = GetWorld()->SpawnActor<AChromosome>();
 		DNA->SetRandomGenes();
 
-		nextGenerationDNA.Add(DNA);
+		DNAResult.Add(DNA);
 
 	}
 
-	//Pasar como parametro el array de adn de todos los nuevos enemigos
-	enemyManager->SpawnEnemies(nextGenerationDNA);
-
-}
-
-void AGeneticManager::SetEnemyManager(AEnemyManager* enemyMG)
-{
-
-	enemyManager = enemyMG;
-}
-
-void AGeneticManager::DestroyAllADN()
-{
-
-	for(auto x: nextGenerationDNA)
-	{
-
-		x->Destroy();
-	}
-
-	nextGenerationDNA.Empty();
+	return DNAResult;
 }
 

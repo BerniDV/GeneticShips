@@ -17,7 +17,8 @@ public:
 	// Sets default values for this actor's properties
 	AEnemyManager();
 
-	void SpawnEnemies(TArray<AChromosome*> generationDNA);
+	//Per repte utilitzar promises i futures per a que la mateixa funcio retorni els resultats
+	void SpawnGeneration(TArray<AChromosome*> generationDNA);
 
 	void DeleteAllEnemies();
 

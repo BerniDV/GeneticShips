@@ -8,6 +8,7 @@
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Factories/ReferencePawnsFactory.h"
 #include "NausTFGMultiPlayer/ServerAndClient/GameStates/ActionGameState.h"
+#include "NausTFGMultiPlayer/ServerAndClient/IA/Chromosome.h"
 #include "NausTFGMultiPlayer/ServerAndClient/IA/Controllers/EnemyManager.h"
 #include "NausTFGMultiPlayer/ServerAndClient/IA/Controllers/GeneticManager.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerControllerImpl.h"
@@ -85,9 +86,12 @@ void AActionGameMode::BeginPlay()
 	geneticManager = GetWorld()->SpawnActor<AGeneticManager>();
 	enemyManager = GetWorld()->SpawnActor<AEnemyManager>();
 
-	geneticManager->SetEnemyManager(enemyManager);
+	//geneticManager->SetEnemyManager(enemyManager);
 
 	Cast<AActionGameState>(GameState)->signalPlayerDead.AddDynamic(this, &AActionGameMode::EndGame);
+
+	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::SetUpNextGeneration, 20.f, true);
+	
 }
 
 void AActionGameMode::SetTeam(APlayerController* PlayerController)
@@ -121,4 +125,28 @@ void AActionGameMode::EndGame()
 {
 	
 	GetWorld()->ServerTravel("/Game/Levels/MenuLevels/MainMenuLevel");
+}
+
+void AActionGameMode::SetUpNextGeneration()
+{
+
+	TArray<AChromosome*> actualGeneration = nextGenerationDNA;
+	nextGenerationDNA.Empty();
+
+	nextGenerationDNA = geneticManager->GenerateNextGenerationDna(actualGeneration);
+	DestroyGeneration(actualGeneration);
+
+	enemyManager->SpawnGeneration(nextGenerationDNA);
+}
+
+void AActionGameMode::DestroyGeneration(TArray<AChromosome*> &generation)
+{
+
+	for (auto x : generation)
+	{
+
+		x->Destroy();
+	}
+
+	generation.Empty();
 }

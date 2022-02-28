@@ -12,7 +12,7 @@
 AEnemyManager::AEnemyManager()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	bReplicates = true;
 
@@ -25,7 +25,7 @@ AEnemyManager::AEnemyManager()
 
 }
 
-void AEnemyManager::SpawnEnemies(TArray<AChromosome*> generationDNA)
+void AEnemyManager::SpawnGeneration(TArray<AChromosome*> generationDNA)
 {
 
 	DeleteAllEnemies();
@@ -63,7 +63,7 @@ void AEnemyManager::SpawnEnemies(TArray<AChromosome*> generationDNA)
 void AEnemyManager::DeleteAllEnemies()
 {
 
-	if(HasAuthority())
+	if(HasAuthority() && EnemyMap.Num() > 0)
 	{
 
 		for (auto x : EnemyMap)

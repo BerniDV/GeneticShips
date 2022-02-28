@@ -6,6 +6,7 @@
 #include "GameFramework/GameMode.h"
 #include "ActionGameMode.generated.h"
 
+class AChromosome;
 class AEnemyManager;
 class AGeneticManager;
 /**
@@ -34,13 +35,22 @@ public:
 	UFUNCTION()
 	void EndGame();
 
+	UFUNCTION()
+	void SetUpNextGeneration();
+
+	void DestroyGeneration(TArray<AChromosome*> &generation);
+
 private:
 
 	TMap<int32, APlayerController*> playersInGame;
 
 	const uint32 maxplayers = 2;
 
+	FTimerHandle timerHandler;
+
 	AGeneticManager* geneticManager;
 	AEnemyManager* enemyManager;
+
+	TArray<AChromosome*> nextGenerationDNA;
 
 };
