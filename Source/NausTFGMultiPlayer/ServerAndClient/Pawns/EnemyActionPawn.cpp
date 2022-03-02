@@ -58,6 +58,12 @@ void AEnemyActionPawn::SetChromosome(AChromosome* newChromosome)
 	ApplyFenotipe();
 }
 
+AChromosome* AEnemyActionPawn::GetChromosome()
+{
+
+	return enemyChromosome;
+}
+
 void AEnemyActionPawn::BeginPlay()
 {
 	Super::BeginPlay();

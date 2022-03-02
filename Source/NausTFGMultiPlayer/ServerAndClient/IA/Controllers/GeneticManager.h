@@ -28,6 +28,14 @@ public:
 
 	TArray<AChromosome*> GenerateNextGenerationDna(TArray<AChromosome*> actualGenerationDNA);
 
+	TArray<AChromosome*> GenerateFirstGenerationDna();
+
+	AChromosome* CrossOver(AChromosome* paren1, AChromosome* parent2);
+
+	float CalculateAptitude(AChromosome* individual);
+	
+	TArray<AChromosome*> GetBestIndividues(TArray<AChromosome*> population, int32 numIndividues);
+
 private:
 
 

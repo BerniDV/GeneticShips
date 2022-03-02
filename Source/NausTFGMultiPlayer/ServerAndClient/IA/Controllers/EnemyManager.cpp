@@ -4,6 +4,7 @@
 #include "EnemyManager.h"
 
 #include "AIBaseController.h"
+#include "NausTFGMultiPlayer/ServerAndClient/GameStates/ActionGameState.h"
 #include "NausTFGMultiPlayer/ServerAndClient/IA/Chromosome.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/EnemyActionPawn.h"
@@ -14,7 +15,7 @@ AEnemyManager::AEnemyManager()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	bReplicates = true;
+	bReplicates = false;
 
 	bAlwaysRelevant = true;
 
@@ -25,11 +26,12 @@ AEnemyManager::AEnemyManager()
 
 }
 
-void AEnemyManager::SpawnGeneration(TArray<AChromosome*> generationDNA)
+std::future<TArray<AChromosome*>> AEnemyManager::SpawnGeneration(TArray<AChromosome*> generationDNA)
 {
 
 	DeleteAllEnemies();
 
+	roundResultPromise = std::promise<TArray<AChromosome*>>();
 
 	for(int i = 0; i < generationDNA.Num(); i++)
 	{
@@ -56,8 +58,15 @@ void AEnemyManager::SpawnGeneration(TArray<AChromosome*> generationDNA)
 			EnemyMap.Add(nextEnemyID, Enemy);
 			++nextEnemyID;
 
+			//En caso de spawn incorrecto intentamos otra vez
+		}else
+		{
+
+			i--;
 		}
 	}
+
+	return roundResultPromise.get_future();
 }
 
 void AEnemyManager::DeleteAllEnemies()
@@ -87,6 +96,18 @@ void AEnemyManager::DeleteAllEnemies()
 void AEnemyManager::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if(!HasAuthority())
+	{
+
+		roundResultPromise.set_value(TArray<AChromosome*>());
+	}
+
+	if(HasAuthority())
+	{
+		AGameStateBase* gameState = GetWorld()->GetGameState();
+		Cast<AActionGameState>(gameState)->signalNewRound.AddDynamic(this, &AEnemyManager::CalculateResults);
+	}
 	
 }
 
@@ -95,5 +116,26 @@ void AEnemyManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
+}
+
+void AEnemyManager::Destroyed()
+{
+
+	Super::Destroyed();
+}
+
+void AEnemyManager::CalculateResults()
+{
+
+	TArray<AChromosome*> result;
+
+	for (auto x : EnemyMap)
+	{
+
+		result.Add(x.Value->GetChromosome());
+	}
+
+	roundResultPromise.set_value(result);
 }
 

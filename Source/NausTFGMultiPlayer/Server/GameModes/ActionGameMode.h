@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
+#include <future>
 #include "ActionGameMode.generated.h"
 
 class AChromosome;
@@ -36,9 +37,20 @@ public:
 	void EndGame();
 
 	UFUNCTION()
-	void SetUpNextGeneration();
+	void SetUpNextGeneration(TArray<AChromosome*> actualGeneration);
+
+
+	UFUNCTION()
+	void SetUpFirstGeneration();
+
+	UFUNCTION()
+	void InitializeNextRound();
 
 	void DestroyGeneration(TArray<AChromosome*> &generation);
+
+protected:
+
+	virtual void Tick(float DeltaSeconds) override;
 
 private:
 
@@ -51,6 +63,7 @@ private:
 	AGeneticManager* geneticManager;
 	AEnemyManager* enemyManager;
 
-	TArray<AChromosome*> nextGenerationDNA;
+	std::future<TArray<AChromosome*>> roundResultFuture;
+	//TFuture<TArray<AChromosome*>> roundResultFuture;
 
 };

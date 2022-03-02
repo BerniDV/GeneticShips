@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include <future>
 #include "EnemyManager.generated.h"
 
 class AChromosome;
@@ -18,7 +19,7 @@ public:
 	AEnemyManager();
 
 	//Per repte utilitzar promises i futures per a que la mateixa funcio retorni els resultats
-	void SpawnGeneration(TArray<AChromosome*> generationDNA);
+	std::future<TArray<AChromosome*>> SpawnGeneration(TArray<AChromosome*> generationDNA);
 
 	void DeleteAllEnemies();
 
@@ -30,6 +31,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void Destroyed() override;
+
+private:
+
+	UFUNCTION()
+	void CalculateResults();
+
 private:
 
 	TSubclassOf<AEnemyActionPawn> enemyClass;
@@ -38,5 +46,7 @@ private:
 
 	UPROPERTY()
 	TMap<int32, AEnemyActionPawn*> EnemyMap;
+
+	std::promise<TArray<AChromosome*>> roundResultPromise;
 
 };

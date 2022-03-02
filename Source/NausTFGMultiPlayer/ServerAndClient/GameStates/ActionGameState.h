@@ -19,12 +19,25 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerDead);
 	FOnPlayerDead signalPlayerDead;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnNewRound);
+	FOnNewRound signalNewRound;
+
 	AActionGameState();
+
+	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
 
 	UFUNCTION()
 	void PlayerDead();
 
+	UFUNCTION()
+	void SetRound(int newRound);
+	
+	int GetRound();
 
+private:
+
+	UPROPERTY(replicated)
+	int round;
 
 
 };

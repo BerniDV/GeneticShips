@@ -12,6 +12,9 @@ AChromosome::AChromosome()
 	PrimaryActorTick.bCanEverTick = false;
 	bReplicates = true;
 	bNetUseOwnerRelevancy = true;
+
+	root = CreateDefaultSubobject<USceneComponent>(TEXT("root"));
+	RootComponent = root;
 }
 
 void AChromosome::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -43,7 +46,13 @@ void AChromosome::SetSizeGene(FVector SizeGene)
 
 void AChromosome::SetRandomGenes()
 {
-	sizeGene = FVector(FMath::RandRange(1, 4));
+	sizeGene = FVector(FMath::RandRange(1, 1));
+}
+
+void AChromosome::Mutation()
+{
+
+	sizeGene = FVector(FMath::RandRange(1, 10));
 }
 
 void AChromosome::ApplyFenotipe()

@@ -29,6 +29,7 @@ public:
 	void ApplyFenotipe();
 
 	void SetChromosome(AChromosome* newChromosome);
+	AChromosome* GetChromosome();
 
 protected:
 

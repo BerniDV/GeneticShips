@@ -86,12 +86,8 @@ void AActionGameMode::BeginPlay()
 	geneticManager = GetWorld()->SpawnActor<AGeneticManager>();
 	enemyManager = GetWorld()->SpawnActor<AEnemyManager>();
 
-	//geneticManager->SetEnemyManager(enemyManager);
-
 	Cast<AActionGameState>(GameState)->signalPlayerDead.AddDynamic(this, &AActionGameMode::EndGame);
-
-	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::SetUpNextGeneration, 20.f, true);
-	
+	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::SetUpFirstGeneration, 10.f, false);
 }
 
 void AActionGameMode::SetTeam(APlayerController* PlayerController)
@@ -127,16 +123,37 @@ void AActionGameMode::EndGame()
 	GetWorld()->ServerTravel("/Game/Levels/MenuLevels/MainMenuLevel");
 }
 
-void AActionGameMode::SetUpNextGeneration()
+void AActionGameMode::SetUpNextGeneration(TArray<AChromosome*> actualGeneration)
 {
 
-	TArray<AChromosome*> actualGeneration = nextGenerationDNA;
-	nextGenerationDNA.Empty();
 
-	nextGenerationDNA = geneticManager->GenerateNextGenerationDna(actualGeneration);
+	TArray<AChromosome*> nextGeneration = geneticManager->GenerateNextGenerationDna(actualGeneration);
 	DestroyGeneration(actualGeneration);
 
-	enemyManager->SpawnGeneration(nextGenerationDNA);
+	roundResultFuture = enemyManager->SpawnGeneration(nextGeneration);
+	
+}
+
+void AActionGameMode::SetUpFirstGeneration()
+{
+
+	TArray<AChromosome*> firstGeneration = geneticManager->GenerateFirstGenerationDna();
+
+	roundResultFuture = enemyManager->SpawnGeneration(firstGeneration);
+
+	GetWorld()->GetTimerManager().ClearTimer(timerHandler);
+	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::InitializeNextRound, 20.f, true);
+}
+
+void AActionGameMode::InitializeNextRound()
+{
+
+	AActionGameState* gameState = Cast<AActionGameState>(GameState);
+
+	int currentRound = gameState->GetRound();
+	currentRound++;
+
+	gameState->SetRound(currentRound);
 }
 
 void AActionGameMode::DestroyGeneration(TArray<AChromosome*> &generation)
@@ -149,4 +166,16 @@ void AActionGameMode::DestroyGeneration(TArray<AChromosome*> &generation)
 	}
 
 	generation.Empty();
+}
+
+void AActionGameMode::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if(roundResultFuture._Is_ready())
+	{
+		
+		TArray<AChromosome*> actualGenerationresult = roundResultFuture.get();
+		SetUpNextGeneration(actualGenerationresult);
+	}
 }

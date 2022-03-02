@@ -33,9 +33,13 @@ public:
 	void ApplyFenotipe();
 	void SetRandomGenes();
 
+	void Mutation();
+
 private:
 
 	UPROPERTY(Replicated)
 	FVector sizeGene;
+
+	USceneComponent* root;
 
 };
