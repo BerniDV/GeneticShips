@@ -48,6 +48,7 @@ std::future<TArray<AChromosome*>> AEnemyManager::SpawnGeneration(TArray<AChromos
 			//Esto sera un bucle por cada adn del array
 			AEnemyActionPawn* Enemy = Cast<AEnemyActionPawn>(spawnedActor);
 			controller->Possess(Enemy);
+			controller->SetEnemyManager(this);
 
 			Enemy->SetID(nextEnemyID);
 			Enemy->SetReplicates(true);
@@ -90,6 +91,18 @@ void AEnemyManager::DeleteAllEnemies()
 
 	}
 	
+}
+
+void AEnemyManager::DeleteEnemy(int32 enemyID)
+{
+
+	if(EnemyMap[enemyID] != nullptr)
+	{
+
+		EnemyMap[enemyID]->Destroy();
+	}
+
+	EnemyMap.Remove(enemyID);
 }
 
 // Called when the game starts or when spawned

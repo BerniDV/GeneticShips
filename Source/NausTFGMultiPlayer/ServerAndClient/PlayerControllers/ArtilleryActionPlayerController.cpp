@@ -103,8 +103,8 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 
 			myPawn->ExecuteRotation(newRotation);
 
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, "my pawn: " +  myPawn->GetActorLocation().ToString());
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, "Pilot: " +  pilotMate->GetActorLocation().ToString());
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, "my pawn: " +  myPawn->GetActorLocation().ToString());
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, "Pilot: " +  pilotMate->GetActorLocation().ToString());
 		}
 
 		if(cameraManager && Cast<AActionCamera>(cameraManager->GetViewTarget()))

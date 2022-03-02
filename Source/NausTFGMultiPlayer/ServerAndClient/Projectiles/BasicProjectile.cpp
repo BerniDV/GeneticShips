@@ -36,7 +36,7 @@ ABasicProjectile::ABasicProjectile()
 
 	if (GetLocalRole() == ROLE_Authority)
 	{
-		//projectileSphereComponent->OnComponentHit.AddDynamic(this, &ABasicProjectile::OnProjectileImpact);
+		
 		projectileSphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ABasicProjectile::OnProjectileImpact);
 	}
 	
@@ -47,6 +47,7 @@ void ABasicProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//Aplicamos tiempo maximo de vida de 10 segundos
 	SetLifeSpan(10.f);
 	
 }
@@ -78,18 +79,21 @@ void ABasicProjectile::OnProjectileImpact(UPrimitiveComponent* OverlappedCompone
 		return;
 	}
 
+	//Si colisionan dos proyectiles no hacemos nada
 	if(Cast<ABasicProjectile>(OtherActor))
 	{
 
 		return;
 	}
 
+	//Si no colisiona con nuestro propio actor aplicamos daño
 	if (OtherActor && GetOwner()->GetInstigatorController() != nullptr && OtherActor->GetInstigatorController() != GetOwner()->GetInstigatorController())
 	{
 		UGameplayStatics::ApplyPointDamage(OtherActor, damage, FVector::ZeroVector, FHitResult(), GetOwner()->GetInstigatorController(), this, damageType);
 		
 	}
 
+	//Aplicamos particulas de contacto y lo destruimos
 	UGameplayStatics::SpawnEmitterAtLocation(this, explosionEffect, GetActorLocation(), FRotator::ZeroRotator, true, EPSCPoolMethod::AutoRelease);
 	Destroy();
 }
@@ -97,7 +101,7 @@ void ABasicProjectile::OnProjectileImpact(UPrimitiveComponent* OverlappedCompone
 bool ABasicProjectile::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget,
 	const FVector& SrcLocation) const
 {
-
+	//Hacemos que el actor sea relevante para otros actores en base a su propia posicion
 	return Super::IsNetRelevantFor(RealViewer, this, SrcLocation);
 }
 

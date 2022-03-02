@@ -6,6 +6,7 @@
 #include "AIController.h"
 #include "AIBaseController.generated.h"
 
+class AEnemyManager;
 class APilotActionPawn;
 /**
  * 
@@ -27,8 +28,19 @@ protected:
 
 	virtual void Destroyed() override;
 
+public:
+
+	float ApplyDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+		AController* EventInstigator, AActor* DamageCauser);
+
+	void SetEnemyManager(AEnemyManager* enemyController);
+
 private:
 
 	APilotActionPawn* target;
+
+	float health;
+
+	AEnemyManager* enemyManager;
 	
 };

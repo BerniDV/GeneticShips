@@ -3,14 +3,18 @@
 
 #include "AIBaseController.h"
 
+#include "EnemyManager.h"
 #include "ParameterCollection.h"
 #include "Kismet/GameplayStatics.h"
+#include "NausTFGMultiPlayer/Server/GameModes/ActionGameMode.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Pawns/EnemyActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
 
 AAIBaseController::AAIBaseController()
 {
 
 	PrimaryActorTick.bCanEverTick = true;
+	health = 100.f;
 }
 
 void AAIBaseController::BeginPlay()
@@ -60,4 +64,31 @@ void AAIBaseController::Destroyed()
 {
 
 	Super::Destroyed();
+}
+
+float AAIBaseController::ApplyDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+
+	float newHealth = health - DamageAmount;
+
+	if (newHealth <= 0)
+	{
+		newHealth = 0.f;
+		AEnemyActionPawn* myPawn = Cast<AEnemyActionPawn>(GetPawn());
+
+		myPawn->PlayDeath();
+
+		//Buscar otra manera que respete la cadena de mando y no necesite guardar una rteferencia al enemy manager
+		enemyManager->DeleteEnemy(myPawn->GetID());
+	}
+
+	health = newHealth;
+	return newHealth;
+}
+
+void AAIBaseController::SetEnemyManager(AEnemyManager* enemyController)
+{
+
+	enemyManager = enemyController;
 }

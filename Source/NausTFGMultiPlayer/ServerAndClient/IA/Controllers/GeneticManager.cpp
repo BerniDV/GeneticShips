@@ -44,32 +44,6 @@ TArray<AChromosome*> AGeneticManager::GenerateNextGenerationDna(TArray<AChromoso
 	TArray<AChromosome*> DNAResult;
 	TArray<AChromosome*> DNABestIndividues;
 
-	//En caso de primera iteracion o de eliminados todos por el jugador (de momento)
-
-	/*
-	if(actualGenerationDNA.Num() == 0)
-	{
-
-		//Crea nueva generacion
-		for (int i = 0; i < 100; i++)
-		{
-
-			AChromosome* DNA = GetWorld()->SpawnActor<AChromosome>();
-
-			if(!DNA)
-			{
-
-				i--;
-				continue;
-			}
-
-			DNA->SetRandomGenes();
-
-			DNAResult.Add(DNA);
-
-		}
-
-	}else */
 	{
 
 		//Obtiene mejores individuos
@@ -99,6 +73,7 @@ TArray<AChromosome*> AGeneticManager::GenerateFirstGenerationDna()
 {
 	TArray<AChromosome*> DNAResult;
 
+	//En caso de primera iteracion o de eliminados todos por el jugador (de momento)
 	//Crea nueva generacion
 	for (int i = 0; i < 100; i++)
 	{

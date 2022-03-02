@@ -21,6 +21,7 @@ public:
 	AEnemyActionPawn();
 
 	void SetID(int32 newEnemyID);
+	int32 GetID();
 
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
 
@@ -30,6 +31,10 @@ public:
 
 	void SetChromosome(AChromosome* newChromosome);
 	AChromosome* GetChromosome();
+
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	virtual void PlayDeath() override;
 
 protected:
 
@@ -51,6 +56,7 @@ protected:
 
 private:
 
+	UPROPERTY(Replicated)
 	int32 id;
 
 	UPROPERTY(Replicated)
