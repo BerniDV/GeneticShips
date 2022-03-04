@@ -10,6 +10,7 @@
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/EnemyActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
 
+
 AAIBaseController::AAIBaseController()
 {
 
@@ -42,11 +43,11 @@ void AAIBaseController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	AActor* myPawn = GetPawn();
+	AEnemyActionPawn* myPawn = Cast<AEnemyActionPawn>(GetPawn());
 
 	
 
-	if(myPawn && target)
+	if(myPawn && target && HasAuthority())
 	{
 
 		FVector myLocation = myPawn->GetActorLocation();
@@ -54,7 +55,7 @@ void AAIBaseController::Tick(float DeltaSeconds)
 		FVector targetLocation = target->GetPredictedPosition();
 		FVector nextLocation = FMath::VInterpConstantTo(myLocation, targetLocation, DeltaSeconds, 500.f);
 	
-		myPawn->SetActorLocation(nextLocation);
+		myPawn->SetPosition(nextLocation);
 		
 	}
 	
@@ -62,7 +63,9 @@ void AAIBaseController::Tick(float DeltaSeconds)
 
 void AAIBaseController::Destroyed()
 {
-
+	//EL pawn esta muerto antes de llamar esto y se jode, hcer qyue no mueran, solo invisibles
+	//Buscar otra manera que respete la cadena de mando y no necesite guardar una rteferencia al enemy manager
+	UE_LOG(LogTemp, Warning, TEXT("Enemy Controller Destroyed"));
 	Super::Destroyed();
 }
 
@@ -78,17 +81,10 @@ float AAIBaseController::ApplyDamage(float DamageAmount, FDamageEvent const& Dam
 		AEnemyActionPawn* myPawn = Cast<AEnemyActionPawn>(GetPawn());
 
 		myPawn->PlayDeath();
-
-		//Buscar otra manera que respete la cadena de mando y no necesite guardar una rteferencia al enemy manager
-		enemyManager->DeleteEnemy(myPawn->GetID());
 	}
+
+	
 
 	health = newHealth;
 	return newHealth;
-}
-
-void AAIBaseController::SetEnemyManager(AEnemyManager* enemyController)
-{
-
-	enemyManager = enemyController;
 }

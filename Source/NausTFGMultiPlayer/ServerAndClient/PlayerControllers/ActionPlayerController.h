@@ -46,7 +46,8 @@ public:
 	UFUNCTION(Server, WithValidation, Reliable)
 	void SetPlayerHealth(float value);
 
-	float ApplyDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+	UFUNCTION(Server, WithValidation, Reliable)
+	void ApplyDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 		AController* EventInstigator, AActor* DamageCauser);
 
 	int GetTeamId();

@@ -18,8 +18,6 @@ ATargetTest::ATargetTest()
 	testActorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
 	testActorMesh->SetupAttachment(RootComponent);
 
-	OnActorBeginOverlap.AddDynamic(this, &ATargetTest::ActorOverlaped);
-
 	Health = 100.f;
 	damageType = UDamageType::StaticClass();
 }
@@ -28,6 +26,16 @@ ATargetTest::ATargetTest()
 void ATargetTest::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (HasAuthority())
+		OnActorBeginOverlap.AddDynamic(this, &ATargetTest::TargetTestOverlap);
+
+}
+
+void ATargetTest::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
 	
 }
 
@@ -38,15 +46,9 @@ void ATargetTest::Tick(float DeltaTime)
 
 }
 
-void ATargetTest::ActorOverlaped(AActor* OverlappedActor, AActor* OtherActor)
-{
-	if(!Cast<ABasicProjectile>(OtherActor))
-		UGameplayStatics::ApplyPointDamage(OtherActor, 50.f, FVector::ZeroVector, FHitResult(), nullptr, this, damageType);
-}
-
 void ATargetTest::Destroyed()
 {
-	UGameplayStatics::SpawnEmitterAtLocation(this, explosionEffect, GetActorLocation(), FRotator::ZeroRotator, FVector(4), true, EPSCPoolMethod::AutoRelease);
+	
 	Super::Destroyed();
 
 }
@@ -56,16 +58,32 @@ void ATargetTest::Destroyed()
 float ATargetTest::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
                               AActor* DamageCauser)
 {
+
 	float currenthealt = Health - DamageAmount;
 
 	Health = currenthealt;
 
 	if (Health <= 0)
-		Destroy();
+	{
+
+		SetHidden(true);
+		SetActorEnableCollision(false);
+		SpawnParticlesDeath();
+		GetWorld()->GetTimerManager().SetTimer(timerDeath, this, &ATargetTest::DeleteActor, 3.f, false);
+		//Destroy();
+	}
+		
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("Current healt: %f"), Health));
 
 	return currenthealt;
+}
+
+void ATargetTest::TargetTestOverlap(AActor* OverlappedActor, AActor* OtherActor)
+{
+
+	UE_LOG(LogTemp, Warning, TEXT("Target Overlap"));
+	UGameplayStatics::ApplyDamage(OtherActor, 50.f, nullptr, this, damageType);
 }
 
 void ATargetTest::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -73,5 +91,17 @@ void ATargetTest::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ATargetTest, Health);
+}
+
+void ATargetTest::DeleteActor()
+{
+
+	Destroy();
+}
+
+void ATargetTest::SpawnParticlesDeath_Implementation()
+{
+
+	UGameplayStatics::SpawnEmitterAtLocation(this, explosionEffect, GetActorLocation(), FRotator::ZeroRotator, FVector(4), true, EPSCPoolMethod::AutoRelease);
 }
 

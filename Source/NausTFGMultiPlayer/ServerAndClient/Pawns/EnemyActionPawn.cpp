@@ -3,7 +3,9 @@
 
 #include "EnemyActionPawn.h"
 
+#include "PilotActionPawn.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "NausTFGMultiPlayer/ServerAndClient/IA/Chromosome.h"
 #include "NausTFGMultiPlayer/ServerAndClient/IA/Controllers/AIBaseController.h"
 #include "Net/UnrealNetwork.h"
@@ -12,6 +14,8 @@ AEnemyActionPawn::AEnemyActionPawn()
 {
 	
 	bReplicates = true;
+
+	SetReplicateMovement(false);
 
 	boxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("boxComponent"));
 	RootComponent = boxComponent;
@@ -43,6 +47,7 @@ void AEnemyActionPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 
 	DOREPLIFETIME(AEnemyActionPawn, enemyChromosome);
 	DOREPLIFETIME(AEnemyActionPawn, id);
+	DOREPLIFETIME(AEnemyActionPawn, position);
 }
 
 void AEnemyActionPawn::SetRandomGenes()
@@ -85,8 +90,7 @@ float AEnemyActionPawn::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 
 
 	}
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Current Health: %f"), currentHealth));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Current Health: %f"), currentHealth));
 
 	return currentHealth;
 }
@@ -94,20 +98,53 @@ float AEnemyActionPawn::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 void AEnemyActionPawn::PlayDeath()
 {
 
-	Destroy();
+	SetHidden(true);
+	SetActorEnableCollision(false);
+	//SpawnParticlesDeath();
+	//Destroy();
 }
+
+void AEnemyActionPawn::SetPosition(FVector newPosition)
+{
+
+	position = newPosition;
+}
+
+void AEnemyActionPawn::EnemyOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+
+	UE_LOG(LogTemp, Warning, TEXT("Enemy Overlap"));
+	UGameplayStatics::ApplyDamage(OtherActor, 20.f, nullptr, this, damageType);
+}
+
 
 void AEnemyActionPawn::BeginPlay()
 {
 	Super::BeginPlay();
 		
+	position = GetActorLocation();
 
+	if(HasAuthority())
+	{
+
+		boxComponent->OnComponentBeginOverlap.AddDynamic(this, &AEnemyActionPawn::EnemyOverlap);
+	}
+}
+
+void AEnemyActionPawn::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	
 }
 
 void AEnemyActionPawn::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
+	FMath::VInterpConstantTo(GetActorLocation(), position, DeltaSeconds, (GetActorLocation()-position).Size()/DeltaSeconds);
+	SetActorLocation(position);
 		
 }
 

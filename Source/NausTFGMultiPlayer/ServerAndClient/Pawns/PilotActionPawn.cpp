@@ -24,12 +24,6 @@ APilotActionPawn::APilotActionPawn()
 	collisionBox->SetCollisionProfileName("BlockAllDynamic");
 	SetRootComponent(collisionBox);
 
-	//if (GetLocalRole() == ROLE_Authority)
-	//{
-		collisionBox->OnComponentHit.AddDynamic(this, &APilotActionPawn::OnPilotImpact);
-		collisionBox->OnComponentBeginOverlap.AddDynamic(this, &APilotActionPawn::OnPilotOverlap);
-	//}
-
 	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("staticMesh"));
 	meshComponent->SetupAttachment(RootComponent);
 
@@ -71,6 +65,21 @@ void APilotActionPawn::BeginPlay()
 	maneuverabilityInPercent = 100.f;
 
 	translationComponent->Inicialite(speedDropRate, defaultMaxAcceleration, defaultMaxSpeed, maxAcceleration, maxSpeed, accelerationSpeed, decelerationSpeed, maneuverabilityInPercent);
+
+	collisionBox->OnComponentBeginOverlap.RemoveAll(this);
+
+	if (HasAuthority())
+	{
+
+		collisionBox->OnComponentBeginOverlap.AddDynamic(this, &APilotActionPawn::OnPilotOverlap);
+	}
+	
+}
+
+void APilotActionPawn::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
 	
 }
 
@@ -162,26 +171,20 @@ bool APilotActionPawn::HasPredictedMovement()
 	return true;
 }
 
-void APilotActionPawn::OnPilotImpact(UPrimitiveComponent* HitComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
-{
-
-	FVector normal = Hit.Normal;
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Hit Detected");
-}
 
 void APilotActionPawn::OnPilotOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Overlap Detected");
+	
 
 	if(!Cast<ABasicProjectile>(OtherActor))
 	{
-		UGameplayStatics::SpawnEmitterAtLocation(this, destoyedParticles, GetActorLocation(), FRotator::ZeroRotator, FVector(7), true, EPSCPoolMethod::AutoRelease);
+		UE_LOG(LogTemp, Warning, TEXT("Pilot Overlap"));
 		UGameplayStatics::ApplyDamage(OtherActor, 100.f, Cast<AActionPlayerController>(GetOwner()), this, damageType);
+		SpawnExplosionParticlesAtActorLocation();
 	}
+	
 	
 }
 
@@ -194,12 +197,12 @@ float APilotActionPawn::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 	if(AActionPlayerController* PC = Cast<AActionPlayerController>(GetOwner()))
 	{
 
-		currentHealth = PC->ApplyDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
-
+		PC->ApplyDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+		//SpawnExplosionParticlesAtActorLocation();
+		currentHealth = PC->GetPlayerHealth();
 	}
 	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Current Health: %f"), currentHealth));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Current Health: %f"), currentHealth));
 
 	return currentHealth;
 }
@@ -252,10 +255,23 @@ bool APilotActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AActor* 
 	return Super::IsNetRelevantFor(RealViewer, ViewTarget, SrcLocation);
 }
 
-void APilotActionPawn::PlayDeath()
+void APilotActionPawn::PlayDeath_Implementation()
 {
-
 	UGameplayStatics::SpawnEmitterAtLocation(this, fireParticles, GetActorLocation(), FRotator::ZeroRotator, FVector(7), false, EPSCPoolMethod::AutoRelease);
 	UGameplayStatics::SpawnEmitterAttached(fireParticles, collisionBox, NAME_None, FVector(ForceInit), FRotator::ZeroRotator, FVector(7), EAttachLocation::KeepRelativeOffset, true, EPSCPoolMethod::None, true);
 	Cast<AActionPlayerController>(GetOwner())->SetInputEnabled(false);
 }
+
+
+void APilotActionPawn::SpawnExplosionParticlesAtActorLocation_Implementation()
+{
+
+	UGameplayStatics::SpawnEmitterAtLocation(this, destoyedParticles, GetActorLocation(), FRotator::ZeroRotator, FVector(7), true, EPSCPoolMethod::AutoRelease);
+
+	AActionPlayerController* PC = Cast<AActionPlayerController>(GetOwner());
+
+	if(PC)
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Current Health: %f"), PC->GetPlayerHealth()));
+}
+
+	

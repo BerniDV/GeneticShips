@@ -171,7 +171,7 @@ void AActionPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 float AActionPlayerController::GetPlayerHealth()
 {
 	
-	return GetPlayerState<AActionPlayerState>()->GetHealth();
+	return playerHealth;
 }
 
 void AActionPlayerController::SetPlayerHealth_Implementation(float value)
@@ -190,7 +190,8 @@ bool AActionPlayerController::SetPlayerHealth_Validate(float value)
 }
 
 
-float AActionPlayerController::ApplyDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+
+void AActionPlayerController::ApplyDamage_Implementation(float DamageAmount, FDamageEvent const& DamageEvent,
 	AController* EventInstigator, AActor* DamageCauser)
 {
 
@@ -198,19 +199,26 @@ float AActionPlayerController::ApplyDamage(float DamageAmount, FDamageEvent cons
 	//float currentHealt = GetPlayerHealth();
 	float newHealth = playerHealth - DamageAmount;
 
-	if(newHealth <= 0)
+	if (newHealth <= 0)
 	{
 		newHealth = 0.f;
 		Cast<APilotActionPawn>(GetPawn())->PlayDeath();
 
 		AActionPawn* teamMate = playerControllerImpl->GetTeamMate();
 
-		if(teamMate)
+		if (teamMate)
 			teamMate->PlayDeath();
 	}
 
 	SetPlayerHealth(newHealth);
-	return newHealth;
+
+}
+
+bool AActionPlayerController::ApplyDamage_Validate(float DamageAmount, FDamageEvent const& DamageEvent,
+	AController* EventInstigator, AActor* DamageCauser)
+{
+
+	return true;
 }
 
 int AActionPlayerController::GetTeamId()

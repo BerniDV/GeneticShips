@@ -19,18 +19,25 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	UFUNCTION()
-	void ActorOverlaped(AActor* OverlappedActor, AActor* OtherActor);
 
 	virtual void Destroyed() override;
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+	UFUNCTION()
+	void TargetTestOverlap(AActor* OverlappedActor, AActor* OtherActor);
+
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
+
+	void DeleteActor();
+
+	UFUNCTION(Client, Reliable)
+	void SpawnParticlesDeath();
 
 protected:
 
@@ -45,4 +52,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	TSubclassOf<UDamageType> damageType;
+
+	FTimerHandle timerDeath;
 };

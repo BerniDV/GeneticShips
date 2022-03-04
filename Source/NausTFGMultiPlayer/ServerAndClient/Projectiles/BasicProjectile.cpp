@@ -33,12 +33,6 @@ ABasicProjectile::ABasicProjectile()
 
 	damage = 10.f;
 	damageType = UDamageType::StaticClass();
-
-	if (GetLocalRole() == ROLE_Authority)
-	{
-		
-		projectileSphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ABasicProjectile::OnProjectileImpact);
-	}
 	
 }
 
@@ -49,7 +43,20 @@ void ABasicProjectile::BeginPlay()
 
 	//Aplicamos tiempo maximo de vida de 10 segundos
 	SetLifeSpan(10.f);
+
+	if (HasAuthority())
+	{
+
+		projectileSphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ABasicProjectile::OnProjectileImpact);
+	}
 	
+}
+
+void ABasicProjectile::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	projectileSphereComponent->OnComponentBeginOverlap.RemoveAll(this);
 }
 
 void ABasicProjectile::Destroyed()

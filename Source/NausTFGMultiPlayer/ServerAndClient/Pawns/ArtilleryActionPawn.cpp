@@ -63,11 +63,11 @@ void AArtilleryActionPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	DOREPLIFETIME(AArtilleryActionPawn, rotationComponent);
 }
 
-void AArtilleryActionPawn::PlayDeath()
+void AArtilleryActionPawn::PlayDeath_Implementation()
 {
-
 	GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Black, "Death");
 }
+
 
 void AArtilleryActionPawn::Tick(float DeltaSeconds)
 {

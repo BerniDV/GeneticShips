@@ -60,7 +60,7 @@ void AActionPlayerState::OnHealthUpdate()
 {
 
 	//lo que quiero que pase en todos los clientes cuando la vida se modifique
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("Tu vida es: %f"), health));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("Tu vida es: %f"), health));
 
 	if(health <=0.f)
 		Cast<AActionGameState>(GetWorld()->GetGameState())->PlayerDead();

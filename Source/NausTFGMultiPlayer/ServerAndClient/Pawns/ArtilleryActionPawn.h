@@ -33,7 +33,7 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
 
-	virtual void PlayDeath() override;
+	virtual void PlayDeath_Implementation() override;
 
 protected:
 
