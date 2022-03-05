@@ -36,16 +36,13 @@ public:
 
 	void DeleteActor();
 
-	UFUNCTION(Client, Reliable)
+	UFUNCTION(NetMulticast, Reliable)
 	void SpawnParticlesDeath();
 
 protected:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UStaticMeshComponent* testActorMesh;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
-	class UParticleSystem* explosionEffect;
 
 	UPROPERTY(Replicated)
 	float Health;

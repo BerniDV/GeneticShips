@@ -2,13 +2,14 @@
 
 
 #include "PresentationController.h"
-
+#include "VisualEffectsController.h"
 #include "Blueprint/UserWidget.h"
 
 UPresentationController::UPresentationController()
 {
 
-
+	//visualEffectsController = NewObject<AVisualEffectsController>(this, TEXT("ParticleCtrl"));
+	
 }
 
 void UPresentationController::Init(APlayerController* owner)
@@ -48,7 +49,7 @@ void UPresentationController::HideAndLockMouseCursor()
 
 void UPresentationController::LoadMenu(UUserWidget* UIMenu)
 {
-
+	
 	UIMenu->bIsFocusable = true;
 	UIMenu->AddToViewport();
 }
@@ -58,5 +59,17 @@ void UPresentationController::UnloadMenu(UUserWidget* UIMenu)
 
 	UIMenu->RemoveFromViewport();
 	UIMenu->bIsFocusable = false;
+}
+
+void UPresentationController::SpawnParticlesAtLocation(FVector Location, FVector Scale)
+{
+	
+	visualEffectsController->SpawnParticlesAtLocation(Location, Scale);
+}
+
+void UPresentationController::SpawnFollowingParticles(USceneComponent* AttatchTo, FVector Scale)
+{
+
+	visualEffectsController->SpawnFollowingParticles(AttatchTo, Scale);
 }
 

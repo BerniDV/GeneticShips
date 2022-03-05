@@ -38,6 +38,9 @@ public:
 
 	void SetPosition(FVector newPosition);
 
+	UFUNCTION(NetMulticast, Reliable)
+	void SpawnParticlesDeath();
+
 	UFUNCTION()
 	void EnemyOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
@@ -48,8 +51,6 @@ protected:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	virtual void Tick(float DeltaSeconds) override;
-
-
 
 	virtual void Destroyed() override;
 

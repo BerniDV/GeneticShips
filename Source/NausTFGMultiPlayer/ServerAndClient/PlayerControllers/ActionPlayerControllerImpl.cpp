@@ -26,7 +26,7 @@ void AActionPlayerControllerImpl::InitializePresentationController()
 	if (!HasAuthority())
 	{
 		//Placeholder para no crash, se sustituye por inGameMenu
-		presentationController = NewObject<UActionGameController>();
+		presentationController = NewObject<UActionGameController>(GetOwner());
 
 		presentationController->Init(Cast<AActionPlayerController>(GetOwner()));
 	}

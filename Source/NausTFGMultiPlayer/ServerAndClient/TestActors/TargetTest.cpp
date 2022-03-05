@@ -4,7 +4,9 @@
 #include "TargetTest.h"
 
 #include "Kismet/GameplayStatics.h"
+#include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Projectiles/BasicProjectile.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Singletons/CustomGameInstance.h"
 #include "Net/UnrealNetwork.h"
 
 // Sets default values
@@ -102,6 +104,14 @@ void ATargetTest::DeleteActor()
 void ATargetTest::SpawnParticlesDeath_Implementation()
 {
 
-	UGameplayStatics::SpawnEmitterAtLocation(this, explosionEffect, GetActorLocation(), FRotator::ZeroRotator, FVector(4), true, EPSCPoolMethod::AutoRelease);
+	if (!HasAuthority())
+	{
+
+		AActionPlayerController* PC = Cast<AActionPlayerController>(Cast<UCustomGameInstance>(GetGameInstance())->GetLocalPlayerController());
+
+		if(PC)
+			PC->SpawnParticlesAtLocation(GetActorLocation(), FVector(7));
+
+	}
 }
 

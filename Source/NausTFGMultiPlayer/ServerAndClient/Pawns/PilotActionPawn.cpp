@@ -257,21 +257,43 @@ bool APilotActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AActor* 
 
 void APilotActionPawn::PlayDeath_Implementation()
 {
-	UGameplayStatics::SpawnEmitterAtLocation(this, fireParticles, GetActorLocation(), FRotator::ZeroRotator, FVector(7), false, EPSCPoolMethod::AutoRelease);
-	UGameplayStatics::SpawnEmitterAttached(fireParticles, collisionBox, NAME_None, FVector(ForceInit), FRotator::ZeroRotator, FVector(7), EAttachLocation::KeepRelativeOffset, true, EPSCPoolMethod::None, true);
+	SpawnExplosionParticlesAtActorLocation();
+	SpawnFollowingFireParticles();
 	Cast<AActionPlayerController>(GetOwner())->SetInputEnabled(false);
+}
+
+void APilotActionPawn::SpawnFollowingFireParticles_Implementation()
+{
+
+	if(!HasAuthority())
+	{
+
+		AActionPlayerController* PC = Cast<AActionPlayerController>(GetOwner());
+
+		if(PC)
+			PC->SpawnFollowingParticles(collisionBox, FVector(7));
+
+	}
+
 }
 
 
 void APilotActionPawn::SpawnExplosionParticlesAtActorLocation_Implementation()
 {
 
-	UGameplayStatics::SpawnEmitterAtLocation(this, destoyedParticles, GetActorLocation(), FRotator::ZeroRotator, FVector(7), true, EPSCPoolMethod::AutoRelease);
+	if(!HasAuthority())
+	{
 
-	AActionPlayerController* PC = Cast<AActionPlayerController>(GetOwner());
+		AActionPlayerController* PC = Cast<AActionPlayerController>(GetOwner());
 
-	if(PC)
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Current Health: %f"), PC->GetPlayerHealth()));
+		if(PC)
+			PC->SpawnParticlesAtLocation(GetActorLocation(), FVector(7));
+
+		if (PC)
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Current Health: %f"), PC->GetPlayerHealth()));
+
+	}
+	
 }
 
 	

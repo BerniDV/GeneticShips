@@ -8,6 +8,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "NausTFGMultiPlayer/ServerAndClient/IA/Chromosome.h"
 #include "NausTFGMultiPlayer/ServerAndClient/IA/Controllers/AIBaseController.h"
+#include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Singletons/CustomGameInstance.h"
 #include "Net/UnrealNetwork.h"
 
 AEnemyActionPawn::AEnemyActionPawn()
@@ -98,9 +100,9 @@ float AEnemyActionPawn::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 void AEnemyActionPawn::PlayDeath()
 {
 
+	SpawnParticlesDeath();
 	SetHidden(true);
 	SetActorEnableCollision(false);
-	//SpawnParticlesDeath();
 	//Destroy();
 }
 
@@ -154,3 +156,18 @@ void AEnemyActionPawn::Destroyed()
 	Super::Destroyed();
 
 }
+
+void AEnemyActionPawn::SpawnParticlesDeath_Implementation()
+{
+	
+	if(!HasAuthority())
+	{
+
+		AActionPlayerController* PC = Cast<AActionPlayerController>(Cast<UCustomGameInstance>(GetGameInstance())->GetLocalPlayerController());
+
+		if (PC)
+			PC->SpawnParticlesAtLocation(GetActorLocation(), GetActorScale());
+	}
+
+}
+

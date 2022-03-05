@@ -20,8 +20,12 @@ public:
 
 	UCustomGameInstance();
 
+	void SetLocalPlayerController(APlayerController* localController);
+
+	APlayerController* GetLocalPlayerController();
+
 
 private:
 
-
+	APlayerController* localPlayerController;
 };

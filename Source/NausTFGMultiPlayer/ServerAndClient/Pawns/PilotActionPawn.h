@@ -75,8 +75,11 @@ public:
 
     virtual void PlayDeath_Implementation() override;
 
-	UFUNCTION(Client, Reliable)
+	UFUNCTION(NetMulticast, Reliable)
 	void SpawnExplosionParticlesAtActorLocation();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void SpawnFollowingFireParticles();
 
 protected:
 
@@ -95,11 +98,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	UStaticMeshComponent* meshComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
-	class UParticleSystem* destoyedParticles;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
-	class UParticleSystem* fireParticles;
 
 private:
 

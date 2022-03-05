@@ -59,6 +59,9 @@ public:
 
 	void SetInputEnabled(bool enable);
 
+	void SpawnParticlesAtLocation(FVector Location, FVector Scale);
+	void SpawnFollowingParticles(USceneComponent* AttatchTo, FVector Scale);
+
 
 protected:
 

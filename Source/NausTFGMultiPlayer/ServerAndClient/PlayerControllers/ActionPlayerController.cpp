@@ -10,11 +10,13 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "NausTFGMultiPlayer/Client/Cameras/ActionCamera.h"
 #include "NausTFGMultiPlayer/Client/Cameras/ActionCameraManager.h"
+#include "NausTFGMultiPlayer/Client/Controllers/PresentationController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ArtilleryActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/ActionPlayerState.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Singletons/CustomGameInstance.h"
 #include "Net/UnrealNetwork.h"
 
 
@@ -34,6 +36,8 @@ AActionPlayerController::AActionPlayerController()
 	artilleryReference = refArtilleryActionPawnBP.Class;
 
 	playerHealth = 100.f;
+
+	
 }
 
 
@@ -259,11 +263,28 @@ void AActionPlayerController::SetInputEnabled(bool enable)
 	
 }
 
+void AActionPlayerController::SpawnParticlesAtLocation(FVector Location, FVector Scale)
+{
+
+	if(presentationController)
+		presentationController->SpawnParticlesAtLocation(Location, Scale);
+
+}
+
+void AActionPlayerController::SpawnFollowingParticles(USceneComponent* AttatchTo, FVector Scale)
+{
+	if (presentationController)
+		presentationController->SpawnFollowingParticles(AttatchTo, Scale);
+}
+
 
 void AActionPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	SetPlayerHealth(playerHealth);
+
+	if(!HasAuthority())
+		Cast<UCustomGameInstance>(GetGameInstance())->SetLocalPlayerController(this);
 
 }
 

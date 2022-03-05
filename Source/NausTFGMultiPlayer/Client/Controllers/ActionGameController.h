@@ -31,6 +31,8 @@ public:
 	void LoadHUD();
 	void UnloadHUD();
 
+	virtual void SpawnParticlesAtLocation(FVector Location, FVector Scale) override;
+
 private:
 
 	//referencia a la classe blueprint de initMenu

@@ -8,6 +8,8 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
+#include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Singletons/CustomGameInstance.h"
 
 // Sets default values
 ABasicProjectile::ABasicProjectile()
@@ -46,7 +48,7 @@ void ABasicProjectile::BeginPlay()
 
 	if (HasAuthority())
 	{
-
+		
 		projectileSphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ABasicProjectile::OnProjectileImpact);
 	}
 	
@@ -56,7 +58,7 @@ void ABasicProjectile::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 
-	projectileSphereComponent->OnComponentBeginOverlap.RemoveAll(this);
+	//projectileSphereComponent->OnComponentBeginOverlap.RemoveAll(this);
 }
 
 void ABasicProjectile::Destroyed()
@@ -96,12 +98,12 @@ void ABasicProjectile::OnProjectileImpact(UPrimitiveComponent* OverlappedCompone
 	//Si no colisiona con nuestro propio actor aplicamos daño
 	if (OtherActor && GetOwner()->GetInstigatorController() != nullptr && OtherActor->GetInstigatorController() != GetOwner()->GetInstigatorController())
 	{
-		UGameplayStatics::ApplyPointDamage(OtherActor, damage, FVector::ZeroVector, FHitResult(), GetOwner()->GetInstigatorController(), this, damageType);
+		//Aplicamos particulas de contacto y lo destruimos
+		SpawnParticles();
+		UGameplayStatics::ApplyDamage(OtherActor, damage, GetOwner()->GetInstigatorController(), this, damageType);
 		
 	}
 
-	//Aplicamos particulas de contacto y lo destruimos
-	UGameplayStatics::SpawnEmitterAtLocation(this, explosionEffect, GetActorLocation(), FRotator::ZeroRotator, true, EPSCPoolMethod::AutoRelease);
 	Destroy();
 }
 
@@ -110,5 +112,20 @@ bool ABasicProjectile::IsNetRelevantFor(const AActor* RealViewer, const AActor* 
 {
 	//Hacemos que el actor sea relevante para otros actores en base a su propia posicion
 	return Super::IsNetRelevantFor(RealViewer, this, SrcLocation);
+}
+
+void ABasicProjectile::SpawnParticles_Implementation()
+{
+
+	if(!HasAuthority())
+	{
+
+		AActionPlayerController* PC = Cast<AActionPlayerController>(Cast<UCustomGameInstance>(GetGameInstance())->GetLocalPlayerController());
+
+		if(PC)
+			PC->SpawnParticlesAtLocation(GetActorLocation(), FVector(1));
+		
+	}
+	
 }
 

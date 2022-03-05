@@ -36,6 +36,9 @@ public:
 
 	virtual void UnloadMenu(UUserWidget* UIMenu);
 
+	virtual void SpawnParticlesAtLocation(FVector Location, FVector Scale);
+	virtual void SpawnFollowingParticles(USceneComponent* AttatchTo, FVector Scale);
+
 public:
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FShowNotLockingCursor, UUserWidget*, userWidget);
@@ -44,7 +47,8 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHideAndLockMouseCursor);
 	FHideAndLockMouseCursor signalHideAndLockMouseCursor;
 
-private:
+protected:
 
+	class AVisualEffectsController* visualEffectsController;
 	
 };

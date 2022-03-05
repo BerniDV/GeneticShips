@@ -3,6 +3,7 @@
 
 #include "ActionGameController.h"
 #include "NausTFGMultiPlayer/Client/GUI/HUD/ArtilleryHUD_EP.h"
+#include "NausTFGMultiPlayer/Client/Controllers/VisualEffectsController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 
 UActionGameController::UActionGameController()
@@ -28,6 +29,9 @@ void UActionGameController::CreaMenus()
 
 	artilleryHUD = CreateWidget<UArtilleryHUD_EP>(actionPlayerController, HUDClass);
 
+	//Crea el controlador de efectos visuales, es actor ya que en objeto unreal anulaba las referencias de punteros por algun motivo
+	visualEffectsController = GetWorld()->SpawnActor<AVisualEffectsController>();
+
 }
 
 void UActionGameController::BindSignals()
@@ -46,5 +50,14 @@ void UActionGameController::UnloadHUD()
 
 	Super::UnloadMenu(artilleryHUD);
 }
+
+void UActionGameController::SpawnParticlesAtLocation(FVector Location, FVector Scale)
+{
+	
+	Super::SpawnParticlesAtLocation(Location, Scale);
+
+}
+
+
 
 
