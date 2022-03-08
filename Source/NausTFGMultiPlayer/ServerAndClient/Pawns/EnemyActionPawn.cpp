@@ -116,7 +116,7 @@ void AEnemyActionPawn::EnemyOverlap(UPrimitiveComponent* OverlappedComponent, AA
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Overlap"));
+	//UE_LOG(LogTemp, Warning, TEXT("Enemy Overlap"));
 	UGameplayStatics::ApplyDamage(OtherActor, 20.f, nullptr, this, damageType);
 }
 

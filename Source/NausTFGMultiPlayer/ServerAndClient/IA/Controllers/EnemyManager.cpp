@@ -29,7 +29,6 @@ AEnemyManager::AEnemyManager()
 std::future<TArray<AChromosome*>> AEnemyManager::SpawnGeneration(TArray<AChromosome*> generationDNA)
 {
 
-	DeleteAllEnemies();
 
 	roundResultPromise = std::promise<TArray<AChromosome*>>();
 
@@ -145,8 +144,10 @@ void AEnemyManager::CalculateResults()
 	for (auto x : EnemyMap)
 	{
 
-		result.Add(x.Value->GetChromosome());
+		result.Add(x.Value->GetChromosome()->Clone());
 	}
+
+	DeleteAllEnemies();
 
 	roundResultPromise.set_value(result);
 }

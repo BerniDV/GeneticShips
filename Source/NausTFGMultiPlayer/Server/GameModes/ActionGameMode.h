@@ -37,7 +37,7 @@ public:
 	void EndGame();
 
 	UFUNCTION()
-	void SetUpNextGeneration(TArray<AChromosome*> actualGeneration);
+	TArray<AChromosome*> SetUpNextGeneration(TArray<AChromosome*> actualGeneration);
 
 
 	UFUNCTION()
@@ -47,6 +47,14 @@ public:
 	void InitializeNextRound();
 
 	void DestroyGeneration(TArray<AChromosome*> &generation);
+
+	UFUNCTION()
+	void ProcesEndRound();
+
+	UFUNCTION()
+	void ProcesNewRound(TArray<AChromosome*>& newGeneration);
+
+	void ProcesBetweenRounds(TArray<AChromosome*> actualGenerationresult);
 
 protected:
 

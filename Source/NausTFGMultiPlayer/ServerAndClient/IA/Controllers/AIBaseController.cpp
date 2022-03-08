@@ -65,7 +65,7 @@ void AAIBaseController::Destroyed()
 {
 	//EL pawn esta muerto antes de llamar esto y se jode, hcer qyue no mueran, solo invisibles
 	//Buscar otra manera que respete la cadena de mando y no necesite guardar una rteferencia al enemy manager
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Controller Destroyed"));
+	//UE_LOG(LogTemp, Warning, TEXT("Enemy Controller Destroyed"));
 	Super::Destroyed();
 }
 

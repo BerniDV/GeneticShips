@@ -55,6 +55,16 @@ void AChromosome::Mutation()
 	sizeGene = FVector(FMath::RandRange(1, 10));
 }
 
+AChromosome* AChromosome::Clone()
+{
+
+	AChromosome* clonedChromosome = GetWorld()->SpawnActor<AChromosome>();
+
+	clonedChromosome->SetSizeGene(sizeGene);
+
+	return clonedChromosome;
+}
+
 void AChromosome::ApplyFenotipe()
 {
 

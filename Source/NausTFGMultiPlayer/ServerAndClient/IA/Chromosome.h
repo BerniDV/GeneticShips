@@ -35,6 +35,8 @@ public:
 
 	void Mutation();
 
+	AChromosome* Clone();
+
 private:
 
 	UPROPERTY(Replicated)

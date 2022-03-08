@@ -123,14 +123,14 @@ void AActionGameMode::EndGame()
 	GetWorld()->ServerTravel("/Game/Levels/MenuLevels/MainMenuLevel");
 }
 
-void AActionGameMode::SetUpNextGeneration(TArray<AChromosome*> actualGeneration)
+TArray<AChromosome*> AActionGameMode::SetUpNextGeneration(TArray<AChromosome*> actualGeneration)
 {
 
 
 	TArray<AChromosome*> nextGeneration = geneticManager->GenerateNextGenerationDna(actualGeneration);
 	DestroyGeneration(actualGeneration);
 
-	roundResultFuture = enemyManager->SpawnGeneration(nextGeneration);
+	return nextGeneration;
 	
 }
 
@@ -142,7 +142,7 @@ void AActionGameMode::SetUpFirstGeneration()
 	roundResultFuture = enemyManager->SpawnGeneration(firstGeneration);
 
 	GetWorld()->GetTimerManager().ClearTimer(timerHandler);
-	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::InitializeNextRound, 20.f, true);
+	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::ProcesEndRound, 20.f, false);
 }
 
 void AActionGameMode::InitializeNextRound()
@@ -168,6 +168,40 @@ void AActionGameMode::DestroyGeneration(TArray<AChromosome*> &generation)
 	generation.Empty();
 }
 
+void AActionGameMode::ProcesEndRound()
+{
+
+	UE_LOG(LogTemp, Warning, TEXT("End Round"));
+	GetWorld()->GetTimerManager().ClearTimer(timerHandler);
+	InitializeNextRound();
+}
+
+void AActionGameMode::ProcesNewRound(TArray<AChromosome*>& newGeneration)
+{
+
+	UE_LOG(LogTemp, Warning, TEXT("New Round"));
+	roundResultFuture = enemyManager->SpawnGeneration(newGeneration);
+	GetWorld()->GetTimerManager().ClearTimer(timerHandler);
+	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::ProcesEndRound, 20.f, false);
+}
+
+void AActionGameMode::ProcesBetweenRounds(TArray<AChromosome*> actualGenerationresult)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Between Rounds"));
+	TArray<AChromosome*> nextGeneration;
+
+	//Se supone que aqui hacemos procesos como calcular siguiente generacion o poner cuenta atras etc...
+	nextGeneration = SetUpNextGeneration(actualGenerationresult);
+
+	FTimerDelegate timerDel;
+	timerDel.BindUFunction(this, FName("ProcesNewRound"), nextGeneration);
+
+	GetWorld()->GetTimerManager().SetTimer(timerHandler, timerDel, 5.f, false);
+
+	//ProcesNewRound(nextGeneration);
+
+}
+
 void AActionGameMode::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
@@ -176,6 +210,6 @@ void AActionGameMode::Tick(float DeltaSeconds)
 	{
 		
 		TArray<AChromosome*> actualGenerationresult = roundResultFuture.get();
-		SetUpNextGeneration(actualGenerationresult);
+		ProcesBetweenRounds(actualGenerationresult);
 	}
 }
