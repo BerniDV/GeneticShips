@@ -3,12 +3,15 @@
 
 #include "ActionGameState.h"
 
+#include "GameFramework/PlayerState.h"
+#include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "Net/UnrealNetwork.h"
 
 AActionGameState::AActionGameState()
 {
 
 	PrimaryActorTick.bCanEverTick = false;
+	bReplicates = true;
 	round = 0;
 }
 
@@ -29,7 +32,15 @@ void AActionGameState::SetRound(int newRound)
 {
 	round = newRound;
 	signalNewRound.Broadcast();
+
 }
+
+void AActionGameState::ClientUpdateRound_Implementation()
+{
+
+	signalNewRound.Broadcast();
+}
+
 
 int AActionGameState::GetRound()
 {

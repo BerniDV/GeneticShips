@@ -33,9 +33,10 @@ void AArtilleryActionPlayerController::BeginPlay()
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Artillery Controller PreparedB"));
 
-	CreaMenus();
-	BindSignals();
-	LoadHUD();
+	//CreaMenus();
+	//BindSignals();
+	//if(!HasAuthority())
+		//LoadHUD();
 	
 }
 
@@ -109,7 +110,7 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 
 		if(cameraManager && Cast<AActionCamera>(cameraManager->GetViewTarget()))
 		{
-
+			
 			AActionCamera* camera = Cast<AActionCamera>(cameraManager->GetViewTarget());
 
 			
@@ -194,13 +195,8 @@ float AArtilleryActionPlayerController::GetTimeSinceLastProjectile()
 void AArtilleryActionPlayerController::CreaMenus()
 {
 
-	bool bIsLocalPlayerContropller = Cast<AActionPlayerController>(GetOwner())->IsLocalPlayerController();
-
-	if (bIsLocalPlayerContropller && presentationController)
-	{
-		presentationController->CreaMenus();
-
-	}
+	Super::CreaMenus();
+	
 }
 
 void AArtilleryActionPlayerController::LoadHUD()

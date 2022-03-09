@@ -49,16 +49,25 @@ void UPresentationController::HideAndLockMouseCursor()
 
 void UPresentationController::LoadMenu(UUserWidget* UIMenu)
 {
+	if(UIMenu)
+	{
+
+		UIMenu->bIsFocusable = true;
+		UIMenu->AddToViewport();
+	}
 	
-	UIMenu->bIsFocusable = true;
-	UIMenu->AddToViewport();
 }
 
 void UPresentationController::UnloadMenu(UUserWidget* UIMenu)
 {
 
-	UIMenu->RemoveFromViewport();
-	UIMenu->bIsFocusable = false;
+	if(UIMenu)
+	{
+
+		UIMenu->RemoveFromViewport();
+		UIMenu->bIsFocusable = false;
+	}
+	
 }
 
 void UPresentationController::SpawnParticlesAtLocation(FVector Location, FVector Scale)

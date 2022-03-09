@@ -7,6 +7,7 @@
 #include "DrawDebugHelpers.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "NausTFGMultiPlayer/Client/Cameras/PilotActionCamera.h"
+#include "NausTFGMultiPlayer/Client/Controllers/PresentationController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/RotationComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/TranslationComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
@@ -33,6 +34,8 @@ void APilotActionPlayerController::BeginPlay()
 
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Pilot Controller Prepared"));
+
+	
 
 }
 
@@ -172,6 +175,20 @@ void APilotActionPlayerController::YawCamera(float value)
 {
 
 	cameraInput.X = value;
+}
+
+void APilotActionPlayerController::CreaMenus()
+{
+
+	Super::CreaMenus();
+
+}
+
+void APilotActionPlayerController::LoadHUD()
+{
+	Super::LoadHUD();
+
+
 }
 
 

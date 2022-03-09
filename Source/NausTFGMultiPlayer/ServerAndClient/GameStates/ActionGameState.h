@@ -31,12 +31,16 @@ public:
 
 	UFUNCTION()
 	void SetRound(int newRound);
-	
+
+	UFUNCTION(NetMulticast, Reliable)
+	void ClientUpdateRound();
+
+	UFUNCTION(BlueprintCallable)
 	int GetRound();
 
 private:
 
-	UPROPERTY(replicated)
+	UPROPERTY(ReplicatedUsing = ClientUpdateRound)
 	int round;
 
 

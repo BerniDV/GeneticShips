@@ -62,6 +62,11 @@ public:
 	void SpawnParticlesAtLocation(FVector Location, FVector Scale);
 	void SpawnFollowingParticles(USceneComponent* AttatchTo, FVector Scale);
 
+	UFUNCTION(Client, Reliable)
+	void UpdateRound();
+
+	virtual void InitializePresentationController() override;
+
 
 protected:
 

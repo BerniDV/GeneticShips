@@ -5,6 +5,7 @@
 
 #include "ActionPlayerController.h"
 #include "NausTFGMultiPlayer/Client/Controllers/ActionGameController.h"
+#include "NausTFGMultiPlayer/ServerAndClient/GameStates/ActionGameState.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/ActionPlayerState.h"
 #include "Net/UnrealNetwork.h"
@@ -18,6 +19,8 @@ AActionPlayerControllerImpl::AActionPlayerControllerImpl()
 	bReplicates = true;
 	bOnlyRelevantToOwner = true;
 
+	
+
 }
 
 void AActionPlayerControllerImpl::InitializePresentationController()
@@ -25,7 +28,7 @@ void AActionPlayerControllerImpl::InitializePresentationController()
 	
 	if (!HasAuthority())
 	{
-		//Placeholder para no crash, se sustituye por inGameMenu
+		
 		presentationController = NewObject<UActionGameController>(GetOwner());
 
 		presentationController->Init(Cast<AActionPlayerController>(GetOwner()));
@@ -35,7 +38,8 @@ void AActionPlayerControllerImpl::InitializePresentationController()
 
 void AActionPlayerControllerImpl::BindSignals()
 {
-	
+
+
 }
 
 UClass* AActionPlayerControllerImpl::GetDefaultPawn()
@@ -177,11 +181,23 @@ void AActionPlayerControllerImpl::PlayDeath()
 
 }
 
+void AActionPlayerControllerImpl::LoadGameStateHUD()
+{
+
+	if(!HasAuthority() && presentationController)
+	{
+
+		Cast<UActionGameController>(presentationController)->LoadGameStateHUD();
+	}
+
+}
+
 void AActionPlayerControllerImpl::BeginPlay()
 {
 	Super::BeginPlay();
 
-	InitializePresentationController();
+	//InitializePresentationController();
+
 
 }
 
@@ -194,6 +210,13 @@ void AActionPlayerControllerImpl::Tick(float DeltaSeconds)
 void AActionPlayerControllerImpl::CreaMenus()
 {
 
+	bool bIsLocalPlayerContropller = Cast<AActionPlayerController>(GetOwner())->IsLocalPlayerController();
+
+	if (bIsLocalPlayerContropller && presentationController)
+	{
+		presentationController->CreaMenus();
+
+	}
 
 }
 

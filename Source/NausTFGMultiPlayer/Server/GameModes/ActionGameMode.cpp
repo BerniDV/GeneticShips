@@ -154,6 +154,7 @@ void AActionGameMode::InitializeNextRound()
 	currentRound++;
 
 	gameState->SetRound(currentRound);
+
 }
 
 void AActionGameMode::DestroyGeneration(TArray<AChromosome*> &generation)

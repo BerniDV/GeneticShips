@@ -6,6 +6,9 @@
 #include "PresentationController.h"
 #include "ActionGameController.generated.h"
 
+class UHUDGameState;
+class UGameStateHUD_EP;
+class UHUDDefaultBehaviours;
 class UArtilleryHUD_EP;
 class AActionPlayerController;
 /**
@@ -31,16 +34,26 @@ public:
 	void LoadHUD();
 	void UnloadHUD();
 
+	void LoadGameStateHUD();
+	void UnloadGameStateHUD();
+
+	void SetRound(int round);
+	FString GetRound();
+
 	virtual void SpawnParticlesAtLocation(FVector Location, FVector Scale) override;
 
 private:
 
 	//referencia a la classe blueprint de initMenu
-	TSubclassOf<UArtilleryHUD_EP> HUDClass;
+	TSubclassOf<UArtilleryHUD_EP> PawnHUDClass;
+	TSubclassOf<UGameStateHUD_EP> GameStateHUDClass;
 
 	AActionPlayerController* actionPlayerController;
 
 	UPROPERTY()
 	UArtilleryHUD_EP* artilleryHUD;
+
+	UPROPERTY()
+	UGameStateHUD_EP* gameStateHUD;
 
 };

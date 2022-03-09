@@ -59,7 +59,7 @@ private:
 	//referencia a la classe blueprint de initMenu
 	TSubclassOf<UMainMenu_EP> mainMenuClass;
 
-	//instancia de la clase initMenu
+	//instancia de la clase mainMenu
 	UPROPERTY()
 	UMainMenu_EP* mainMenu;
 

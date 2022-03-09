@@ -51,6 +51,10 @@ public:
 
 	virtual void YawCamera(float value) override;
 
+	virtual void CreaMenus() override;
+
+	virtual void LoadHUD() override;
+
 
 protected:
 

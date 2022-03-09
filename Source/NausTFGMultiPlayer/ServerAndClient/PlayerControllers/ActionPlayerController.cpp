@@ -10,8 +10,10 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "NausTFGMultiPlayer/Client/Cameras/ActionCamera.h"
 #include "NausTFGMultiPlayer/Client/Cameras/ActionCameraManager.h"
+#include "NausTFGMultiPlayer/Client/Controllers/ActionGameController.h"
 #include "NausTFGMultiPlayer/Client/Controllers/PresentationController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
+#include "NausTFGMultiPlayer/ServerAndClient/GameStates/ActionGameState.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ArtilleryActionPawn.h"
@@ -44,6 +46,9 @@ AActionPlayerController::AActionPlayerController()
 void AActionPlayerController::BindSignals()
 {
 	Super::BindSignals();
+
+	if (!HasAuthority())
+		Cast<AActionGameState>(GetWorld()->GetGameState())->signalNewRound.AddDynamic(this, &AActionPlayerController::UpdateRound);
 	
 	playerControllerImpl->BindSignals();
 }
@@ -143,11 +148,15 @@ void AActionPlayerController::SetupInputComponent()
 void AActionPlayerController::Client_InitializeClientPlayerControllerImpl_Implementation()
 {
 
-	presentationController = playerControllerImpl->GetPresentationController();
+	InitializePresentationController();
 	SetupInputComponent();
 	CreaMenus();
 	BindSignals();
 	HideAndLockMouseCursor();
+
+	//Crear funciones propias que llamen a estas
+	playerControllerImpl->LoadGameStateHUD();
+	playerControllerImpl->LoadHUD();
 	playerControllerImpl->SetCameraManager(PlayerCameraManager);
 	SpawnActionCamera();
 
@@ -277,6 +286,25 @@ void AActionPlayerController::SpawnFollowingParticles(USceneComponent* AttatchTo
 		presentationController->SpawnFollowingParticles(AttatchTo, Scale);
 }
 
+void AActionPlayerController::UpdateRound_Implementation()
+{
+	if(IsLocalPlayerController())
+	{
+
+		int round = Cast<AActionGameState>(GetWorld()->GetGameState())->GetRound();
+
+		Cast<UActionGameController>(presentationController)->SetRound(round);
+
+	}
+}
+
+
+void AActionPlayerController::InitializePresentationController()
+{
+
+	playerControllerImpl->InitializePresentationController();
+	presentationController = playerControllerImpl->GetPresentationController();
+}
 
 void AActionPlayerController::BeginPlay()
 {
@@ -291,6 +319,9 @@ void AActionPlayerController::BeginPlay()
 void AActionPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+
+	if(!HasAuthority() && presentationController)
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, Cast<UActionGameController>(presentationController)->GetRound());
 
 	
 }

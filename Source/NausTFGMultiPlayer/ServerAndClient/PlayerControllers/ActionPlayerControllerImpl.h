@@ -68,6 +68,12 @@ public:
 
 	virtual void PlayDeath();
 
+	virtual void LoadGameStateHUD();
+
+	virtual void CreaMenus();
+
+	virtual void LoadHUD();
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -80,10 +86,6 @@ protected:
 
 	UPROPERTY(ReplicatedUsing = Client_HideTeamMateActor)
 	AActionPawn* teamMate;
-
-	virtual void CreaMenus();
-
-	virtual void LoadHUD();
 
 	const float TestSensibility = 100.f;
 
