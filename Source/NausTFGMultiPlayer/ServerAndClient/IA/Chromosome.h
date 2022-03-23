@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <Misc/TVariant.h>
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Chromosome.generated.h"
@@ -43,5 +45,38 @@ private:
 	FVector sizeGene;
 
 	USceneComponent* root;
+
+	struct Gene
+	{
+		TVariant<float, int> value;
+	};
+
+
+	float Mutate(float i_left)
+	{
+		return i_left;
+	}
+
+	int Mutate(int i_left)
+	{
+		return i_left;
+	}
+
+	Gene Mutate(const Gene& i_left)
+	{
+		if (i_left.value.IsType<float>())
+		{
+			Mutate(i_left.value.Get<float>());
+		}
+		
+	}
+
+	enum GeneId
+	{
+		SPEED_XXXXXX,
+		COLOR
+	};
+
+	std::map<GeneId, Gene> m_genes;
 
 };
