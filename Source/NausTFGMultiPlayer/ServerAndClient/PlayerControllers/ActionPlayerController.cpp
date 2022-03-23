@@ -64,7 +64,8 @@ UClass* AActionPlayerController::GetDefaultPawn()
 	}else
 	{
 		//No me gusta pero hasta no encontrar otra solucion se queda así
-		//Problema: El patron state requiere que se haga spawn del actor en UE4, si lo hago así puede ser que unreal intente ver qual es el pawn que queremos antes de que se termine de spawnear
+		//Problema: El patron state requiere que se haga spawn del actor en UE4, si lo hago así puede ser que unreal intente ver qual es el pawn que queremos antes de que se termine de spawnear,
+					//por lo tanto devuelvo las referencias del playerController original en vez de usar el Impl en caso que no este inicializado
 		if(playerRole == NausTFGRolTypes::PilotActionRolType)
 		{
 

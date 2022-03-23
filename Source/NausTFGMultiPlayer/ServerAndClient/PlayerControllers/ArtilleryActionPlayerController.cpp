@@ -9,6 +9,7 @@
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ArtilleryActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
 #include "NausTFGMultiPlayer/Client/Controllers/ActionGameController.h"
+#include "NausTFGMultiPlayer/Client/Controllers/ArtilleryActionGameController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/ActionPlayerState.h"
 
 AArtilleryActionPlayerController::AArtilleryActionPlayerController()
@@ -205,7 +206,7 @@ void AArtilleryActionPlayerController::LoadHUD()
 	if (bIsLocalPlayerContropller)
 	{
 
-		Cast<UActionGameController>(presentationController)->LoadHUD();
+		Cast<UArtilleryActionGameController>(presentationController)->LoadHUD();
 
 	}
 }
@@ -219,6 +220,18 @@ void AArtilleryActionPlayerController::PlayDeath()
 {
 
 
+}
+
+void AArtilleryActionPlayerController::InitializePresentationController()
+{
+
+	if (!HasAuthority())
+	{
+
+		presentationController = NewObject<UArtilleryActionGameController>(GetOwner());
+
+		presentationController->Init(Cast<AActionPlayerController>(GetOwner()));
+	}
 }
 
 void AArtilleryActionPlayerController::StartShooting()

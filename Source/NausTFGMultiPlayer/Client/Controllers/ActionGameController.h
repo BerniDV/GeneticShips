@@ -31,8 +31,8 @@ public:
 
 	virtual void BindSignals() override;
 
-	void LoadHUD();
-	void UnloadHUD();
+	virtual void LoadHUD();
+	virtual void UnloadHUD();
 
 	void LoadGameStateHUD();
 	void UnloadGameStateHUD();
@@ -42,16 +42,14 @@ public:
 
 	virtual void SpawnParticlesAtLocation(FVector Location, FVector Scale) override;
 
-private:
-
-	//referencia a la classe blueprint de initMenu
-	TSubclassOf<UArtilleryHUD_EP> PawnHUDClass;
-	TSubclassOf<UGameStateHUD_EP> GameStateHUDClass;
+protected:
 
 	AActionPlayerController* actionPlayerController;
 
-	UPROPERTY()
-	UArtilleryHUD_EP* artilleryHUD;
+private:
+
+	//referencia a la classe blueprint de initMenu
+	TSubclassOf<UGameStateHUD_EP> GameStateHUDClass;
 
 	UPROPERTY()
 	UGameStateHUD_EP* gameStateHUD;

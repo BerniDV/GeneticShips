@@ -50,6 +50,8 @@ public:
 
 	virtual void PlayDeath() override;
 
+	virtual void InitializePresentationController() override;
+
 private:
 
 	UClass* reference;
