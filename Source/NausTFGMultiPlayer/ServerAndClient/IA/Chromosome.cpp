@@ -15,6 +15,9 @@ AChromosome::AChromosome()
 
 	root = CreateDefaultSubobject<USceneComponent>(TEXT("root"));
 	RootComponent = root;
+
+	timeAlive = 0.f;
+	damageCausedToTarget = 0.f;
 }
 
 void AChromosome::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -61,8 +64,40 @@ AChromosome* AChromosome::Clone()
 	AChromosome* clonedChromosome = GetWorld()->SpawnActor<AChromosome>();
 
 	clonedChromosome->SetSizeGene(sizeGene);
+	clonedChromosome->SetDamageCausedTopTarget(damageCausedToTarget);
+	clonedChromosome->SetTimeAlive(timeAlive);
 
 	return clonedChromosome;
+}
+
+void AChromosome::SetDamageCausedTopTarget(float amount)
+{
+
+	damageCausedToTarget = amount;
+}
+
+float AChromosome::GetDamageCausedToTarget()
+{
+
+	return damageCausedToTarget;
+}
+
+void AChromosome::AddDamageCausedToTarget(float amount)
+{
+
+	damageCausedToTarget += amount;
+}
+
+float AChromosome::GetTimeAlive()
+{
+
+	return timeAlive;
+}
+
+void AChromosome::SetTimeAlive(float time)
+{
+
+	timeAlive = time;
 }
 
 void AChromosome::ApplyFenotipe()
@@ -86,6 +121,8 @@ void AChromosome::BeginPlay()
 void AChromosome::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	timeAlive += DeltaTime;
 
 }
 

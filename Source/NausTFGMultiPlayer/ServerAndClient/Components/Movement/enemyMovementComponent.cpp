@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "TranslationComponent.h"
+#include "enemyMovementComponent.h"
 
 #include "ParameterCollection.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -12,19 +12,19 @@
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "Net/UnrealNetwork.h"
 
-
 // Sets default values for this component's properties
-UTranslationComponent::UTranslationComponent()
+
+
+UenemyMovementComponent::UenemyMovementComponent()
 {
+
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
 }
 
-
 // Called when the game starts
-void UTranslationComponent::BeginPlay()
+void UenemyMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -50,7 +50,7 @@ void UTranslationComponent::BeginPlay()
 
 }
 
-void UTranslationComponent::Inicialite(float _speedDropRate, float _defaultMaxAcceleration, float _defaultMaxSpeed, float _maxAcceleration, float _maxSpeed, float _accelerationSpeed, float _decelerationSpeed, float _meneuverabilityInPercent)
+void UenemyMovementComponent::Inicialite(float _speedDropRate, float _defaultMaxAcceleration, float _defaultMaxSpeed, float _maxAcceleration, float _maxSpeed, float _accelerationSpeed, float _decelerationSpeed, float _meneuverabilityInPercent)
 {
 
 	defaultMaxAcceleration = _defaultMaxAcceleration;
@@ -65,36 +65,36 @@ void UTranslationComponent::Inicialite(float _speedDropRate, float _defaultMaxAc
 
 }
 
-bool UTranslationComponent::SimilarEnough(FVector v1, FVector v2)
+bool UenemyMovementComponent::SimilarEnough(FVector v1, FVector v2)
 {
 	FVector diff = v2 - v1;
 	return diff.Size() < 50.f;
 }
 
-float UTranslationComponent::GetCurrenntSpeed()
+float UenemyMovementComponent::GetCurrenntSpeed()
 {
 	return currentspeed.Size();
 }
 
-FVector UTranslationComponent::GetReplicatedPosition()
+FVector UenemyMovementComponent::GetReplicatedPosition()
 {
 
 	return position;
 }
 
-FVector UTranslationComponent::GetPredictedPosition()
+FVector UenemyMovementComponent::GetPredictedPosition()
 {
 
 	return predictedPosition;
 }
 
-float UTranslationComponent::GetInterpolationSpeed()
+float UenemyMovementComponent::GetInterpolationSpeed()
 {
 
 	return interpolationSpeed;
 }
 
-FVector UTranslationComponent::GetLastPosition()
+FVector UenemyMovementComponent::GetLastPosition()
 {
 
 	return lastPosition;
@@ -105,52 +105,49 @@ FVector UTranslationComponent::GetLastPosition()
 
 // Called every frame
 
-void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UenemyMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if(GetOwner()->GetLocalRole() == ENetRole::ROLE_AutonomousProxy)
+
+	if (AActionGameState* GS = Cast<AActionGameState>(GetWorld()->GetGameState()))
 	{
 
-		if (accelerationInMS > maxAcceleration)
-			accelerationInMS = maxAcceleration;
+		currentTime = GS->GetServerWorldTimeSeconds();
+	}
 
-		//para que la velocidad nunca se mantenga al maximo constante, simula motor en maximas capacidades, y permite intervalos de canvio de direccion sean aplicados
-		if(currentspeed.Size() > maxSpeed - 50.f)
+	if (GetOwner()->HasAuthority())
+	{
+
+		direction = (forwardDirection + rightDirection);
+		direction.Normalize();
+
+		if (currentspeed.Size() > maxSpeed - 50.f)
 		{
 			currentspeed = FMath::VInterpConstantTo(currentspeed, FVector::ZeroVector, DeltaTime, currentspeed.Size() / 1.5f);
 
 		}
 
-
-		if(AActionGameState* GS = Cast<AActionGameState>(GetWorld()->GetGameState()))
-		{
-
-			currentTime = GS->GetServerWorldTimeSeconds();
-		}
-		
-
-		direction = (forwardDirection + rightDirection);
-		direction.Normalize();
-
-		if(direction == FVector::ZeroVector && currentspeed.Size() > 0.f)
+		if (direction == FVector::ZeroVector && currentspeed.Size() > 0.f)
 		{
 
 			accelerationInMS = FMath::FInterpConstantTo(accelerationInMS, 0.f, DeltaTime, decelerationSpeed);
 
-		}else
+		}
+		else
 		{
 
 			accelerationInMS = FMath::FInterpConstantTo(accelerationInMS, maxAcceleration, DeltaTime, accelerationSpeed);
 
 		}
 
-		if(accelerationInMS == 0.0f)
+		if (accelerationInMS == 0.0f)
 		{
 
 			currentspeed = FMath::VInterpConstantTo(currentspeed, FVector::ZeroVector, DeltaTime, speedDropRate);
 
-		}else
+		}
+		else
 		{
 
 			currentspeed = CalculateSpeedNextIteration(currentspeed, maneuverabilityInPercent, direction, accelerationInMS, DeltaTime);
@@ -162,52 +159,54 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 		predictedPosition = position;
 		interpolatedPosition = position;
 
-
-
-		if (currentspeed.Size() != 0)
-			Move_Server(position, direction, currentspeed, currentTime, accelerationInMS, maneuverabilityInPercent);
+		movementReplicatedPack.Update(position, direction, currentspeed, accelerationInMS, currentTime, maneuverabilityInPercent);
 
 		Cast<AActionPawn>(GetOwner())->SetActorLocation(position, true);
-		
-	}
-	
-	//Si nos hemos parado corregimos a la ultima posiciopn confirmada conocida, en caso contrario seguimos interpolando entre la actual y la que hemos predecido
+
+		UE_LOG(LogTemp, Warning, TEXT("%f %f %f"), direction.X, direction.Y, direction.Z);
+	}else
+	{
+
+		//Si nos hemos parado corregimos a la ultima posiciopn confirmada conocida, en caso contrario seguimos interpolando entre la actual y la que hemos predecido
 	//Como siempre predecimos segun la ultima confirmada las pequeñas correciones se hacen implicitamente
-	if (GetOwner()->GetLocalRole() != ENetRole::ROLE_AutonomousProxy && !SimilarEnough(position, lastPosition)) {
+		if (!SimilarEnough(position, predictedPosition)) {
 
-		interpolatedPosition = FMath::VInterpConstantTo(interpolatedPosition, predictedPosition, DeltaTime, interpolationSpeed); 
-		Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Prediction");
-	}
-	else
-	{	//En caso de llegar a una interpolacion casi completa significa que el jugador ya no se mueve, y por lo tanto rectificamos el ultimo movimiento predicho y lo ponemos en la posición final
-		predictedPosition = position;
-		//interpolationSpeed = (GetOwner()->GetActorLocation() - position).Size() / delay;
-		
-		//interpolatedPosition = FMath::VInterpConstantTo(GetOwner()->GetActorLocation(), position, DeltaTime, interpolationSpeed);
-		interpolatedPosition = FMath::Lerp(GetOwner()->GetActorLocation(), position, 0.3);
-		Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Correction");
-	}
+			interpolatedPosition = FMath::VInterpConstantTo(interpolatedPosition, predictedPosition, DeltaTime, interpolationSpeed);
+			Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
 
-	lastPosition = position;
-		
+		}
+		else
+		{	//En caso de llegar a una interpolacion casi completa significa que el jugador ya no se mueve, y por lo tanto rectificamos el ultimo movimiento predicho y lo ponemos en la posición final
+			predictedPosition = position;
+			//interpolationSpeed = (GetOwner()->GetActorLocation() - position).Size() / delay;
+
+			//interpolatedPosition = FMath::VInterpConstantTo(GetOwner()->GetActorLocation(), position, DeltaTime, interpolationSpeed);
+			interpolatedPosition = FMath::Lerp(GetOwner()->GetActorLocation(), position, 0.3);
+			Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Correction");
+		}
+
+		lastPosition = position;
+
+	}
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, direction.ToString());
+	
 }
 
-void UTranslationComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void UenemyMovementComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME_CONDITION(UTranslationComponent, movementReplicatedPack, COND_SkipOwner);
-	 
+	DOREPLIFETIME(UenemyMovementComponent, movementReplicatedPack);
+
 }
 
-void UTranslationComponent::MoveRight(float movement)
+void UenemyMovementComponent::MoveRight(float movement)
 {
 
 	AActionPawn* myPawn = Cast<AActionPawn>(GetOwner());
 
-	AActionPlayerController* playerController = Cast<AActionPlayerController>(myPawn->GetController());	   
+	AActionPlayerController* playerController = Cast<AActionPlayerController>(myPawn->GetController());
 
 	//rightDirection = FRotationMatrix(playerController->GetControlRotation()).GetScaledAxis(EAxis::Y) * movement;
 	rightDirection = GetOwner()->GetActorRightVector() * movement;
@@ -215,63 +214,42 @@ void UTranslationComponent::MoveRight(float movement)
 }
 
 
-void UTranslationComponent::MoveForward(float movement)
+void UenemyMovementComponent::MoveForward(float movement)
 {
 
 	AActionPawn* myPawn = Cast<AActionPawn>(GetOwner());
 
-	if(myPawn)
+	if (myPawn)
 	{
+
+		AActionPlayerController* playerController = Cast<AActionPlayerController>(myPawn->GetController());
 
 		//forwardDirection = FRotationMatrix(playerController->GetControlRotation()).GetScaledAxis(EAxis::X) * movement;
 		forwardDirection = GetOwner()->GetActorForwardVector() * movement;
-		
-	}
-
-}
-
-
-void UTranslationComponent::Move_Server_Implementation(FVector movement, FVector _direction, FVector _currentSpeed, float _currentTime, float _accelerationInMs, float _maneuverabilityInPercent)
-{
-	
-	movementReplicatedPack.Update(movement, _direction, _currentSpeed, _accelerationInMs, _currentTime, _maneuverabilityInPercent);
-
-
-	if(GetOwner()->HasAuthority())
-	{
-
-		ApplyMovementWithInterpolation();
 
 	}
+
 }
 
-bool UTranslationComponent::Move_Server_Validate(FVector movement, FVector _direction, FVector _currentSpeed, float _currentTime, float accelerationInMs, float _maneuverabilityInPercent)
-{
-
-	return true;
-}
-
-
-
-void UTranslationComponent::SetMaxAcceleration(float _maxAcceleration)
+void UenemyMovementComponent::SetMaxAcceleration(float _maxAcceleration)
 {
 
 	maxAcceleration = _maxAcceleration;
 }
 
-void UTranslationComponent::SetCurrentAcceleration(float _currentAcceleration)
+void UenemyMovementComponent::SetCurrentAcceleration(float _currentAcceleration)
 {
 
 	accelerationInMS = _currentAcceleration;
 }
 
-void UTranslationComponent::SetMaxSpeed(float _maxSpeed)
+void UenemyMovementComponent::SetMaxSpeed(float _maxSpeed)
 {
 
 	maxSpeed = _maxSpeed;
 }
 
-void UTranslationComponent::SetCurrentSpeed(float _currentSpeed)
+void UenemyMovementComponent::SetCurrentSpeed(float _currentSpeed)
 {
 
 	FVector currentDirection = currentspeed;
@@ -279,19 +257,19 @@ void UTranslationComponent::SetCurrentSpeed(float _currentSpeed)
 	currentspeed = _currentSpeed * currentDirection;
 }
 
-float UTranslationComponent::GetMaxAcceleration()
+float UenemyMovementComponent::GetMaxAcceleration()
 {
 
 	return maxAcceleration;
 }
 
-float UTranslationComponent::GetMaxSpeed()
+float UenemyMovementComponent::GetMaxSpeed()
 {
 
 	return maxSpeed;
 }
 
-void UTranslationComponent::ResetSpeedAndAcceleration()
+void UenemyMovementComponent::ResetSpeedAndAcceleration()
 {
 
 	maxAcceleration = defaultMaxAcceleration;
@@ -301,7 +279,7 @@ void UTranslationComponent::ResetSpeedAndAcceleration()
 
 }
 
-void UTranslationComponent::BoostSpeed(float Value)
+void UenemyMovementComponent::BoostSpeed(float Value)
 {
 
 	FVector pilotBoost = Value * direction * 4.f;
@@ -310,7 +288,7 @@ void UTranslationComponent::BoostSpeed(float Value)
 
 }
 
-FVector UTranslationComponent::CalculateSpeedNextIteration(FVector _currentSpeed, float _maneuverabilityInPercent, FVector _direction, float _acelerationInMS, float time)
+FVector UenemyMovementComponent::CalculateSpeedNextIteration(FVector _currentSpeed, float _maneuverabilityInPercent, FVector _direction, float _acelerationInMS, float time)
 {
 
 	FVector speedUp = FVector::ZeroVector;
@@ -328,7 +306,7 @@ FVector UTranslationComponent::CalculateSpeedNextIteration(FVector _currentSpeed
 
 }
 
-FVector UTranslationComponent::CalculatePositionNextIteration(FVector _position, FVector _currentSpeed, float time)
+FVector UenemyMovementComponent::CalculatePositionNextIteration(FVector _position, FVector _currentSpeed, float time)
 {
 
 	FVector nextPosition = FVector::ZeroVector;
@@ -340,24 +318,14 @@ FVector UTranslationComponent::CalculatePositionNextIteration(FVector _position,
 }
 
 
-void UTranslationComponent::ApplyMovementWithInterpolation()
+void UenemyMovementComponent::ApplyMovementWithInterpolation()
 {
 	//Multiplicar velocidad por vector de direccion por tiempo que hemos estado sin updatear
-	
-	if(bfirstUpdate)
-	{
 
-		bfirstUpdate = false;
-		predictedPosition = movementReplicatedPack.position;
-
-		lastPosition = movementReplicatedPack.position;
-		currentPosition = movementReplicatedPack.position;	
-		interpolatedPosition = movementReplicatedPack.position;
-
-	}else
 	{
 
 		position = movementReplicatedPack.position;
+		interpolatedPosition = position;
 		direction = movementReplicatedPack.direction;
 		currentspeed = movementReplicatedPack.currentspeed;
 		accelerationInMS = movementReplicatedPack.accelerationInMS;
@@ -388,5 +356,3 @@ void UTranslationComponent::ApplyMovementWithInterpolation()
 	}
 
 }
-
-

@@ -47,10 +47,10 @@ TArray<AChromosome*> AGeneticManager::GenerateNextGenerationDna(TArray<AChromoso
 	{
 
 		//Obtiene mejores individuos
-		DNABestIndividues = GetBestIndividues(actualGenerationDNA, actualGenerationDNA.Num()/2);
+		DNABestIndividues = GetBestIndividues(actualGenerationDNA, (actualGenerationDNA.Num()+1)/2);
 
-		//Los cruzo (de momento) haciendo que los dos mejores se reproduzcan con todos los mejores
-		for(int i = 0; i < 2; i++)
+		//Los cruzo (de momento) haciendo que el mejor se reproduzca con todos los mejores
+		for(int i = 0; i < 1; i++)
 		{
 
 			for(int j = 0; j < DNABestIndividues.Num(); ++j)
@@ -73,13 +73,16 @@ TArray<AChromosome*> AGeneticManager::GenerateFirstGenerationDna()
 {
 	TArray<AChromosome*> DNAResult;
 
+	int populationSize = 1;
+
 	//En caso de primera iteracion o de eliminados todos por el jugador (de momento)
 	//Crea nueva generacion
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < populationSize; i++)
 	{
 
 		AChromosome* DNA = GetWorld()->SpawnActor<AChromosome>();
 
+		//Por si ha intentado spawnear en un lugar donde habia colision y no se ha finalizado el proceso
 		if (!DNA)
 		{
 
@@ -126,7 +129,7 @@ AChromosome* AGeneticManager::CrossOver(AChromosome* parent1, AChromosome* paren
 float AGeneticManager::CalculateAptitude(AChromosome* individual)
 {
 
-	return individual->GetSizeGene().Size();
+	return individual->GetSizeGene().Size() + individual->GetTimeAlive() + individual->GetDamageCausedToTarget();
 }
 
 TArray<AChromosome*> AGeneticManager::GetBestIndividues(TArray<AChromosome*> population, int32 numIndividues)
@@ -145,6 +148,7 @@ TArray<AChromosome*> AGeneticManager::GetBestIndividues(TArray<AChromosome*> pop
 
 		float aptitude = CalculateAptitude(x);
 
+		//fuera de rango en el caso de ser peor que los n mejores
 		int index = numIndividues + 1;
 
 		//Buscamos posicion

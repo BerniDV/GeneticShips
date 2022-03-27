@@ -321,8 +321,5 @@ void AActionPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if(!HasAuthority() && presentationController)
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, Cast<UActionGameController>(presentationController)->GetRound());
-
 	
 }

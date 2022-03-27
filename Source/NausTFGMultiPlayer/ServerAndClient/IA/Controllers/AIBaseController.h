@@ -35,10 +35,16 @@ public:
 	float ApplyDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 		AController* EventInstigator, AActor* DamageCauser);
 
+	void MoveForward(float movement);
+
+	void MoveRight(float movement);
+
 private:
 
 	APilotActionPawn* target;
 
 	float health;
+
+	float fireTimeTest;
 	
 };

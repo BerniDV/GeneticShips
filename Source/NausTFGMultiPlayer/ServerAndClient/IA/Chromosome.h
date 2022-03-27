@@ -37,10 +37,24 @@ public:
 
 	AChromosome* Clone();
 
+	void SetDamageCausedTopTarget(float amount);
+
+	float GetDamageCausedToTarget();
+
+	void AddDamageCausedToTarget(float amount);
+
+	float GetTimeAlive();
+
+	void SetTimeAlive(float time);
+
 private:
 
 	UPROPERTY(Replicated)
 	FVector sizeGene;
+
+	float timeAlive;
+
+	float damageCausedToTarget;
 
 	USceneComponent* root;
 

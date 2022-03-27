@@ -73,7 +73,7 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 				myPawn->SetActorLocation(pilotMate->GetActorLocation());
 			}
 
-			//En caso que el piloto se este a punto de parar aprovechamos una velocidad precalculada para que la interpolacion final de correcion sea suave para la camara
+			//En caso que el piloto se este a punto de parar aprovechamos una velocidad precalculada para que la interpolacion final de correccion sea suave para la camara
 			//ya que la interpolation speed en ese caso sera casi nula
 			
 			if(pilotMate->GetCurrentSpeed() > 300.f)

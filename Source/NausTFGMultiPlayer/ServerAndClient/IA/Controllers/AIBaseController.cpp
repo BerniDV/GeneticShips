@@ -16,6 +16,7 @@ AAIBaseController::AAIBaseController()
 
 	PrimaryActorTick.bCanEverTick = true;
 	health = 100.f;
+	fireTimeTest = 0.f;
 }
 
 void AAIBaseController::BeginPlay()
@@ -49,13 +50,33 @@ void AAIBaseController::Tick(float DeltaSeconds)
 
 	if(myPawn && target && HasAuthority())
 	{
-
+		
 		FVector myLocation = myPawn->GetActorLocation();
 		
 		FVector targetLocation = target->GetPredictedPosition();
-		FVector nextLocation = FMath::VInterpConstantTo(myLocation, targetLocation, DeltaSeconds, 500.f);
+		FVector targetEnemyVector = targetLocation - myLocation;
+
+		//FVector nextLocation = FMath::VInterpConstantTo(myLocation, targetLocation, DeltaSeconds, 500.f);
 	
-		myPawn->SetPosition(nextLocation);
+		//myPawn->SetPosition(nextLocation);
+
+		targetEnemyVector.Normalize();
+
+		myPawn->ExecuteRotation(targetEnemyVector.Rotation());
+
+		myPawn->MoverForward(1);
+		//myPawn->MoverRight(targetEnemyVector.Y);
+		
+	}
+
+	fireTimeTest += DeltaSeconds;
+
+	if(fireTimeTest > 5.f && HasAuthority())
+	{
+
+		fireTimeTest = 0.f;
+		myPawn->Server_Fire(myPawn->GetActorLocation(), target->GetActorLocation());
+
 		
 	}
 	
@@ -87,4 +108,19 @@ float AAIBaseController::ApplyDamage(float DamageAmount, FDamageEvent const& Dam
 
 	health = newHealth;
 	return newHealth;
+}
+
+void AAIBaseController::MoveForward(float movement)
+{
+
+	AEnemyActionPawn* myPawn = Cast<AEnemyActionPawn>(GetPawn());
+
+	myPawn->MoverForward(movement);
+}
+
+void AAIBaseController::MoveRight(float movement)
+{
+	AEnemyActionPawn* myPawn = Cast<AEnemyActionPawn>(GetPawn());
+
+	myPawn->MoverRight(movement);
 }

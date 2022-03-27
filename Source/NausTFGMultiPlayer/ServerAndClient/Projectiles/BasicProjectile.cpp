@@ -8,6 +8,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Pawns/EnemyActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Singletons/CustomGameInstance.h"
 
@@ -89,7 +90,7 @@ void ABasicProjectile::OnProjectileImpact(UPrimitiveComponent* OverlappedCompone
 	}
 
 	//Si colisionan dos proyectiles no hacemos nada
-	if(Cast<ABasicProjectile>(OtherActor))
+	if(Cast<ABasicProjectile>(OtherActor) || (Cast<AEnemyActionPawn>(OtherActor) && Cast<AEnemyActionPawn>(GetOwner())))
 	{
 
 		return;
