@@ -63,5 +63,4 @@ private:
 
 	FVector2D cameraInput;
 
-	FVector lastTeamMatePosition;
 };

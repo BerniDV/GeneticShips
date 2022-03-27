@@ -169,7 +169,7 @@ void UenemyMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 		//Si nos hemos parado corregimos a la ultima posiciopn confirmada conocida, en caso contrario seguimos interpolando entre la actual y la que hemos predecido
 	//Como siempre predecimos segun la ultima confirmada las pequeñas correciones se hacen implicitamente
-		if (!SimilarEnough(position, predictedPosition)) {
+	    if (!SimilarEnough(position, predictedPosition)) {
 
 			interpolatedPosition = FMath::VInterpConstantTo(interpolatedPosition, predictedPosition, DeltaTime, interpolationSpeed);
 			Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
@@ -181,7 +181,7 @@ void UenemyMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 			//interpolationSpeed = (GetOwner()->GetActorLocation() - position).Size() / delay;
 
 			//interpolatedPosition = FMath::VInterpConstantTo(GetOwner()->GetActorLocation(), position, DeltaTime, interpolationSpeed);
-			interpolatedPosition = FMath::Lerp(GetOwner()->GetActorLocation(), position, 0.3);
+			interpolatedPosition = FMath::Lerp(interpolatedPosition, position, 0.3);
 			Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Correction");
 		}

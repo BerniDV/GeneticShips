@@ -11,8 +11,9 @@
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Singletons/CustomGameInstance.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Projectiles/BasicProjectile.h"
-#include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/enemyMovementComponent.h"
+//#include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/enemyMovementComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/RotationComponent.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/TranslationComponent.h"
 #include "Net/UnrealNetwork.h"
 
 AEnemyActionPawn::AEnemyActionPawn()
@@ -28,7 +29,7 @@ AEnemyActionPawn::AEnemyActionPawn()
 	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("staticMesh"));
 	meshComponent->SetupAttachment(RootComponent);
 
-	translationComponent = CreateDefaultSubobject<UenemyMovementComponent>(TEXT("translationComponent"));
+	translationComponent = CreateDefaultSubobject<UTranslationComponent>(TEXT("movementComponent"));
 	translationComponent->SetIsReplicated(true);
 
 	rotationComponent = CreateDefaultSubobject<URotationComponent>(TEXT("rotationComponent"));
@@ -151,6 +152,18 @@ void AEnemyActionPawn::ExecuteRotation(FRotator rotator)
 {
 
 	rotationComponent->ExecuteRotation(rotator);
+}
+
+FVector AEnemyActionPawn::GetPredictedPosition()
+{
+
+	return translationComponent->GetPredictedPosition();
+}
+
+float AEnemyActionPawn::GetInterpolationSpeed()
+{
+
+	return translationComponent->GetInterpolationSpeed();
 }
 
 void AEnemyActionPawn::Server_Fire_Implementation(FVector locationToFire, FVector target)

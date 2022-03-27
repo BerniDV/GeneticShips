@@ -7,7 +7,9 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "NausTFGMultiPlayer/ServerAndClient/GameStates/ActionGameState.h"
 #include "NausTFGMultiPlayer/ServerAndClient/IA/Controllers/AIBaseController.h"
+#include "NausTFGMultiPlayer/ServerAndClient/IA/Controllers/EnemyManager.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Pawns/EnemyActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "Net/UnrealNetwork.h"
@@ -68,7 +70,9 @@ void UTranslationComponent::Inicialite(float _speedDropRate, float _defaultMaxAc
 bool UTranslationComponent::SimilarEnough(FVector v1, FVector v2)
 {
 	FVector diff = v2 - v1;
-	return diff.Size() < 50.f;
+	//return diff.Size() < 50.f;
+
+	return diff.Size() == 0.f;
 }
 
 float UTranslationComponent::GetCurrenntSpeed()
@@ -109,7 +113,7 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if(GetOwner()->GetLocalRole() == ENetRole::ROLE_AutonomousProxy)
+	if(GetOwner()->GetLocalRole() == ENetRole::ROLE_AutonomousProxy || (Cast<AEnemyActionPawn>(GetOwner()) && GetOwner()->HasAuthority()))
 	{
 
 		if (accelerationInMS > maxAcceleration)
@@ -169,25 +173,33 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 		Cast<AActionPawn>(GetOwner())->SetActorLocation(position, true);
 		
-	}
-	
-	//Si nos hemos parado corregimos a la ultima posiciopn confirmada conocida, en caso contrario seguimos interpolando entre la actual y la que hemos predecido
-	//Como siempre predecimos segun la ultima confirmada las pequeñas correciones se hacen implicitamente
-	if (GetOwner()->GetLocalRole() != ENetRole::ROLE_AutonomousProxy && !SimilarEnough(position, lastPosition)) {
+	}else
+	{
 
-		interpolatedPosition = FMath::VInterpConstantTo(interpolatedPosition, predictedPosition, DeltaTime, interpolationSpeed); 
-		Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Prediction");
-	}
-	else
-	{	//En caso de llegar a una interpolacion casi completa significa que el jugador ya no se mueve, y por lo tanto rectificamos el ultimo movimiento predicho y lo ponemos en la posición final
-		predictedPosition = position;
-		//interpolationSpeed = (GetOwner()->GetActorLocation() - position).Size() / delay;
-		
-		//interpolatedPosition = FMath::VInterpConstantTo(GetOwner()->GetActorLocation(), position, DeltaTime, interpolationSpeed);
-		interpolatedPosition = FMath::Lerp(GetOwner()->GetActorLocation(), position, 0.3);
-		Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Correction");
+		//Si nos hemos parado corregimos a la ultima posiciopn confirmada conocida, en caso contrario seguimos interpolando entre la actual y la que hemos predecido
+		//Como siempre predecimos segun la ultima confirmada las pequeñas correciones se hacen implicitamente  interpolationSpeed != 0.f && !Cast<APilotActionPawn>(GetOwner())
+		if (true) {
+
+			interpolatedPosition = FMath::VInterpConstantTo(GetOwner()->GetActorLocation(), predictedPosition, DeltaTime, interpolationSpeed);
+			Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Prediction");
+		}
+		else
+		{	//En caso de llegar a una interpolacion casi completa significa que el jugador ya no se mueve, y por lo tanto rectificamos el ultimo movimiento predicho y lo ponemos en la posición final
+			predictedPosition = position;
+			//interpolationSpeed = (GetOwner()->GetActorLocation() - position).Size() / delay;
+
+			//interpolatedPosition = FMath::VInterpConstantTo(GetOwner()->GetActorLocation(), position, DeltaTime, interpolationSpeed);
+			interpolatedPosition = FMath::Lerp(GetOwner()->GetActorLocation(), position, 0.3);
+			Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Correction");
+
+			if(Cast<AEnemyActionPawn>(GetOwner()))
+			{
+
+				int i = 2;
+			}
+		}
 	}
 
 	lastPosition = position;
@@ -237,7 +249,7 @@ void UTranslationComponent::Move_Server_Implementation(FVector movement, FVector
 	movementReplicatedPack.Update(movement, _direction, _currentSpeed, _accelerationInMs, _currentTime, _maneuverabilityInPercent);
 
 
-	if(GetOwner()->HasAuthority())
+	if(GetOwner()->HasAuthority() && !Cast<AEnemyActionPawn>(GetOwner()))
 	{
 
 		ApplyMovementWithInterpolation();
@@ -344,17 +356,7 @@ void UTranslationComponent::ApplyMovementWithInterpolation()
 {
 	//Multiplicar velocidad por vector de direccion por tiempo que hemos estado sin updatear
 	
-	if(bfirstUpdate)
-	{
-
-		bfirstUpdate = false;
-		predictedPosition = movementReplicatedPack.position;
-
-		lastPosition = movementReplicatedPack.position;
-		currentPosition = movementReplicatedPack.position;	
-		interpolatedPosition = movementReplicatedPack.position;
-
-	}else
+	
 	{
 
 		position = movementReplicatedPack.position;

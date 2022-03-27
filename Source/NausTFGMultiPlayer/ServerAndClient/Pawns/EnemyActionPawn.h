@@ -56,6 +56,9 @@ public:
 
 	virtual void ExecuteRotation(FRotator rotator) override;
 
+	FVector GetPredictedPosition();
+	float GetInterpolationSpeed(); 
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -92,7 +95,7 @@ private:
 	TSubclassOf<ABasicProjectile> projectile;
 
 	UPROPERTY(Replicated)
-	UenemyMovementComponent* translationComponent;
+	UTranslationComponent* translationComponent;
 
 	UPROPERTY(Replicated)
 	URotationComponent* rotationComponent;

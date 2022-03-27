@@ -24,7 +24,6 @@ AArtilleryActionPlayerController::AArtilleryActionPlayerController()
 	cadencyOfTheGunInSeconds = 0.1f;
 	bIsShooting = false;
 	timeSinceLastProjectile = 0.f;
-	lastTeamMatePosition = FVector::ZeroVector;
 }
 
 void AArtilleryActionPlayerController::BeginPlay()
@@ -67,35 +66,8 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 
 		if (myPawn) {
 
-			if ((myPawn->GetActorLocation() - pilotMate->GetActorLocation()).Size() > 2000.f)
-			{
 
-				myPawn->SetActorLocation(pilotMate->GetActorLocation());
-			}
-
-			//En caso que el piloto se este a punto de parar aprovechamos una velocidad precalculada para que la interpolacion final de correccion sea suave para la camara
-			//ya que la interpolation speed en ese caso sera casi nula
-			
-			if(pilotMate->GetCurrentSpeed() > 300.f)
-			{
-				
-				FVector nextLocationPawn = FMath::VInterpConstantTo(myPawn->GetActorLocation(), pilotMate->GetPredictedPosition(), DeltaSeconds, pilotMate->GetInterpolationSpeed());
-
-				myPawn->SetActorLocation(nextLocationPawn);
-
-				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, pilotMate->GetReplicatedPosition().ToString() + " y " + pilotMate->GetLastPosition().ToString());
-				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("%f"), pilotMate->GetCurrentSpeed()));
-			}else 
-			{
-				
-				FVector nextLocationPawn = FMath::VInterpConstantTo(myPawn->GetActorLocation(), pilotMate->GetActorLocation(), DeltaSeconds, 300.f);
-				//FVector nextLocationPawn = FMath::Lerp(myPawn->GetActorLocation(), pilotMate->GetActorLocation(), 0.02);
-				myPawn->SetActorLocation(nextLocationPawn);
-				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, "lerp");
-			}
-			
-
-			lastTeamMatePosition = pilotMate->GetActorLocation();
+			myPawn->SetActorLocation(pilotMate->GetActorLocation());
 
 			FRotator newRotation = myPawn->GetActorRotation();
 
@@ -105,8 +77,6 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 
 			myPawn->ExecuteRotation(newRotation);
 
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, "my pawn: " +  myPawn->GetActorLocation().ToString());
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, "Pilot: " +  pilotMate->GetActorLocation().ToString());
 		}
 
 		if(cameraManager && Cast<AActionCamera>(cameraManager->GetViewTarget()))
@@ -115,16 +85,9 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 			AActionCamera* camera = Cast<AActionCamera>(cameraManager->GetViewTarget());
 
 			
-			if((camera->GetActorLocation() - pilotMate->GetActorLocation()).Size() > 2000.f)
-			{
-
-				camera->SetActorLocation(pilotMate->GetActorLocation());
-			}
+			FVector nextLocation = FMath::VInterpConstantTo(camera->GetActorLocation(), pilotMate->GetActorLocation(), DeltaSeconds, pilotMate->GetInterpolationSpeed());
+			camera->SetActorLocation(nextLocation);
 			
-
-			FVector nextLocation = FMath::VInterpConstantTo(camera->GetActorLocation(), pilotMate->GetPredictedPosition(), DeltaSeconds, pilotMate->GetInterpolationSpeed());
-
-			camera->SetActorLocation(myPawn->GetActorLocation());
 			camera->SetActorRotation(myPawn->GetActorRotation());
 		}
 		
