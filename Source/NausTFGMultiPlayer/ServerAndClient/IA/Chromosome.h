@@ -31,6 +31,9 @@ public:
 	void SetSizeGene(FVector SizeGene);
 
 	void ApplyFenotipe();
+
+	void ApplyMovementGenes();
+
 	void SetRandomGenes();
 
 	void Mutation();
@@ -47,6 +50,26 @@ public:
 
 	void SetTimeAlive(float time);
 
+	float GetImpactDamage();
+	void SetImpactDamage(float damage);
+
+	float GetSpeedDropRate();
+	void SetSpeedDropRate(float value);
+	float GetDefaultMaxAcceleration();
+	void SetDefaultMaxAcceleration(float value);
+	float GetMaxAcceleration();
+	void SetMaxAcceleration(float value);
+	float GetDefaultMaxSpeed();
+	void SetDefaultMaxSpeed(float value);
+	float GetMaxSpeed();
+	void SetMaxSpeed(float value);
+	float GetAccelerationSpeed();
+	void SetAccelerationSpeed(float value);
+	float GetDecelerationSpeed();
+	void SetDecelerationSpeed(float value);
+	float GetManeuverabilityInPercent();
+	void SetManeuverabilityInPercent(float value);
+
 private:
 
 	UPROPERTY(Replicated)
@@ -55,6 +78,27 @@ private:
 	float timeAlive;
 
 	float damageCausedToTarget;
+
+	UPROPERTY(Replicated)
+	float impactDamage;
+
+	UPROPERTY(Replicated)
+	float speedDropRate;
+	UPROPERTY(Replicated)
+	float defaultMaxAcceleration;
+	UPROPERTY(Replicated)
+	float maxAcceleration;
+	UPROPERTY(Replicated)
+	float defaultMaxSpeed;
+	UPROPERTY(Replicated)
+	float maxSpeed;
+	UPROPERTY(Replicated)
+	float accelerationSpeed;
+	UPROPERTY(Replicated)
+	float decelerationSpeed;
+	UPROPERTY(Replicated)
+	float maneuverabilityInPercent;
+
 
 	USceneComponent* root;
 

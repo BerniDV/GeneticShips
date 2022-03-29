@@ -49,8 +49,8 @@ TArray<AChromosome*> AGeneticManager::GenerateNextGenerationDna(TArray<AChromoso
 		//Obtiene mejores individuos
 		DNABestIndividues = GetBestIndividues(actualGenerationDNA, (actualGenerationDNA.Num()+1)/2);
 
-		//Los cruzo (de momento) haciendo que el mejor se reproduzca con todos los mejores
-		for(int i = 0; i < 1; i++)
+		//Los cruzo (de momento) haciendo que los dos mejores se reproduzca con todos los mejores
+		for(int i = 0; i < 2; i++)
 		{
 
 			for(int j = 0; j < DNABestIndividues.Num(); ++j)
@@ -73,7 +73,7 @@ TArray<AChromosome*> AGeneticManager::GenerateFirstGenerationDna()
 {
 	TArray<AChromosome*> DNAResult;
 
-	int populationSize = 1;
+	int populationSize = 50;
 
 	//En caso de primera iteracion o de eliminados todos por el jugador (de momento)
 	//Crea nueva generacion
@@ -105,14 +105,19 @@ AChromosome* AGeneticManager::CrossOver(AChromosome* parent1, AChromosome* paren
 
 	float probabilityCrossOver = (rand() % 100) + 1;
 
-	AChromosome* son = GetWorld()->SpawnActor<AChromosome>();
+	AChromosome* son; //= GetWorld()->SpawnActor<AChromosome>();
 
-	son->SetSizeGene(parent2->GetSizeGene());
+	//Aqui aplicare diferentes metodos de crossover como de doble punto etc...
 
 	if(probabilityCrossOver < 60)
 	{
 		
-		son->SetSizeGene(parent1->GetSizeGene());
+		son = parent1->Clone();
+
+	}else
+	{
+
+		son = parent2->Clone();
 	}
 
 	float probabilityMutation = (rand() % 100) + 1;
@@ -129,7 +134,8 @@ AChromosome* AGeneticManager::CrossOver(AChromosome* parent1, AChromosome* paren
 float AGeneticManager::CalculateAptitude(AChromosome* individual)
 {
 
-	return individual->GetSizeGene().Size() + individual->GetTimeAlive() + individual->GetDamageCausedToTarget();
+
+	return individual->GetTimeAlive() + individual->GetDamageCausedToTarget();
 }
 
 TArray<AChromosome*> AGeneticManager::GetBestIndividues(TArray<AChromosome*> population, int32 numIndividues)

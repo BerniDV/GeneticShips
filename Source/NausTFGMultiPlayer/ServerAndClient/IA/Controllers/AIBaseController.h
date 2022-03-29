@@ -4,10 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "AIBaseController.generated.h"
 
 class AEnemyManager;
 class APilotActionPawn;
+
+
+
 /**
  * 
  */
@@ -20,6 +24,7 @@ public:
 
 	AAIBaseController();
 
+	void BindSignals();
 
 protected:
 
@@ -39,6 +44,8 @@ public:
 
 	void MoveRight(float movement);
 
+	void OnEnemyDead();
+
 private:
 
 	APilotActionPawn* target;
@@ -46,5 +53,7 @@ private:
 	float health;
 
 	float fireTimeTest;
+
+	EnemyState enemyState;
 	
 };

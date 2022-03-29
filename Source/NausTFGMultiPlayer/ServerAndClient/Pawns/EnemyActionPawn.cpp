@@ -11,7 +11,6 @@
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Singletons/CustomGameInstance.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Projectiles/BasicProjectile.h"
-//#include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/enemyMovementComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/RotationComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/TranslationComponent.h"
 #include "Net/UnrealNetwork.h"
@@ -67,6 +66,14 @@ void AEnemyActionPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	//DOREPLIFETIME(AEnemyActionPawn, position);
 }
 
+void AEnemyActionPawn::InitMovementCompnent(float _speedDropRate, float _defaultMaxAcceleration, float _defaultMaxSpeed,
+	float _maxAcceleration, float _maxSpeed, float _accelerationSpeed, float _decelerationSpeed,
+	float _meneuverabilityInPercent)
+{
+
+	translationComponent->Inicialite(_speedDropRate, _defaultMaxAcceleration, _defaultMaxSpeed, _maxAcceleration, _maxSpeed, _accelerationSpeed, _decelerationSpeed, _meneuverabilityInPercent);
+}
+
 void AEnemyActionPawn::SetRandomGenes()
 {
 
@@ -79,12 +86,20 @@ void AEnemyActionPawn::ApplyFenotipe()
 	enemyChromosome->ApplyFenotipe();
 }
 
+void AEnemyActionPawn::ApplyMovementGenes()
+{
+
+	enemyChromosome->ApplyMovementGenes();
+}
+
 void AEnemyActionPawn::SetChromosome(AChromosome* newChromosome)
 {
 
 	enemyChromosome = newChromosome;
 
 	ApplyFenotipe();
+	ApplyMovementGenes();
+	
 }
 
 AChromosome* AEnemyActionPawn::GetChromosome()
@@ -133,7 +148,13 @@ void AEnemyActionPawn::EnemyOverlap(UPrimitiveComponent* OverlappedComponent, AA
 
 	//UE_LOG(LogTemp, Warning, TEXT("Enemy Overlap"));
 	if(Cast<APilotActionPawn>(OtherActor))
-		UGameplayStatics::ApplyDamage(OtherActor, 20.f, nullptr, this, damageType);
+	{
+
+		float impactDamage = GetChromosome()->GetImpactDamage();
+		UGameplayStatics::ApplyDamage(OtherActor, impactDamage, nullptr, this, damageType);
+
+	}
+		
 }
 
 void AEnemyActionPawn::MoverForward(float movement)
@@ -164,6 +185,12 @@ float AEnemyActionPawn::GetInterpolationSpeed()
 {
 
 	return translationComponent->GetInterpolationSpeed();
+}
+
+void AEnemyActionPawn::OnEnemyDead()
+{
+
+	signalOnEnemyDead.Broadcast();
 }
 
 void AEnemyActionPawn::Server_Fire_Implementation(FVector locationToFire, FVector target)
@@ -203,8 +230,7 @@ void AEnemyActionPawn::BeginPlay()
 	float decelerationSpeed = 100.f;
 	float maneuverabilityInPercent = 100.f;
 
-	
-	translationComponent->Inicialite(speedDropRate, defaultMaxAcceleration, defaultMaxSpeed, maxAcceleration, maxSpeed, accelerationSpeed, decelerationSpeed, maneuverabilityInPercent);
+	InitMovementCompnent(speedDropRate, defaultMaxAcceleration, defaultMaxSpeed, maxAcceleration, maxSpeed, accelerationSpeed, decelerationSpeed, maneuverabilityInPercent);
 
 	if(HasAuthority())
 	{

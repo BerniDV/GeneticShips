@@ -21,6 +21,9 @@ class NAUSTFGMULTIPLAYER_API AEnemyActionPawn : public AActionPawn
 
 public:
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEnemyDead);
+	FOnEnemyDead signalOnEnemyDead;
+
 	AEnemyActionPawn();
 
 	void SetID(int32 newEnemyID);
@@ -28,9 +31,12 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
 
+	void InitMovementCompnent(float _speedDropRate, float _defaultMaxAcceleration, float _defaultMaxSpeed, float _maxAcceleration, float _maxSpeed, float _accelerationSpeed, float _decelerationSpeed, float _meneuverabilityInPercent);
+
 	void SetRandomGenes();
 
 	void ApplyFenotipe();
+	void ApplyMovementGenes();
 
 	void SetChromosome(AChromosome* newChromosome);
 	AChromosome* GetChromosome();
@@ -57,7 +63,9 @@ public:
 	virtual void ExecuteRotation(FRotator rotator) override;
 
 	FVector GetPredictedPosition();
-	float GetInterpolationSpeed(); 
+	float GetInterpolationSpeed();
+
+	void OnEnemyDead();
 
 protected:
 

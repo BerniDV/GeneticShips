@@ -46,6 +46,16 @@ enum class NausTFGPawnReferencesFactories_Enum : uint8
 
 };
 
+
+UENUM()
+enum class EnemyState : uint8
+{
+
+	Alive,
+	Dead
+
+};
+
 /*
 UCLASS()
 class NAUSTFGMULTIPLAYER_API UNausTFGEnums : public UObject

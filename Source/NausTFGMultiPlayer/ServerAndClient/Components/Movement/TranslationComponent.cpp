@@ -219,10 +219,9 @@ void UTranslationComponent::MoveRight(float movement)
 
 	AActionPawn* myPawn = Cast<AActionPawn>(GetOwner());
 
-	AActionPlayerController* playerController = Cast<AActionPlayerController>(myPawn->GetController());	   
-
 	//rightDirection = FRotationMatrix(playerController->GetControlRotation()).GetScaledAxis(EAxis::Y) * movement;
-	rightDirection = GetOwner()->GetActorRightVector() * movement;
+	if(myPawn)
+		rightDirection = myPawn->GetActorRightVector() * movement;
 
 }
 
@@ -236,7 +235,7 @@ void UTranslationComponent::MoveForward(float movement)
 	{
 
 		//forwardDirection = FRotationMatrix(playerController->GetControlRotation()).GetScaledAxis(EAxis::X) * movement;
-		forwardDirection = GetOwner()->GetActorForwardVector() * movement;
+		forwardDirection = myPawn->GetActorForwardVector() * movement;
 		
 	}
 

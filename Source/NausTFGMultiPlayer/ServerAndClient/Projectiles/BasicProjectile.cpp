@@ -97,7 +97,7 @@ void ABasicProjectile::OnProjectileImpact(UPrimitiveComponent* OverlappedCompone
 	}
 
 	//Si no colisiona con nuestro propio actor aplicamos daño
-	if (OtherActor && GetOwner()->GetInstigatorController() != nullptr && OtherActor->GetInstigatorController() != GetOwner()->GetInstigatorController())
+	if (OtherActor && GetOwner() && GetOwner()->GetInstigatorController() != nullptr && OtherActor && OtherActor->GetInstigatorController() != GetOwner()->GetInstigatorController())
 	{
 		//Aplicamos particulas de contacto y lo destruimos
 		SpawnParticles();

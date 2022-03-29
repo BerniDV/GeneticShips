@@ -19,10 +19,19 @@ AAIBaseController::AAIBaseController()
 	fireTimeTest = 0.f;
 }
 
+void AAIBaseController::BindSignals()
+{
+
+	AEnemyActionPawn* myPawn = Cast<AEnemyActionPawn>(GetPawn());
+
+	myPawn->signalOnEnemyDead.AddDynamic(this, &AAIBaseController::OnEnemyDead);
+}
+
 void AAIBaseController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	enemyState = EnemyState::Alive;
 	
 	//target = UGameplayStatics::GetActorOfClass(GetWorld(), APilotActionPawn::StaticClass());
 	TArray<AActor*> targetArray;
@@ -71,9 +80,9 @@ void AAIBaseController::Tick(float DeltaSeconds)
 
 	fireTimeTest += DeltaSeconds;
 
-	if(fireTimeTest > 5.f && HasAuthority())
+	if(fireTimeTest > 5.f && HasAuthority() && enemyState != EnemyState::Dead)
 	{
-
+		//Si el enemigo esta muerto no deberia poder disparar
 		fireTimeTest = 0.f;
 		myPawn->Server_Fire(myPawn->GetActorLocation(), target->GetActorLocation());
 
@@ -123,4 +132,10 @@ void AAIBaseController::MoveRight(float movement)
 	AEnemyActionPawn* myPawn = Cast<AEnemyActionPawn>(GetPawn());
 
 	myPawn->MoverRight(movement);
+}
+
+void AAIBaseController::OnEnemyDead()
+{
+
+	enemyState = EnemyState::Dead;
 }
