@@ -42,31 +42,65 @@ TArray<AChromosome*> AGeneticManager::GenerateNextGenerationDna(TArray<AChromoso
 {
 
 	TArray<AChromosome*> DNAResult;
-	TArray<AChromosome*> DNABestIndividues;
+	TArray<AChromosome*> DNAParents;
 
 	{
 
 		//Obtiene mejores individuos
-		DNABestIndividues = GetBestIndividues(actualGenerationDNA, (actualGenerationDNA.Num()+1)/2);
+		//DNABestIndividues = GetBestIndividues(actualGenerationDNA, (actualGenerationDNA.Num()+1)/2);
+
+		//Calcula valor de aptitud de los individuos y de la poblacion
+
+		TArray<float> aptitudes;
+
+		float aptitudePopulation = CalculateRelativeAptitudes(aptitudes, actualGenerationDNA);
 
 		//Los cruzo (de momento) haciendo que los dos mejores se reproduzca con todos los mejores
-		for(int i = 0; i < 2; i++)
+		//Metodo de la ruleta (seleccion de montecarlo): Calcular la aptitud relativa al grupo y usarla como probabilidad, se tira la ruleta y se escoge como padre la region en la que cae.
+		for (int i = 0; i < aptitudes.Num(); i++)
 		{
 
-			for(int j = 0; j < DNABestIndividues.Num(); ++j)
-			{
+			float rulete = FMath::FRandRange(0.f, 1.f);
 
-				AChromosome* son = CrossOver(DNABestIndividues[i], DNABestIndividues[j]);
-
-				DNAResult.Add(son);
-
-			}
+			DNAParents.Add(actualGenerationDNA[GetIndexChromosomeRulete(aptitudes, rulete)]);
 
 		}
+
+		for(int j = 0; j < DNAParents.Num() - 1; ++j)
+		{
+			AChromosome* son = CrossOver(DNAParents[j], DNAParents[j + 1]);
+
+			DNAResult.Add(son);
+		}
+
+		DNAResult.Add(CrossOver(DNAParents[0], DNAParents[DNAParents.Num()-1]));
 
 	}
 
 	return DNAResult;
+}
+
+int AGeneticManager::GetIndexChromosomeRulete(TArray<float> aptitudes, float rulete)
+{
+
+	int index;
+
+	float amountProbabilities = 0.f;
+
+	for(int i = 0; i < aptitudes.Num(); i++)
+	{
+
+		amountProbabilities += aptitudes[i];
+
+		if(amountProbabilities >= rulete)
+		{
+
+			index = i;
+			break;
+		}
+	}
+
+	return index;
 }
 
 TArray<AChromosome*> AGeneticManager::GenerateFirstGenerationDna()
@@ -129,6 +163,29 @@ AChromosome* AGeneticManager::CrossOver(AChromosome* parent1, AChromosome* paren
 	}
 
 	return son;
+}
+
+float AGeneticManager::CalculateRelativeAptitudes(TArray<float>& aptitudes, TArray<AChromosome*> population)
+{
+
+	float aptitudePopulation = 0.f;
+
+	for (auto x : population)
+	{
+
+		float aptitude = CalculateAptitude(x);
+		aptitudePopulation += aptitude;
+
+		aptitudes.Add(CalculateAptitude(x));
+	}
+
+	for (int i = 0; i < aptitudes.Num(); i++)
+	{
+
+		aptitudes[i] = aptitudes[i] / aptitudePopulation;
+	}
+
+	return aptitudePopulation;
 }
 
 float AGeneticManager::CalculateAptitude(AChromosome* individual)

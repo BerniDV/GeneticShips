@@ -32,14 +32,19 @@ public:
 
 	AChromosome* CrossOver(AChromosome* paren1, AChromosome* parent2);
 
-	float CalculateAptitude(AChromosome* individual);
+	float CalculateRelativeAptitudes(TArray<float>& aptitudes, TArray<AChromosome*> population);
 	
 	TArray<AChromosome*> GetBestIndividues(TArray<AChromosome*> population, int32 numIndividues);
 
+	int GetIndexChromosomeRulete(TArray<float> population, float rulete);
+
 private:
 
+	float CalculateAptitude(AChromosome* individual);
 
 };
+
+
 
 
 
