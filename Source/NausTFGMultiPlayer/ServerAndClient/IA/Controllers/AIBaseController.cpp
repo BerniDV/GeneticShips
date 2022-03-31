@@ -80,15 +80,19 @@ void AAIBaseController::Tick(float DeltaSeconds)
 
 	fireTimeTest += DeltaSeconds;
 
-	if(fireTimeTest > 5.f && HasAuthority() && enemyState != EnemyState::Dead)
+	if(enemyState != EnemyState::Dead)
 	{
-		//Si el enemigo esta muerto no deberia poder disparar
-		fireTimeTest = 0.f;
-		myPawn->Server_Fire(myPawn->GetActorLocation(), target->GetActorLocation());
 
-		
+		if (fireTimeTest > 5.f && HasAuthority())
+		{
+			//Si el enemigo esta muerto no deberia poder disparar
+			fireTimeTest = 0.f;
+			myPawn->Server_Fire(myPawn->GetActorLocation(), target->GetActorLocation());
+
+		}
+
 	}
-	
+
 }
 
 void AAIBaseController::Destroyed()

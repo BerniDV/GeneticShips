@@ -191,6 +191,7 @@ void AEnemyActionPawn::OnEnemyDead()
 {
 
 	signalOnEnemyDead.Broadcast();
+	enemyChromosome->SetbAlive(false);
 }
 
 void AEnemyActionPawn::Server_Fire_Implementation(FVector locationToFire, FVector target)

@@ -70,35 +70,30 @@ public:
 	float GetManeuverabilityInPercent();
 	void SetManeuverabilityInPercent(float value);
 
+	void SetbAlive(bool value);
+	void SetGenesArray(TArray<float> genes);
+	TArray<float> GetGenes();
+
 private:
 
+	/*
+	 * 0: size
+	 * 1: timeAlive
+	 * 2: damageCaused
+	 * 3: impactDamage
+	 * 4: speedDropRate
+	 * 5: defaultMaxAcceleration
+	 * 6: maxAcceleration
+	 * 7: defaultMaxSpeed
+	 * 8: maxSpeed
+	 * 9: accelerationSpeed
+	 * 10: decelerationSpeed
+	 * 11: maneuverabilityInPercent
+	 */
 	UPROPERTY(Replicated)
-	FVector sizeGene;
+	TArray<float> genesArray;
 
-	float timeAlive;
-
-	float damageCausedToTarget;
-
-	UPROPERTY(Replicated)
-	float impactDamage;
-
-	UPROPERTY(Replicated)
-	float speedDropRate;
-	UPROPERTY(Replicated)
-	float defaultMaxAcceleration;
-	UPROPERTY(Replicated)
-	float maxAcceleration;
-	UPROPERTY(Replicated)
-	float defaultMaxSpeed;
-	UPROPERTY(Replicated)
-	float maxSpeed;
-	UPROPERTY(Replicated)
-	float accelerationSpeed;
-	UPROPERTY(Replicated)
-	float decelerationSpeed;
-	UPROPERTY(Replicated)
-	float maneuverabilityInPercent;
-
+	bool bAlive;
 
 	USceneComponent* root;
 

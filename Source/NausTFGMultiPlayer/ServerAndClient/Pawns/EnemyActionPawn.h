@@ -38,6 +38,7 @@ public:
 	void ApplyFenotipe();
 	void ApplyMovementGenes();
 
+	
 	void SetChromosome(AChromosome* newChromosome);
 	AChromosome* GetChromosome();
 
