@@ -180,6 +180,9 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 		//Como siempre predecimos segun la ultima confirmada las pequeñas correciones se hacen implicitamente  interpolationSpeed != 0.f && !Cast<APilotActionPawn>(GetOwner())
 		if (true) {
 
+			if (Cast<AEnemyActionPawn>(GetOwner()))
+				int a = 2;
+
 			interpolatedPosition = FMath::VInterpConstantTo(GetOwner()->GetActorLocation(), predictedPosition, DeltaTime, interpolationSpeed);
 			Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Prediction");

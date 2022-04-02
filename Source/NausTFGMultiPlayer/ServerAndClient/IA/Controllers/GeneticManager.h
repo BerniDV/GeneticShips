@@ -38,9 +38,13 @@ public:
 
 	int GetIndexChromosomeRulete(TArray<float> population, float rulete);
 
+	void SetPopulationSize(int populationSize);
+
 private:
 
 	float CalculateAptitude(AChromosome* individual);
+
+	int populationSize;
 
 };
 

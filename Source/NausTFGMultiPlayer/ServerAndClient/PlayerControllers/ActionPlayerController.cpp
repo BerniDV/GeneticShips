@@ -12,6 +12,7 @@
 #include "NausTFGMultiPlayer/Client/Cameras/ActionCameraManager.h"
 #include "NausTFGMultiPlayer/Client/Controllers/ActionGameController.h"
 #include "NausTFGMultiPlayer/Client/Controllers/PresentationController.h"
+#include "NausTFGMultiPlayer/Server/GameModes/ActionGameMode.h"
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "NausTFGMultiPlayer/ServerAndClient/GameStates/ActionGameState.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
@@ -305,6 +306,62 @@ void AActionPlayerController::InitializePresentationController()
 
 	playerControllerImpl->InitializePresentationController();
 	presentationController = playerControllerImpl->GetPresentationController();
+}
+
+void AActionPlayerController::SetNewRound(int round)
+{
+
+	SetRoundServer(round);
+}
+
+void AActionPlayerController::SetNumEnemies(int enemies)
+{
+
+	SetNumEnemiesServer(enemies);
+}
+
+void AActionPlayerController::SetNumEnemiesServer_Implementation(int enemies)
+{
+
+	if (HasAuthority())
+	{
+
+		AActionGameMode* gameMode = Cast<AActionGameMode>(GetWorld()->GetAuthGameMode());
+
+		if (gameMode)
+		{
+
+			gameMode->SetPopulationSize(enemies);
+		}
+	}
+}
+
+bool AActionPlayerController::SetNumEnemiesServer_Validate(int enemies)
+{
+
+	return true;
+}
+
+void AActionPlayerController::SetRoundServer_Implementation(int round)
+{
+	if(HasAuthority())
+	{
+
+		AActionGameMode* gameMode = Cast<AActionGameMode>(GetWorld()->GetAuthGameMode());
+
+		if(gameMode)
+		{
+
+			gameMode->SetRound(round);
+		}
+	}
+	
+}
+
+bool AActionPlayerController::SetRoundServer_Validate(int round)
+{
+
+	return true;
 }
 
 void AActionPlayerController::BeginPlay()

@@ -56,6 +56,10 @@ public:
 
 	void ProcesBetweenRounds(TArray<AChromosome*> actualGenerationresult);
 
+	void SetRound(int round);
+
+	void SetPopulationSize(int populationSize);
+
 protected:
 
 	virtual void Tick(float DeltaSeconds) override;

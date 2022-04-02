@@ -67,6 +67,20 @@ public:
 
 	virtual void InitializePresentationController() override;
 
+	//Comandos para la consola
+
+	UFUNCTION(Exec)
+	void SetNewRound(int round);
+
+	UFUNCTION(Server, WithValidation, Reliable)
+	void SetRoundServer(int round);
+
+	UFUNCTION(Exec)
+	void SetNumEnemies(int enemies);
+
+	UFUNCTION(Server, WithValidation, Reliable)
+	void SetNumEnemiesServer(int enemies);
+
 
 protected:
 

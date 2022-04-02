@@ -85,7 +85,7 @@ void AAIBaseController::Tick(float DeltaSeconds)
 	if(enemyState != EnemyState::Dead)
 	{
 
-		if (fireTimeTest > cadencyFire && HasAuthority())
+		if (fireTimeTest > cadencyFire && HasAuthority() && false)
 		{
 			//Si el enemigo esta muerto no deberia poder disparar
 			fireTimeTest = 0.f;
