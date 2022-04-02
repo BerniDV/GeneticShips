@@ -7,8 +7,10 @@
 #include "GameFramework/GameStateBase.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "NausTFGMultiPlayer/ServerAndClient/IA/Chromosome.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/EnemyActionPawn.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Singletons/CustomGameInstance.h"
 
@@ -103,6 +105,12 @@ void ABasicProjectile::OnProjectileImpact(UPrimitiveComponent* OverlappedCompone
 		SpawnParticles();
 		UGameplayStatics::ApplyDamage(OtherActor, damage, GetOwner()->GetInstigatorController(), this, damageType);
 		
+	}
+
+	if(Cast<APilotActionPawn>(OtherActor) && GetOwner())
+	{
+
+		Cast<AEnemyActionPawn>(GetOwner())->GetChromosome()->AddDamageCausedToTarget(damage);
 	}
 
 	Destroy();

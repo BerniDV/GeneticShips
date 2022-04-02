@@ -56,6 +56,26 @@ enum class EnemyState : uint8
 
 };
 
+UENUM()
+enum class Gene : uint8
+{
+
+	size = 0,
+	timeAlive,
+	damageCaused,
+	impactDamage,
+	speedDropRate,
+	defaultMaxAcceleration,
+	maxAcceleration,
+	defaultMaxSpeed,
+	maxSpeed,
+	accelerationSpeed,
+	decelerationSpeed,
+	maneuverabilityInPercent,
+	fireCadancy
+
+};
+
 /*
 UCLASS()
 class NAUSTFGMULTIPLAYER_API UNausTFGEnums : public UObject

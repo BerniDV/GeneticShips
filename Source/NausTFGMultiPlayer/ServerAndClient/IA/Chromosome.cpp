@@ -64,6 +64,7 @@ void AChromosome::SetRandomGenes()
 	genesArray[9] = FMath::FRandRange(0.f, 50.f);
 	genesArray[10] = FMath::FRandRange(0.f, 100.f);
 	genesArray[11] = FMath::FRandRange(0.f, 10.f);
+	genesArray[12] = FMath::FRandRange(5.f, 10.f);
 }
 
 void AChromosome::Mutation()
@@ -83,6 +84,7 @@ void AChromosome::Mutation()
 	genesArray[9] = FMath::FRandRange(0.f, 20 * round); //50
 	genesArray[10] = FMath::FRandRange(0.f, 20 * round); //100
 	genesArray[11] = FMath::FRandRange(0.f, (2 * round)%100); //100
+	genesArray[12] = FMath::FRandRange(10.f/round, 10.f); //0.1
 }
 
 AChromosome* AChromosome::Clone()
@@ -246,6 +248,18 @@ void AChromosome::SetManeuverabilityInPercent(float value)
 	genesArray[11] = value;
 }
 
+float AChromosome::GetGene(Gene gene)
+{
+
+	return genesArray[(int8)gene];
+}
+
+void AChromosome::SetGene(Gene gene, float value)
+{
+
+	genesArray[(int8)gene] = value;
+}
+
 void AChromosome::SetbAlive(bool value)
 {
 
@@ -292,7 +306,7 @@ void AChromosome::BeginPlay()
 	Super::BeginPlay();
 
 	//mientras no encuentre como reservar y inicializar n elementos en declaracion de TArray lo hago manual
-	int numGenes = 12;
+	
 	for(int i = 0; i < numGenes; i++)
 	{
 

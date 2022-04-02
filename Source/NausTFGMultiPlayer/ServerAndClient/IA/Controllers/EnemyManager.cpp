@@ -46,13 +46,13 @@ std::future<TArray<AChromosome*>> AEnemyManager::SpawnGeneration(TArray<AChromos
 
 			//Esto sera un bucle por cada adn del array
 			AEnemyActionPawn* Enemy = Cast<AEnemyActionPawn>(spawnedActor);
-			controller->Possess(Enemy);
 
 			Enemy->SetID(nextEnemyID);
 			Enemy->SetReplicates(true);
 			generationDNA[i]->SetOwner(Enemy);
 			Enemy->SetChromosome(generationDNA[i]);
-			
+
+			controller->Possess(Enemy);
 
 			EnemyMap.Add(nextEnemyID, Enemy);
 			++nextEnemyID;

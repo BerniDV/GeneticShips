@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "Chromosome.generated.h"
 
 UCLASS()
@@ -70,6 +71,9 @@ public:
 	float GetManeuverabilityInPercent();
 	void SetManeuverabilityInPercent(float value);
 
+	float GetGene(Gene gene);
+	void SetGene(Gene gene, float value);
+
 	void SetbAlive(bool value);
 	void SetGenesArray(TArray<float> genes);
 	TArray<float> GetGenes();
@@ -89,11 +93,14 @@ private:
 	 * 9: accelerationSpeed
 	 * 10: decelerationSpeed
 	 * 11: maneuverabilityInPercent
+	 * 12: fireCadancy
 	 */
 	UPROPERTY(Replicated)
 	TArray<float> genesArray;
 
 	bool bAlive;
+
+	int numGenes = 13;
 
 	USceneComponent* root;
 

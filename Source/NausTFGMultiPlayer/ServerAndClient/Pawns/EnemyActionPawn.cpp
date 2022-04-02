@@ -153,6 +153,7 @@ void AEnemyActionPawn::EnemyOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		float impactDamage = GetChromosome()->GetImpactDamage();
 		UGameplayStatics::ApplyDamage(OtherActor, impactDamage, nullptr, this, damageType);
 
+		enemyChromosome->AddDamageCausedToTarget(impactDamage);
 	}
 		
 }

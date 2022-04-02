@@ -46,6 +46,9 @@ public:
 
 	void OnEnemyDead();
 
+	virtual void OnPossess(APawn* InPawn) override;
+	
+
 private:
 
 	APilotActionPawn* target;
@@ -53,6 +56,7 @@ private:
 	float health;
 
 	float fireTimeTest;
+	float cadencyFire;
 
 	EnemyState enemyState;
 	

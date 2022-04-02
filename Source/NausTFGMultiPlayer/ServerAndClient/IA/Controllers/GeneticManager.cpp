@@ -192,7 +192,7 @@ float AGeneticManager::CalculateAptitude(AChromosome* individual)
 {
 
 
-	return individual->GetTimeAlive() + individual->GetDamageCausedToTarget();
+	return individual->GetTimeAlive() + individual->GetDamageCausedToTarget() - individual->GetGene(Gene::fireCadancy);
 }
 
 TArray<AChromosome*> AGeneticManager::GetBestIndividues(TArray<AChromosome*> population, int32 numIndividues)
