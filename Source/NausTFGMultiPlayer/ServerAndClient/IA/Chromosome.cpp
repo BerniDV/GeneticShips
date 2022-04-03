@@ -20,9 +20,7 @@ AChromosome::AChromosome()
 	root = CreateDefaultSubobject<USceneComponent>(TEXT("root"));
 	RootComponent = root;
 
-	timeAlive = 0.f;
-	damageCausedToTarget = 0.f;
-	impactDamage = 0.f;
+	bAlive = true;
 }
 
 void AChromosome::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -43,17 +41,18 @@ void AChromosome::Destroyed()
 void AChromosome::SetRandomGenes()
 {
 
-	genesArray[(int8)Gene::size] = FMath::RandRange(1, 1); 
-	impactDamage = FMath::FRandRange(0.f, 25.f);
+	genesArray[(int8)Gene::size] = FMath::RandRange(1, 1);
+	genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(0.f, 25.f);
 
-	speedDropRate = FMath::FRandRange(0.f, 100.f);
-	defaultMaxAcceleration = FMath::FRandRange(0.f, 100.f);
-	maxAcceleration = FMath::FRandRange(0.f, 100.f);
-	defaultMaxSpeed = FMath::FRandRange(0.f, 100.f);
-	maxSpeed = FMath::FRandRange(0.f, 100.f);
-	accelerationSpeed = FMath::FRandRange(0.f, 50.f);
-	decelerationSpeed = FMath::FRandRange(0.f, 100.f);
-	maneuverabilityInPercent = FMath::FRandRange(0.f, 10.f);
+	genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, 100.f);
+	genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(0.f, 100.f);
+	genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(0.f, 100.f);
+	genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(0.f, 100.f);
+	genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(0.f, 100.f);
+	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(0.f, 50.f);
+	genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, 100.f);
+	genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, 10.f);
+	genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(5.f, 10.f);
 }
 
 void AChromosome::Mutation()
@@ -63,16 +62,18 @@ void AChromosome::Mutation()
 
 	//Igual dividir el maximo por un numero acordado menos la ronda
 	genesArray[(int8)Gene::size] = FMath::RandRange(1, 1 * round); //10
-	impactDamage = FMath::FRandRange(0.f, 5 * round); //100
+	genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(0.f, 5 * round); //100
 
-	speedDropRate = FMath::FRandRange(0.f, 500 * round); //300
-	defaultMaxAcceleration = FMath::FRandRange(0.f, 1000 * round); //400
-	maxAcceleration = FMath::FRandRange(0.f, 1000 * round); //400
-	defaultMaxSpeed = FMath::FRandRange(0.f, 200 * round); //1000
-	maxSpeed = FMath::FRandRange(0.f, 200 * round); //1000
-	accelerationSpeed = FMath::FRandRange(0.f, 20 * round); //50
-	decelerationSpeed = FMath::FRandRange(0.f, 20 * round); //100
-	maneuverabilityInPercent = FMath::FRandRange(0.f, (2 * round)%100); //100
+	genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, 500 * round); //300
+	genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(0.f, 1000 * round); //400
+	genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(0.f, 1000 * round); //400
+	genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(0.f, 200 * round); //1000
+	genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(0.f, 200 * round); //1000
+	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(0.f, 20 * round); //50
+	genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, 20 * round); //100
+	genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, (2 * round) % 100); //100
+	genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(0.1f, (1 * round + 1) % 20); //0.1
+	genesArray[(int8)Gene::fireCadancy] = 1.f / genesArray[12];
 }
 
 AChromosome* AChromosome::Clone()
@@ -80,164 +81,33 @@ AChromosome* AChromosome::Clone()
 
 	AChromosome* clonedChromosome = GetWorld()->SpawnActor<AChromosome>();
 
-	clonedChromosome->SetGene(Gene::size, genesArray[(int8)Gene::size]);
-	clonedChromosome->SetDamageCausedTopTarget(damageCausedToTarget);
-	clonedChromosome->SetTimeAlive(timeAlive);
-	clonedChromosome->SetImpactDamage(impactDamage);
-
-	clonedChromosome->SetSpeedDropRate(speedDropRate);
-	clonedChromosome->SetDefaultMaxAcceleration(defaultMaxAcceleration);
-	clonedChromosome->SetMaxAcceleration(maxAcceleration);
-	clonedChromosome->SetDefaultMaxSpeed(defaultMaxSpeed);
-	clonedChromosome->SetMaxSpeed(maxSpeed);
-	clonedChromosome->SetAccelerationSpeed(accelerationSpeed);
-	clonedChromosome->SetDecelerationSpeed(decelerationSpeed);
-	clonedChromosome->SetManeuverabilityInPercent(maneuverabilityInPercent);
+	clonedChromosome->SetGenesArray(genesArray);
 
 	return clonedChromosome;
 }
 
-void AChromosome::SetDamageCausedTopTarget(float amount)
+void AChromosome::SetGenesArray(TArray<float> genes)
 {
 
-	damageCausedToTarget = amount;
-}
+	genesArray.Empty();
 
-float AChromosome::GetDamageCausedToTarget()
-{
+	for (int i = 0; i < genes.Num(); i++)
+	{
 
-	return damageCausedToTarget;
-}
-
-void AChromosome::AddDamageCausedToTarget(float amount)
-{
-
-	damageCausedToTarget += amount;
-}
-
-float AChromosome::GetTimeAlive()
-{
-
-	return timeAlive;
-}
-
-void AChromosome::SetTimeAlive(float time)
-{
-
-	timeAlive = time;
-}
-
-float AChromosome::GetImpactDamage()
-{
-
-	return impactDamage;
-}
-
-void AChromosome::SetImpactDamage(float damage)
-{
-
-	impactDamage = damage;
-}
-
-float AChromosome::GetSpeedDropRate()
-{
-	return speedDropRate;
-}
-
-void AChromosome::SetSpeedDropRate(float value)
-{
-
-	speedDropRate = value;
-}
-
-float AChromosome::GetDefaultMaxAcceleration()
-{
-
-	return defaultMaxAcceleration;
-}
-
-void AChromosome::SetDefaultMaxAcceleration(float value)
-{
-
-	defaultMaxAcceleration = value;
-}
-
-float AChromosome::GetMaxAcceleration()
-{
-
-	return maxAcceleration;
-}
-
-void AChromosome::SetMaxAcceleration(float value)
-{
-
-	maxAcceleration = value;
-}
-
-float AChromosome::GetDefaultMaxSpeed()
-{
-
-	return defaultMaxSpeed;
-}
-
-void AChromosome::SetDefaultMaxSpeed(float value)
-{
-
-	defaultMaxSpeed = value;
-}
-
-float AChromosome::GetMaxSpeed()
-{
-
-	return maxSpeed;
-}
-
-void AChromosome::SetMaxSpeed(float value)
-{
-
-	maxSpeed = value;
-}
-
-float AChromosome::GetAccelerationSpeed()
-{
-
-	return accelerationSpeed;
-}
-
-void AChromosome::SetAccelerationSpeed(float value)
-{
-
-	accelerationSpeed = value;
-}
-
-float AChromosome::GetDecelerationSpeed()
-{
-
-	return decelerationSpeed;
-}
-
-void AChromosome::SetDecelerationSpeed(float value)
-{
-
-	decelerationSpeed = value;
-}
-
-float AChromosome::GetManeuverabilityInPercent()
-{
-
-	return maneuverabilityInPercent;
-}
-
-void AChromosome::SetManeuverabilityInPercent(float value)
-{
-
-	maneuverabilityInPercent = value;
+		genesArray.Add(genes[i]);
+	}
 }
 
 void AChromosome::SetGene(Gene typeGene, float value)
 {
 
 	genesArray[(int8)typeGene] = value;
+}
+
+float AChromosome::GetGene(Gene typeGene)
+{
+
+	return genesArray[(int8)typeGene];
 }
 
 void AChromosome::ApplyFenotipe()
@@ -266,7 +136,7 @@ void AChromosome::ApplyMovementGenes()
 	if (myOwner)
 	{
 
-		myOwner->InitMovementCompnent(speedDropRate, defaultMaxAcceleration, defaultMaxSpeed, maxAcceleration, maxSpeed, accelerationSpeed, decelerationSpeed, maneuverabilityInPercent);
+		myOwner->InitMovementCompnent(genesArray[(int8)Gene::speedDropRate], genesArray[(int8)Gene::defaultMaxAcceleration], genesArray[(int8)Gene::defaultMaxSpeed], genesArray[(int8)Gene::maxAcceleration], genesArray[(int8)Gene::maxSpeed], genesArray[(int8)Gene::accelerationSpeed], genesArray[(int8)Gene::decelerationSpeed], genesArray[(int8)Gene::maneuverabilityInPercent]);
 
 	}
 }
@@ -279,7 +149,11 @@ void AChromosome::BeginPlay()
 	if(HasAuthority())
 	{
 
-		genesArray.Add(0);
+		for (int i = 0; i < numGenes; i++)
+		{
+
+			genesArray.Push(0.f);
+		}
 	}
 	
 }
@@ -289,7 +163,8 @@ void AChromosome::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	timeAlive += DeltaTime;
+	if (bAlive && HasAuthority())
+		genesArray[(int8)Gene::timeAlive] += DeltaTime;
 
 }
 

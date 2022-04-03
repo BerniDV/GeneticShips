@@ -41,62 +41,13 @@ public:
 
 	AChromosome* Clone();
 
-	void SetDamageCausedTopTarget(float amount);
-
-	float GetDamageCausedToTarget();
-
-	void AddDamageCausedToTarget(float amount);
-
-	float GetTimeAlive();
-
-	void SetTimeAlive(float time);
-
-	float GetImpactDamage();
-	void SetImpactDamage(float damage);
-
-	float GetSpeedDropRate();
-	void SetSpeedDropRate(float value);
-	float GetDefaultMaxAcceleration();
-	void SetDefaultMaxAcceleration(float value);
-	float GetMaxAcceleration();
-	void SetMaxAcceleration(float value);
-	float GetDefaultMaxSpeed();
-	void SetDefaultMaxSpeed(float value);
-	float GetMaxSpeed();
-	void SetMaxSpeed(float value);
-	float GetAccelerationSpeed();
-	void SetAccelerationSpeed(float value);
-	float GetDecelerationSpeed();
-	void SetDecelerationSpeed(float value);
-	float GetManeuverabilityInPercent();
-	void SetManeuverabilityInPercent(float value);
 
 	void SetGene(Gene typeGene, float value);
+	float GetGene(Gene typeGene);
+
+	void SetGenesArray(TArray<float> genes);
 
 private:
-
-
-	float timeAlive;
-
-	float damageCausedToTarget;
-
-	float impactDamage;
-
-	float speedDropRate;
-
-	float defaultMaxAcceleration;
-
-	float maxAcceleration;
-
-	float defaultMaxSpeed;
-
-	float maxSpeed;
-
-	float accelerationSpeed;
-
-	float decelerationSpeed;
-
-	float maneuverabilityInPercent;
 
 
 	/*
@@ -116,6 +67,10 @@ private:
 	 */
 	
 	TArray<float> genesArray;
+
+	bool bAlive;
+
+	int numGenes = 13;
 
 	USceneComponent* root;
 

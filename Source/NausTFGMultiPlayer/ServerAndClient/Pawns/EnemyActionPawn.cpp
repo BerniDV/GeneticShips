@@ -150,7 +150,7 @@ void AEnemyActionPawn::EnemyOverlap(UPrimitiveComponent* OverlappedComponent, AA
 	if(Cast<APilotActionPawn>(OtherActor))
 	{
 
-		float impactDamage = GetChromosome()->GetImpactDamage();
+		float impactDamage = GetChromosome()->GetGene(Gene::impactDamage);
 		UGameplayStatics::ApplyDamage(OtherActor, impactDamage, nullptr, this, damageType);
 
 	}

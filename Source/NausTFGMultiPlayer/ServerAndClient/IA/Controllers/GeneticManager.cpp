@@ -138,7 +138,7 @@ float AGeneticManager::CalculateAptitude(AChromosome* individual)
 {
 
 
-	return individual->GetTimeAlive() + individual->GetDamageCausedToTarget();
+	return individual->GetGene(Gene::timeAlive) + individual->GetGene(Gene::damageCaused);
 }
 
 void AGeneticManager::SetPopulationSize(int population)
