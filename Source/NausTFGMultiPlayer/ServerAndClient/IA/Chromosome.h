@@ -79,24 +79,24 @@ private:
 
 	float damageCausedToTarget;
 
-	UPROPERTY(Replicated)
+
 	float impactDamage;
 
-	UPROPERTY(Replicated)
+
 	float speedDropRate;
-	UPROPERTY(Replicated)
+
 	float defaultMaxAcceleration;
-	UPROPERTY(Replicated)
+
 	float maxAcceleration;
-	UPROPERTY(Replicated)
+
 	float defaultMaxSpeed;
-	UPROPERTY(Replicated)
+
 	float maxSpeed;
-	UPROPERTY(Replicated)
+
 	float accelerationSpeed;
-	UPROPERTY(Replicated)
+
 	float decelerationSpeed;
-	UPROPERTY(Replicated)
+
 	float maneuverabilityInPercent;
 
 

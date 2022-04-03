@@ -30,17 +30,6 @@ void AChromosome::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 
 	DOREPLIFETIME(AChromosome, sizeGene);
 
-	DOREPLIFETIME(AChromosome, impactDamage);
-
-	DOREPLIFETIME(AChromosome, speedDropRate);
-	DOREPLIFETIME(AChromosome, defaultMaxAcceleration);
-	DOREPLIFETIME(AChromosome, maxAcceleration);
-	DOREPLIFETIME(AChromosome, defaultMaxSpeed);
-	DOREPLIFETIME(AChromosome, maxSpeed);
-	DOREPLIFETIME(AChromosome, accelerationSpeed);
-	DOREPLIFETIME(AChromosome, decelerationSpeed);
-	DOREPLIFETIME(AChromosome, maneuverabilityInPercent);
-
 }
 
 void AChromosome::Destroyed()
