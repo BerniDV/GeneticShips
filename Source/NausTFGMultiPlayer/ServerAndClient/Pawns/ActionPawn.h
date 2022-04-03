@@ -66,6 +66,8 @@ public:
 	UFUNCTION(CLient, Reliable)
 	virtual void PlayDeath();
 
+	UFUNCTION(NetMulticast, Reliable)
+	void SetSizeAllClients(FVector size);
 private:
 
 	float maxHealth;

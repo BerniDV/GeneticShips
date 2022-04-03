@@ -222,19 +222,6 @@ void AEnemyActionPawn::BeginPlay()
 		
 	//position = GetActorLocation();
 
-	//estos valores pueden variar para personalizar la nave, de momento tambien lo hace el cliente pero debera ser replicado y solo hacerlo el server
-	/*
-	float speedDropRate = 300.f;
-	float defaultMaxAcceleration = 400;
-	float maxAcceleration = 400;
-	float defaultMaxSpeed = 1000;
-	float maxSpeed = 1000;
-	float accelerationSpeed = 50.f;
-	float decelerationSpeed = 100.f;
-	float maneuverabilityInPercent = 100.f;
-	*/
-	//InitMovementCompnent(speedDropRate, defaultMaxAcceleration, defaultMaxSpeed, maxAcceleration, maxSpeed, accelerationSpeed, decelerationSpeed, maneuverabilityInPercent);
-
 	if(HasAuthority())
 	{
 

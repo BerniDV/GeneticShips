@@ -27,7 +27,7 @@ void AChromosome::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(AChromosome, genesArray);
+	
 
 }
 
@@ -282,10 +282,18 @@ void AChromosome::SetGenesArray(TArray<float> genes)
 void AChromosome::ApplyFenotipe()
 {
 
-	AActor* myOwner = GetOwner();
+	ApplyFenotipeSize(FVector(genesArray[(int8)Gene::size]));
+}
 
-	if(myOwner)
-		myOwner->SetActorScale3D(FVector(genesArray[0]));
+void AChromosome::ApplyFenotipeSize(FVector size)
+{
+
+	if (AActionPawn* myPawn = Cast<AActionPawn>(GetOwner()))
+	{
+
+		myPawn->SetActorScale3D(size);
+		myPawn->SetSizeAllClients(size);
+	}
 }
 
 void AChromosome::ApplyMovementGenes()

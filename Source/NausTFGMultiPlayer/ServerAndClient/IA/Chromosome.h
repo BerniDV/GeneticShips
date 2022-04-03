@@ -33,6 +33,8 @@ public:
 
 	void ApplyFenotipe();
 
+	void ApplyFenotipeSize(FVector size);
+
 	void ApplyMovementGenes();
 
 	void SetRandomGenes();
@@ -95,7 +97,7 @@ private:
 	 * 11: maneuverabilityInPercent
 	 * 12: fireCadancy
 	 */
-	UPROPERTY(Replicated)
+	
 	TArray<float> genesArray;
 
 	bool bAlive;

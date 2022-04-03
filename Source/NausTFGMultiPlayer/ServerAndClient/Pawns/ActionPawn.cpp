@@ -157,6 +157,12 @@ bool AActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewT
 	return Super::IsNetRelevantFor(RealViewer, this, SrcLocation);
 }
 
+void AActionPawn::SetSizeAllClients_Implementation(FVector size)
+{
+
+	SetActorScale3D(size);
+}
+
 void AActionPawn::PlayDeath_Implementation()
 {
 
