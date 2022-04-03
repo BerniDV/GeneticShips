@@ -38,6 +38,10 @@ public:
 
 	void SetPopulationSize(int populationSize);
 
+	int GetIndexChromosomeRulete(TArray<float> population, float rulete);
+
+	float CalculateRelativeAptitudes(TArray<float>& aptitudes, TArray<AChromosome*> population);
+
 private:
 
 	int populationSize;
