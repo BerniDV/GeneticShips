@@ -203,6 +203,19 @@ void AActionGameMode::ProcesBetweenRounds(TArray<AChromosome*> actualGenerationr
 
 }
 
+void AActionGameMode::SetRound(int round)
+{
+	AActionGameState* gameState = Cast<AActionGameState>(GameState);
+
+	gameState->SetRound(round);
+}
+
+void AActionGameMode::SetPopulationSize(int populationSize)
+{
+
+	geneticManager->SetPopulationSize(populationSize);
+}
+
 void AActionGameMode::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);

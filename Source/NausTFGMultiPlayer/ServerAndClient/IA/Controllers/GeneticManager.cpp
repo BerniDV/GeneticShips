@@ -19,6 +19,8 @@ AGeneticManager::AGeneticManager()
 
 	bAlwaysRelevant = true;
 
+	populationSize = 0;
+
 }
 
 // Called when the game starts or when spawned
@@ -73,7 +75,8 @@ TArray<AChromosome*> AGeneticManager::GenerateFirstGenerationDna()
 {
 	TArray<AChromosome*> DNAResult;
 
-	int populationSize = 50;
+	if (populationSize == 0)
+		populationSize = 50;
 
 	//En caso de primera iteracion o de eliminados todos por el jugador (de momento)
 	//Crea nueva generacion
@@ -136,6 +139,12 @@ float AGeneticManager::CalculateAptitude(AChromosome* individual)
 
 
 	return individual->GetTimeAlive() + individual->GetDamageCausedToTarget();
+}
+
+void AGeneticManager::SetPopulationSize(int population)
+{
+
+	populationSize = population;
 }
 
 TArray<AChromosome*> AGeneticManager::GetBestIndividues(TArray<AChromosome*> population, int32 numIndividues)

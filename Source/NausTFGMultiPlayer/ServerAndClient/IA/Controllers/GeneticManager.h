@@ -36,7 +36,11 @@ public:
 	
 	TArray<AChromosome*> GetBestIndividues(TArray<AChromosome*> population, int32 numIndividues);
 
+	void SetPopulationSize(int populationSize);
+
 private:
+
+	int populationSize;
 
 
 };
