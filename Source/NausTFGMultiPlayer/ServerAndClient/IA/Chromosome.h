@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "Chromosome.generated.h"
 
 UCLASS()
@@ -27,10 +28,10 @@ public:
 
 	virtual void Destroyed() override;
 
-	FVector GetSizeGene();
-	void SetSizeGene(FVector SizeGene);
-
 	void ApplyFenotipe();
+
+	
+	void ApplyFenotipeSize(FVector size);
 
 	void ApplyMovementGenes();
 
@@ -70,18 +71,16 @@ public:
 	float GetManeuverabilityInPercent();
 	void SetManeuverabilityInPercent(float value);
 
+	void SetGene(Gene typeGene, float value);
+
 private:
 
-	UPROPERTY(Replicated)
-	FVector sizeGene;
 
 	float timeAlive;
 
 	float damageCausedToTarget;
 
-
 	float impactDamage;
-
 
 	float speedDropRate;
 
@@ -99,6 +98,24 @@ private:
 
 	float maneuverabilityInPercent;
 
+
+	/*
+	 * 0: size
+	 * 1: timeAlive
+	 * 2: damageCaused
+	 * 3: impactDamage
+	 * 4: speedDropRate
+	 * 5: defaultMaxAcceleration
+	 * 6: maxAcceleration
+	 * 7: defaultMaxSpeed
+	 * 8: maxSpeed
+	 * 9: accelerationSpeed
+	 * 10: decelerationSpeed
+	 * 11: maneuverabilityInPercent
+	 * 12: fireCadancy
+	 */
+	
+	TArray<float> genesArray;
 
 	USceneComponent* root;
 

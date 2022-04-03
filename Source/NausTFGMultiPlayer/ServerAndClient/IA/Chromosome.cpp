@@ -4,6 +4,7 @@
 #include "Chromosome.h"
 
 #include "ParameterCollection.h"
+#include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "NausTFGMultiPlayer/ServerAndClient/GameStates/ActionGameState.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/EnemyActionPawn.h"
 #include "Net/UnrealNetwork.h"
@@ -28,8 +29,7 @@ void AChromosome::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(AChromosome, sizeGene);
-
+	
 }
 
 void AChromosome::Destroyed()
@@ -39,22 +39,11 @@ void AChromosome::Destroyed()
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Chromosome Destroyed"));
 }
 
-FVector AChromosome::GetSizeGene()
-{
-
-	return sizeGene;
-}
-
-void AChromosome::SetSizeGene(FVector SizeGene)
-{
-
-	sizeGene = SizeGene;
-	
-}
 
 void AChromosome::SetRandomGenes()
 {
-	sizeGene = FVector(FMath::RandRange(1, 1));
+
+	genesArray[(int8)Gene::size] = FMath::RandRange(1, 1); 
 	impactDamage = FMath::FRandRange(0.f, 25.f);
 
 	speedDropRate = FMath::FRandRange(0.f, 100.f);
@@ -73,7 +62,7 @@ void AChromosome::Mutation()
 	int round = Cast<AActionGameState>(GetWorld()->GetGameState())->GetRound();
 
 	//Igual dividir el maximo por un numero acordado menos la ronda
-	sizeGene = FVector(FMath::RandRange(1, 1 * round)); //10
+	genesArray[(int8)Gene::size] = FMath::RandRange(1, 1 * round); //10
 	impactDamage = FMath::FRandRange(0.f, 5 * round); //100
 
 	speedDropRate = FMath::FRandRange(0.f, 500 * round); //300
@@ -91,7 +80,7 @@ AChromosome* AChromosome::Clone()
 
 	AChromosome* clonedChromosome = GetWorld()->SpawnActor<AChromosome>();
 
-	clonedChromosome->SetSizeGene(sizeGene);
+	clonedChromosome->SetGene(Gene::size, genesArray[(int8)Gene::size]);
 	clonedChromosome->SetDamageCausedTopTarget(damageCausedToTarget);
 	clonedChromosome->SetTimeAlive(timeAlive);
 	clonedChromosome->SetImpactDamage(impactDamage);
@@ -245,13 +234,28 @@ void AChromosome::SetManeuverabilityInPercent(float value)
 	maneuverabilityInPercent = value;
 }
 
+void AChromosome::SetGene(Gene typeGene, float value)
+{
+
+	genesArray[(int8)typeGene] = value;
+}
+
 void AChromosome::ApplyFenotipe()
 {
 
-	AActor* myOwner = GetOwner();
+	//Aqui poner una llamada rcp que obligue al cliente a poner el tamaño del servidor y lo que sea
+	ApplyFenotipeSize(FVector(genesArray[(int8)Gene::size]));
+}
 
-	if(myOwner)
-		myOwner->SetActorScale3D(sizeGene);
+void AChromosome::ApplyFenotipeSize(FVector size)
+{
+
+	if(AActionPawn* myPawn = Cast<AActionPawn>(GetOwner()))
+	{
+
+		myPawn->SetActorScale3D(size);
+		myPawn->SetSizeAllClients(size);
+	}
 }
 
 void AChromosome::ApplyMovementGenes()
@@ -272,7 +276,12 @@ void AChromosome::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if(HasAuthority())
+	{
 
+		genesArray.Add(0);
+	}
+	
 }
 
 // Called every frame
