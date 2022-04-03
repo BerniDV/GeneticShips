@@ -61,7 +61,6 @@ void AEnemyActionPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 
 	DOREPLIFETIME(AEnemyActionPawn, translationComponent);
 	DOREPLIFETIME(AEnemyActionPawn, rotationComponent);
-	DOREPLIFETIME(AEnemyActionPawn, enemyChromosome);
 	DOREPLIFETIME(AEnemyActionPawn, id);
 	//DOREPLIFETIME(AEnemyActionPawn, position);
 }
@@ -152,6 +151,8 @@ void AEnemyActionPawn::EnemyOverlap(UPrimitiveComponent* OverlappedComponent, AA
 
 		float impactDamage = GetChromosome()->GetGene(Gene::impactDamage);
 		UGameplayStatics::ApplyDamage(OtherActor, impactDamage, nullptr, this, damageType);
+
+		enemyChromosome->AddToGene(Gene::damageCaused, impactDamage);
 
 	}
 		

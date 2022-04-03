@@ -90,7 +90,6 @@ private:
 	UPROPERTY(Replicated)
 	int32 id;
 
-	UPROPERTY(Replicated)
 	AChromosome* enemyChromosome;
 
 	UPROPERTY(VisibleAnywhere)

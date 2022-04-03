@@ -44,6 +44,7 @@ public:
 
 	void SetGene(Gene typeGene, float value);
 	float GetGene(Gene typeGene);
+	void AddToGene(Gene typeGene, float amount);
 
 	void SetGenesArray(TArray<float> genes);
 

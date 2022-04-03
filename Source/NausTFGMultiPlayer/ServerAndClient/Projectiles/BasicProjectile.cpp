@@ -8,9 +8,11 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/EnemyActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Singletons/CustomGameInstance.h"
+#include "NausTFGMultiPlayer/ServerAndClient/IA/Chromosome.h"
 
 // Sets default values
 ABasicProjectile::ABasicProjectile()
@@ -29,12 +31,12 @@ ABasicProjectile::ABasicProjectile()
 
 	projectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	projectileMovementComponent->SetUpdatedComponent(projectileSphereComponent);
-	projectileMovementComponent->InitialSpeed = 3000.0f;
-	projectileMovementComponent->MaxSpeed = 3000.0f;
+	projectileMovementComponent->InitialSpeed = 30000.0f;
+	projectileMovementComponent->MaxSpeed = 30000.0f;
 	projectileMovementComponent->bRotationFollowsVelocity = true;
 	projectileMovementComponent->ProjectileGravityScale = 0.0f;
 
-	damage = 10.f;
+	damage = 0.f;
 	damageType = UDamageType::StaticClass();
 	
 }
@@ -45,7 +47,7 @@ void ABasicProjectile::BeginPlay()
 	Super::BeginPlay();
 
 	//Aplicamos tiempo maximo de vida de 10 segundos
-	SetLifeSpan(10.f);
+	SetLifeSpan(2.f);
 
 	if (HasAuthority())
 	{
@@ -103,6 +105,12 @@ void ABasicProjectile::OnProjectileImpact(UPrimitiveComponent* OverlappedCompone
 		SpawnParticles();
 		UGameplayStatics::ApplyDamage(OtherActor, damage, GetOwner()->GetInstigatorController(), this, damageType);
 		
+	}
+
+	if (Cast<APilotActionPawn>(OtherActor) && GetOwner())
+	{
+		AEnemyActionPawn* owner = Cast<AEnemyActionPawn>(GetOwner());
+		owner->GetChromosome()->AddToGene(Gene::damageCaused, damage);
 	}
 
 	Destroy();

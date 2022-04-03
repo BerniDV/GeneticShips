@@ -14,7 +14,7 @@ AChromosome::AChromosome()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	bReplicates = true;
+	bReplicates = false;
 	bNetUseOwnerRelevancy = true;
 
 	root = CreateDefaultSubobject<USceneComponent>(TEXT("root"));
@@ -108,6 +108,12 @@ float AChromosome::GetGene(Gene typeGene)
 {
 
 	return genesArray[(int8)typeGene];
+}
+
+void AChromosome::AddToGene(Gene typeGene, float amount)
+{
+
+	genesArray[(int8)typeGene] += amount;
 }
 
 void AChromosome::ApplyFenotipe()

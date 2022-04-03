@@ -9,6 +9,7 @@
 #include "NausTFGMultiPlayer/Server/GameModes/ActionGameMode.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/EnemyActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
+#include "NausTFGMultiPlayer/ServerAndClient/IA/Chromosome.h"
 
 
 AAIBaseController::AAIBaseController()
@@ -17,6 +18,8 @@ AAIBaseController::AAIBaseController()
 	PrimaryActorTick.bCanEverTick = true;
 	health = 100.f;
 	fireTimeTest = 0.f;
+	cadencyFire = 10.f;
+	bCanShoot = true;
 }
 
 void AAIBaseController::BindSignals()
@@ -80,7 +83,7 @@ void AAIBaseController::Tick(float DeltaSeconds)
 
 	fireTimeTest += DeltaSeconds;
 
-	if(fireTimeTest > 5.f && HasAuthority() && enemyState != EnemyState::Dead)
+	if(fireTimeTest > cadencyFire && HasAuthority() && enemyState != EnemyState::Dead && bCanShoot)
 	{
 		//Si el enemigo esta muerto no deberia poder disparar
 		fireTimeTest = 0.f;
@@ -138,4 +141,20 @@ void AAIBaseController::OnEnemyDead()
 {
 
 	enemyState = EnemyState::Dead;
+}
+
+void AAIBaseController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+	//Coger valor genetico de disparo
+	AEnemyActionPawn* myPawn = Cast<AEnemyActionPawn>(InPawn);
+
+	cadencyFire = myPawn->GetChromosome()->GetGene(Gene::fireCadancy);
+}
+
+void AAIBaseController::SetEnemyCanShoot(bool canShoot)
+{
+
+	bCanShoot = canShoot;
 }
