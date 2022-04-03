@@ -18,7 +18,7 @@
 ABasicProjectile::ABasicProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 
 	projectileSphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("sphereComponent"));
@@ -74,6 +74,26 @@ void ABasicProjectile::Destroyed()
 void ABasicProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if(HasAuthority())
+	{
+
+		FVector start = GetActorLocation();
+		FVector end = start + (GetVelocity() * DeltaTime);
+
+		FCollisionQueryParams collisionParams;
+		collisionParams.AddIgnoredActor(this);
+
+		FHitResult outHit;
+
+		bool isHit = GetWorld()->LineTraceSingleByChannel(outHit, start, end, ECC_Visibility, collisionParams);
+
+		if(isHit)
+		{
+
+			OnProjectileImpact(nullptr, outHit.Actor.Get(), nullptr, 0, false, outHit);
+		}
+	}
 
 }
 
