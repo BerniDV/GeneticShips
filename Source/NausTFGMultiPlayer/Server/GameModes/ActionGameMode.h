@@ -59,6 +59,7 @@ public:
 	void SetRound(int round);
 
 	void SetPopulationSize(int populationSize);
+
 	
 
 protected:
