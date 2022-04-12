@@ -47,7 +47,7 @@ void ABasicProjectile::BeginPlay()
 	Super::BeginPlay();
 
 	//Aplicamos tiempo maximo de vida de 10 segundos
-	SetLifeSpan(2.f);
+	SetLifeSpan(5.f);
 
 	if (HasAuthority())
 	{

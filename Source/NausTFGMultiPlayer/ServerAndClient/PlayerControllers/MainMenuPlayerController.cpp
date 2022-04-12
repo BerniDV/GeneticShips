@@ -73,7 +73,7 @@ void AMainMenuPlayerController::SpawnMainMenuCamera()
 {
 
 	FVector spawnLocation(-440.0f, -340.0f, 230.0f);
-	FRotator spawnRotation(7.0f, 4.f, 0.f);
+	FRotator spawnRotation(7.0f, 94.f, 0.f);
 
 	AMainMenuCameraActor* camera = GetWorld()->SpawnActor<AMainMenuCameraActor>(spawnLocation, spawnRotation);
 

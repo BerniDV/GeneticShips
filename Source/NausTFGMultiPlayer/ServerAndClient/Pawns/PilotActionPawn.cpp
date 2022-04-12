@@ -54,15 +54,15 @@ void APilotActionPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//estos valores pueden variar para personalizar la nave
-	speedDropRate = 300.f;
-	defaultMaxAcceleration = 400;
-	maxAcceleration = 400;
-	defaultMaxSpeed = 1000;
-	maxSpeed = 1000;
-	accelerationSpeed = 50.f;
-	decelerationSpeed = 100.f;
-	maneuverabilityInPercent = 100.f;
+	//estos valores pueden variar para personalizar la nave x10
+	speedDropRate = 3000.f/2;
+	defaultMaxAcceleration = 4000/2;
+	maxAcceleration = 4000/2;
+	defaultMaxSpeed = 10000/2;
+	maxSpeed = 10000/2;
+	accelerationSpeed = 500.f/2;
+	decelerationSpeed = 1000.f/2;
+	maneuverabilityInPercent = 1000.f/2;
 
 	translationComponent->Inicialite(speedDropRate, defaultMaxAcceleration, defaultMaxSpeed, maxAcceleration, maxSpeed, accelerationSpeed, decelerationSpeed, maneuverabilityInPercent);
 

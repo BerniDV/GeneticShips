@@ -58,36 +58,48 @@ void AAIBaseController::Tick(float DeltaSeconds)
 
 	AEnemyActionPawn* myPawn = Cast<AEnemyActionPawn>(GetPawn());
 
-	
+	if (HasAuthority()) {
 
-	if(myPawn && target && HasAuthority())
-	{
-		
+		//Si esta muy lejos no puede disparar
+		if ((myPawn->GetActorLocation() - target->GetActorLocation()).Size() < 50000)
+		{
+
+
+			bCanShoot = true;
+
+		}
+		else
+		{
+
+			bCanShoot = false;
+		}
+
+
 		FVector myLocation = myPawn->GetActorLocation();
-		
+
 		FVector targetLocation = target->GetPredictedPosition();
 		FVector targetEnemyVector = targetLocation - myLocation;
-
-		//FVector nextLocation = FMath::VInterpConstantTo(myLocation, targetLocation, DeltaSeconds, 500.f);
-	
-		//myPawn->SetPosition(nextLocation);
 
 		targetEnemyVector.Normalize();
 
 		myPawn->ExecuteRotation(targetEnemyVector.Rotation());
 
 		myPawn->MoverForward(1);
-		//myPawn->MoverRight(targetEnemyVector.Y);
 		
-	}
 
-	fireTimeTest += DeltaSeconds;
+		
+		fireTimeTest += DeltaSeconds;
 
-	if(fireTimeTest > cadencyFire && HasAuthority() && enemyState != EnemyState::Dead && bCanShoot)
+		if (fireTimeTest > cadencyFire && enemyState != EnemyState::Dead && bCanShoot && false)
+		{
+			//Si el enemigo esta muerto no deberia poder disparar
+			fireTimeTest = 0.f;
+			myPawn->Server_Fire(myPawn->GetActorLocation(), target->GetActorLocation());
+
+
+		}
+	}else
 	{
-		//Si el enemigo esta muerto no deberia poder disparar
-		fireTimeTest = 0.f;
-		myPawn->Server_Fire(myPawn->GetActorLocation(), target->GetActorLocation());
 
 		
 	}

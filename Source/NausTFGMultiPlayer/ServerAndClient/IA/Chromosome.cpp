@@ -44,15 +44,15 @@ void AChromosome::SetRandomGenes()
 	genesArray[(int8)Gene::size] = FMath::RandRange(1, 1);
 	genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(0.f, 25.f);
 
-	genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, 100.f);
-	genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(0.f, 100.f);
-	genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(0.f, 100.f);
-	genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(0.f, 100.f);
-	genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(0.f, 100.f);
-	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(0.f, 50.f);
-	genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, 100.f);
-	genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, 10.f);
-	genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(5.f, 10.f);
+	genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, 1000.f);
+	genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(0.f, 1000.f);
+	genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(0.f, 1000.f);
+	genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(0.f, 1000.f);
+	genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(0.f, 1000.f);
+	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(0.f, 500.f);
+	genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, 1000.f);
+	genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, 100.f);
+	genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(5.f, 100.f);
 }
 
 void AChromosome::Mutation()
@@ -64,13 +64,13 @@ void AChromosome::Mutation()
 	genesArray[(int8)Gene::size] = FMath::RandRange(1, 1 * round); //10
 	genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(0.f, 5 * round); //100
 
-	genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, 500 * round); //300
-	genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(0.f, 1000 * round); //400
-	genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(0.f, 1000 * round); //400
-	genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(0.f, 200 * round); //1000
-	genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(0.f, 200 * round); //1000
-	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(0.f, 20 * round); //50
-	genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, 20 * round); //100
+	genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, 5000 * round); //300
+	genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(0.f, 10000 * round); //400
+	genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(0.f, 10000 * round); //400
+	genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(0.f, 2000 * round); //1000
+	genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(0.f, 2000 * round); //1000
+	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(0.f, 200 * round); //50
+	genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, 200 * round); //100
 	genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, (2 * round) % 100); //100
 	genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(0.1f, (1 * round + 1) % 20); //0.1
 	genesArray[(int8)Gene::fireCadancy] = 1.f / genesArray[12];

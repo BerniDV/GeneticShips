@@ -15,7 +15,7 @@ URotationComponent::URotationComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	rotation = FRotator::ZeroRotator;
-
+	
 }
 
 
@@ -31,7 +31,7 @@ void URotationComponent::BeginPlay()
 void URotationComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
+	/*
 	if(GetOwnerRole() == ROLE_SimulatedProxy)
 	{
 
@@ -42,14 +42,14 @@ void URotationComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 		GetOwner()->SetActorRotation(currentRotation);
 
 	}
-	
+	*/
 }
 
 void URotationComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME_CONDITION(URotationComponent, rotation, COND_SkipOwner);
+	//DOREPLIFETIME_CONDITION(URotationComponent, rotation, COND_SkipOwner);
 }
 
 FRotator URotationComponent::GetRotation()
@@ -63,10 +63,10 @@ void URotationComponent::ExecuteRotation(FRotator rotator)
 
 	AActionPawn* myPawn = Cast<AActionPawn>(GetOwner());
 
-	rotation = rotator;
+	//rotation = rotator;
 	myPawn->SetActorRotation(rotator);
 
-	Server_ExecuteRotation(rotator);
+	//Server_ExecuteRotation(rotator);
 
 }
 

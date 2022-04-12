@@ -37,7 +37,7 @@ public:
 
 private:
 
-	UPROPERTY(Replicated)
+	//UPROPERTY(Replicated)
 	FRotator rotation;
 
 };

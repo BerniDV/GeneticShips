@@ -21,7 +21,7 @@ AEnemyActionPawn::AEnemyActionPawn()
 	bReplicates = true;
 
 	SetReplicateMovement(false);
-
+	
 	boxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("boxComponent"));
 	RootComponent = boxComponent;
 
@@ -32,7 +32,7 @@ AEnemyActionPawn::AEnemyActionPawn()
 	translationComponent->SetIsReplicated(true);
 
 	rotationComponent = CreateDefaultSubobject<URotationComponent>(TEXT("rotationComponent"));
-	rotationComponent->SetIsReplicated(true);
+	rotationComponent->SetIsReplicated(false);
 
 	enemyChromosome = nullptr;
 
@@ -40,6 +40,11 @@ AEnemyActionPawn::AEnemyActionPawn()
 
 	ConstructorHelpers::FClassFinder <ABasicProjectile> refBasicProjectileBP(TEXT("/Game/ServerAndClient/Projectiles/BasicProjectile_BP"));
 	projectile = refBasicProjectileBP.Class;
+
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+	
 }
 
 void AEnemyActionPawn::SetID(int32 newEnemyID)
@@ -173,7 +178,12 @@ void AEnemyActionPawn::MoverRight(float movement)
 void AEnemyActionPawn::ExecuteRotation(FRotator rotator)
 {
 
-	rotationComponent->ExecuteRotation(rotator);
+	//rotationComponent->ExecuteRotation(rotator);
+	if(HasAuthority())
+	{
+
+		SetActorRotation(rotator);
+	}
 }
 
 FVector AEnemyActionPawn::GetPredictedPosition()
@@ -220,7 +230,7 @@ void AEnemyActionPawn::BeginPlay()
 	Super::BeginPlay();
 		
 	//position = GetActorLocation();
-
+	
 	if(HasAuthority())
 	{
 
