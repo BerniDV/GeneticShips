@@ -23,6 +23,7 @@ AEnemyActionPawn::AEnemyActionPawn()
 	SetReplicateMovement(false);
 	
 	boxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("boxComponent"));
+	
 	RootComponent = boxComponent;
 
 	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("staticMesh"));
@@ -198,7 +199,7 @@ float AEnemyActionPawn::GetInterpolationSpeed()
 	return translationComponent->GetInterpolationSpeed();
 }
 
-void AEnemyActionPawn::OnEnemyDead() 
+void AEnemyActionPawn::OnEnemyDead()
 {
 
 	signalOnEnemyDead.Broadcast();
@@ -234,6 +235,7 @@ void AEnemyActionPawn::BeginPlay()
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
+
 	
 	if(HasAuthority())
 	{
