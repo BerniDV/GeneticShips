@@ -198,7 +198,7 @@ float AEnemyActionPawn::GetInterpolationSpeed()
 	return translationComponent->GetInterpolationSpeed();
 }
 
-void AEnemyActionPawn::OnEnemyDead()
+void AEnemyActionPawn::OnEnemyDead() 
 {
 
 	signalOnEnemyDead.Broadcast();

@@ -41,6 +41,7 @@ void AChromosome::Destroyed()
 void AChromosome::SetRandomGenes()
 {
 
+
 	genesArray[(int8)Gene::size] = FMath::RandRange(1, 10);
 	genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(0.f, 25.f);
 
