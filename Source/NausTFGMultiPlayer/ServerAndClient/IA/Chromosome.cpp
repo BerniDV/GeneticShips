@@ -41,7 +41,7 @@ void AChromosome::Destroyed()
 void AChromosome::SetRandomGenes()
 {
 
-	genesArray[(int8)Gene::size] = FMath::RandRange(1, 1);
+	genesArray[(int8)Gene::size] = FMath::RandRange(1, 10);
 	genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(0.f, 25.f);
 
 	genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, 1000.f);
@@ -52,7 +52,7 @@ void AChromosome::SetRandomGenes()
 	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(0.f, 500.f);
 	genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, 1000.f);
 	genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, 100.f);
-	genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(5.f, 100.f);
+	genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(5.f, 10.f);
 }
 
 void AChromosome::Mutation()
@@ -61,7 +61,7 @@ void AChromosome::Mutation()
 	int round = Cast<AActionGameState>(GetWorld()->GetGameState())->GetRound();
 
 	//Igual dividir el maximo por un numero acordado menos la ronda
-	genesArray[(int8)Gene::size] = FMath::RandRange(1, 1 * round); //10
+	genesArray[(int8)Gene::size] = FMath::RandRange(10, 1 * round); //10
 	genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(0.f, 5 * round); //100
 
 	genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, 5000 * round); //300

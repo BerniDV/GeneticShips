@@ -65,7 +65,7 @@ void AEnemyActionPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AEnemyActionPawn, translationComponent);
-	DOREPLIFETIME(AEnemyActionPawn, rotationComponent);
+	//DOREPLIFETIME(AEnemyActionPawn, rotationComponent);
 	DOREPLIFETIME(AEnemyActionPawn, id);
 	//DOREPLIFETIME(AEnemyActionPawn, position);
 }
@@ -230,6 +230,10 @@ void AEnemyActionPawn::BeginPlay()
 	Super::BeginPlay();
 		
 	//position = GetActorLocation();
+
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
 	
 	if(HasAuthority())
 	{

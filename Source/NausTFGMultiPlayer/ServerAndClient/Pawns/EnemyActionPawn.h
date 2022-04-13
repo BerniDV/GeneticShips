@@ -104,7 +104,7 @@ private:
 	UPROPERTY(Replicated)
 	UTranslationComponent* translationComponent;
 
-	UPROPERTY(Replicated)
+	//UPROPERTY(Replicated)
 	URotationComponent* rotationComponent;
 
 };

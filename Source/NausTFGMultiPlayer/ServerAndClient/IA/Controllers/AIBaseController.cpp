@@ -20,6 +20,7 @@ AAIBaseController::AAIBaseController()
 	fireTimeTest = 0.f;
 	cadencyFire = 10.f;
 	bCanShoot = true;
+
 }
 
 void AAIBaseController::BindSignals()
@@ -90,7 +91,7 @@ void AAIBaseController::Tick(float DeltaSeconds)
 		
 		fireTimeTest += DeltaSeconds;
 
-		if (fireTimeTest > cadencyFire && enemyState != EnemyState::Dead && bCanShoot && false)
+		if (fireTimeTest > cadencyFire && enemyState != EnemyState::Dead && bCanShoot)
 		{
 			//Si el enemigo esta muerto no deberia poder disparar
 			fireTimeTest = 0.f;
@@ -98,12 +99,8 @@ void AAIBaseController::Tick(float DeltaSeconds)
 
 
 		}
-	}else
-	{
-
-		
 	}
-	
+
 }
 
 void AAIBaseController::Destroyed()
