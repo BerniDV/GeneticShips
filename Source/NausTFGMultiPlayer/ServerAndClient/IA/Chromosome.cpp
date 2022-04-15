@@ -120,7 +120,7 @@ void AChromosome::AddToGene(Gene typeGene, float amount)
 void AChromosome::ApplyFenotipe()
 {
 
-	//Aqui poner una llamada rcp que obligue al cliente a poner el tamaño del servidor y lo que sea
+	
 	ApplyFenotipeSize(FVector(genesArray[(int8)Gene::size]));
 }
 
@@ -130,8 +130,10 @@ void AChromosome::ApplyFenotipeSize(FVector size)
 	if(AActionPawn* myPawn = Cast<AActionPawn>(GetOwner()))
 	{
 
-		myPawn->SetActorScale3D(size);
-		myPawn->SetSizeAllClients(size);
+		FVector normalSize = FVector(52.f, 3.f, 7.f);
+
+		myPawn->SetActorScale3D(size * normalSize);
+		myPawn->SetSizeAllClients(size * normalSize);
 	}
 }
 

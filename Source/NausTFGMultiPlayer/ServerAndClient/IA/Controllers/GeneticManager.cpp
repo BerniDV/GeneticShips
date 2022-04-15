@@ -110,7 +110,7 @@ TArray<AChromosome*> AGeneticManager::GenerateFirstGenerationDna()
 	TArray<AChromosome*> DNAResult;
 
 	if (populationSize == 0)
-		populationSize = 100;
+		populationSize = 200;
 
 	//En caso de primera iteracion o de eliminados todos por el jugador (de momento)
 	//Crea nueva generacion

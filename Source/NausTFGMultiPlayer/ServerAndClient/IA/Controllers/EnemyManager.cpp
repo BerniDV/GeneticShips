@@ -36,7 +36,7 @@ std::future<TArray<AChromosome*>> AEnemyManager::SpawnGeneration(TArray<AChromos
 	for(int i = 0; i < generationDNA.Num(); i++)
 	{
 
-		FVector spawnLocation(FMath::RandRange(-150000.f, 150000.f), FMath::RandRange(-150000.f, 150000.f), FMath::RandRange(-150000.f, 150000.f));
+		FVector spawnLocation(FMath::RandRange(-1500000.f/3, 1500000.f/3), FMath::RandRange(-1500000.f/3, 1500000.f/3), FMath::RandRange(-1500000.f/3, 1500000.f/3));
 
 		AActor* spawnedActor = nullptr;
 		spawnedActor = GetWorld()->SpawnActor<AActionPawn>(enemyClass, spawnLocation, FRotator::ZeroRotator);

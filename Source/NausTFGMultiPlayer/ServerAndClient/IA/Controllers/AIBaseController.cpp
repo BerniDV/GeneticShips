@@ -48,6 +48,7 @@ void AAIBaseController::BeginPlay()
 		{
 
 			target = Cast<APilotActionPawn>(x);
+
 			break;
 		}
 	}
@@ -59,10 +60,11 @@ void AAIBaseController::Tick(float DeltaSeconds)
 
 	AEnemyActionPawn* myPawn = Cast<AEnemyActionPawn>(GetPawn());
 
-	if (HasAuthority()) {
+
+	if (myPawn) {
 
 		//Si esta muy lejos no puede disparar
-		if ((myPawn->GetActorLocation() - target->GetActorLocation()).Size() < 50000)
+		if ((myPawn->GetActorLocation() - target->GetActorLocation()).Size() < 50000 && HasAuthority())
 		{
 
 
@@ -76,22 +78,29 @@ void AAIBaseController::Tick(float DeltaSeconds)
 		}
 
 
-		FVector myLocation = myPawn->GetActorLocation();
+		if(HasAuthority())
+		{
 
-		FVector targetLocation = target->GetPredictedPosition();
-		FVector targetEnemyVector = targetLocation - myLocation;
+			FVector myLocation = myPawn->GetActorLocation();
 
-		targetEnemyVector.Normalize();
+			FVector targetLocation = target->GetPredictedPosition();
+			FVector targetEnemyVector = targetLocation - myLocation;
 
-		myPawn->ExecuteRotation(targetEnemyVector.Rotation());
+			targetEnemyVector.Normalize();
 
-		myPawn->MoverForward(1);
+			FRotator newRotation = FMath::RInterpConstantTo(myPawn->GetActorRotation(), targetEnemyVector.Rotation(), DeltaSeconds, 100.f);
+
+			myPawn->ExecuteRotation(newRotation);
+
+			myPawn->MoverForward(1);
+
+			fireTimeTest += DeltaSeconds;
+
+		}
+
 		
 
-		
-		fireTimeTest += DeltaSeconds;
-
-		if (fireTimeTest > cadencyFire && enemyState != EnemyState::Dead && bCanShoot)
+		if (fireTimeTest > cadencyFire && enemyState != EnemyState::Dead && bCanShoot && HasAuthority())
 		{
 			//Si el enemigo esta muerto no deberia poder disparar
 			fireTimeTest = 0.f;

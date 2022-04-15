@@ -127,7 +127,7 @@ void ABasicProjectile::OnProjectileImpact(UPrimitiveComponent* OverlappedCompone
 		
 	}
 
-	if (Cast<APilotActionPawn>(OtherActor) && GetOwner())
+	if (Cast<APilotActionPawn>(OtherActor) && Cast<AEnemyActionPawn>(GetOwner()))
 	{
 		AEnemyActionPawn* owner = Cast<AEnemyActionPawn>(GetOwner());
 		owner->GetChromosome()->AddToGene(Gene::damageCaused, damage);

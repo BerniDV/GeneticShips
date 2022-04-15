@@ -6,6 +6,7 @@
 #include "ActionPawn.h"
 #include "EnemyActionPawn.generated.h"
 
+class APilotActionPawn;
 class UBoxComponent;
 class AChromosome;
 class ABasicProjectile;

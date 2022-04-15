@@ -33,7 +33,7 @@ AEnemyActionPawn::AEnemyActionPawn()
 	translationComponent->SetIsReplicated(true);
 
 	rotationComponent = CreateDefaultSubobject<URotationComponent>(TEXT("rotationComponent"));
-	rotationComponent->SetIsReplicated(false);
+	rotationComponent->SetIsReplicated(true);
 
 	enemyChromosome = nullptr;
 
@@ -179,12 +179,8 @@ void AEnemyActionPawn::MoverRight(float movement)
 void AEnemyActionPawn::ExecuteRotation(FRotator rotator)
 {
 
-	//rotationComponent->ExecuteRotation(rotator);
-	if(HasAuthority())
-	{
-
-		SetActorRotation(rotator);
-	}
+	rotationComponent->ExecuteRotation(rotator);
+	//SetActorRotation(rotator);
 }
 
 FVector AEnemyActionPawn::GetPredictedPosition()
@@ -257,6 +253,7 @@ void AEnemyActionPawn::Tick(float DeltaSeconds)
 
 	//FMath::VInterpConstantTo(GetActorLocation(), position, DeltaSeconds, (GetActorLocation()-position).Size()/DeltaSeconds);
 	//SetActorLocation(position);
+
 		
 }
 
