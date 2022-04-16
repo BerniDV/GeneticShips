@@ -19,6 +19,8 @@ APilotActionPawn::APilotActionPawn()
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Pilot Pawn Prepared"));
 
+	translationComponent = CreateDefaultSubobject<UTranslationComponent>(TEXT("translationComponent"));
+	translationComponent->SetIsReplicated(true);
 
 	collisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("boxComponent"));
 	collisionBox->SetCollisionProfileName("BlockAllDynamic");
@@ -26,9 +28,6 @@ APilotActionPawn::APilotActionPawn()
 
 	meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("staticMesh"));
 	meshComponent->SetupAttachment(RootComponent);
-
-	translationComponent = CreateDefaultSubobject<UTranslationComponent>(TEXT("translationComponent"));
-	translationComponent->SetIsReplicated(true);
 
 	rotationComponent = CreateDefaultSubobject<URotationComponent>(TEXT("rotationComponent"));
 	rotationComponent->SetIsReplicated(true);
@@ -54,17 +53,7 @@ void APilotActionPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//estos valores pueden variar para personalizar la nave x10
-	speedDropRate = 3000.f/3;
-	defaultMaxAcceleration = 4000/3;
-	maxAcceleration = 4000/3;
-	defaultMaxSpeed = 10000;
-	maxSpeed = 10000;
-	accelerationSpeed = 500.f/2;
-	decelerationSpeed = 1000.f/2;
-	maneuverabilityInPercent = 15.f;
-
-	translationComponent->Inicialite(speedDropRate, defaultMaxAcceleration, defaultMaxSpeed, maxAcceleration, maxSpeed, accelerationSpeed, decelerationSpeed, maneuverabilityInPercent);
+	
 
 	collisionBox->OnComponentBeginOverlap.RemoveAll(this);
 
@@ -72,7 +61,14 @@ void APilotActionPawn::BeginPlay()
 	{
 
 		collisionBox->OnComponentBeginOverlap.AddDynamic(this, &APilotActionPawn::OnPilotOverlap);
+		//translationComponent = NewObject<UTranslationComponent>(this, FName("TranslationComp"));
 	}
+
+	
+
+	InitializeMovement();
+	
+	
 	
 }
 
@@ -128,11 +124,11 @@ void APilotActionPawn::ExecuteRotation(FRotator rotator)
 void APilotActionPawn::ImpulseON()
 {
 
-	translationComponent->SetMaxSpeed(maxSpeed * 7);
-	translationComponent->SetCurrentSpeed(maxSpeed * 3);
+	translationComponent->SetMaxSpeed(maxSpeed * 3);
+	translationComponent->SetCurrentSpeed(maxSpeed * 2);
 
-	translationComponent->SetMaxAcceleration(maxAcceleration * 5);
-	translationComponent->SetCurrentAcceleration(maxAcceleration * 4);
+	translationComponent->SetMaxAcceleration(maxAcceleration * 3);
+	translationComponent->SetCurrentAcceleration(maxAcceleration * 2);
 	
 }
 
@@ -260,6 +256,22 @@ void APilotActionPawn::PlayDeath_Implementation()
 	SpawnExplosionParticlesAtActorLocation();
 	SpawnFollowingFireParticles();
 	Cast<AActionPlayerController>(GetOwner())->SetInputEnabled(false);
+}
+
+void APilotActionPawn::InitializeMovement()
+{
+
+	//estos valores pueden variar para personalizar la nave x10
+	speedDropRate = 3000.f / 3;
+	defaultMaxAcceleration = 4000 / 3;
+	maxAcceleration = 4000 / 3;
+	defaultMaxSpeed = 10000;
+	maxSpeed = 10000;
+	accelerationSpeed = 500.f / 2;
+	decelerationSpeed = 1000.f / 2;
+	maneuverabilityInPercent = 15.f;
+
+	translationComponent->Inicialite(speedDropRate, defaultMaxAcceleration, defaultMaxSpeed, maxAcceleration, maxSpeed, accelerationSpeed, decelerationSpeed, maneuverabilityInPercent);
 }
 
 void APilotActionPawn::SpawnFollowingFireParticles_Implementation()

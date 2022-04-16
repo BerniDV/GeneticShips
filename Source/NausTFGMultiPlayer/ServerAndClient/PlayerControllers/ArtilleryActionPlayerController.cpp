@@ -66,8 +66,19 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 
 		if (myPawn) {
 
+			float diference = (myPawn->GetActorLocation() - pilotMate->GetPredictedPosition()).Size();
 
-			myPawn->SetActorLocation(pilotMate->GetActorLocation());
+			if (diference < 1000)
+			{
+
+				FVector nextLocation = FMath::VInterpConstantTo(myPawn->GetActorLocation(), pilotMate->GetPredictedPosition(), DeltaSeconds, pilotMate->GetCurrentSpeed());
+				myPawn->SetActorLocation(nextLocation);
+			}else
+			{
+				FVector nextLocation = FMath::Lerp(myPawn->GetActorLocation(), pilotMate->GetPredictedPosition(),0.05);
+				myPawn->SetActorLocation(nextLocation);
+
+			}
 
 			FRotator newRotation = myPawn->GetActorRotation();
 
@@ -79,17 +90,20 @@ void AArtilleryActionPlayerController::Tick(float DeltaSeconds)
 
 		}
 
-		if(cameraManager && Cast<AActionCamera>(cameraManager->GetViewTarget()))
+		if(cameraManager && Cast<AActionCamera>(cameraManager->GetViewTarget()) && myPawn)
 		{
 			
 			AActionCamera* camera = Cast<AActionCamera>(cameraManager->GetViewTarget());
 
-			
-			FVector nextLocation = FMath::VInterpConstantTo(camera->GetActorLocation(), pilotMate->GetActorLocation(), DeltaSeconds, pilotMate->GetInterpolationSpeed());
-			camera->SetActorLocation(nextLocation);
+			//FVector nextLocation = FMath::VInterpConstantTo(myPawn->GetActorLocation(), pilotMate->GetPredictedPosition(), DeltaSeconds, pilotMate->GetCurrentSpeed());
+
+			camera->SetActorLocation(myPawn->GetActorLocation());
 			
 			camera->SetActorRotation(myPawn->GetActorRotation());
+		
 		}
+		
+		
 		
 	}
 
@@ -132,14 +146,21 @@ void AArtilleryActionPlayerController::Fire()
 {
 	
 	AActionPlayerController* playerController = Cast<AActionPlayerController>(GetOwner());
-	Cast<AActionPawn>(playerController->GetPawn())->Fire();
+
+	if(AActionPawn* myPawn = Cast<AActionPawn>(playerController->GetPawn()))
+	{
+
+		myPawn->Fire();
+
+	}
+
 	
 }
 
 void AArtilleryActionPlayerController::StopShooting()
 {
-
-	bIsShooting = false;
+	//tiene que ser false
+	bIsShooting = true;
 	AActionPlayerController* playerController = Cast<AActionPlayerController>(GetOwner());
 	Cast<AActionPawn>(playerController->GetPawn())->StopFire();
 }

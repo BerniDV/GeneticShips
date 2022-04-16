@@ -47,4 +47,8 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Replicated)
 	URotationComponent* rotationComponent;
 
+private:
+
+	UPROPERTY(Replicated)
+	FVector position;
 };

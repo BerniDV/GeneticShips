@@ -61,6 +61,8 @@ void AArtilleryActionPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AArtilleryActionPawn, rotationComponent);
+	DOREPLIFETIME_CONDITION(AArtilleryActionPawn, position, COND_SkipOwner);
+	
 }
 
 void AArtilleryActionPawn::PlayDeath_Implementation()
@@ -73,6 +75,15 @@ void AArtilleryActionPawn::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
+	if(HasAuthority())
+	{
+
+		position = GetActorLocation();
+	}else if(GetLocalRole() == ROLE_SimulatedProxy)
+	{
+
+		SetActorLocation(position);
+	}
 	
 }
 

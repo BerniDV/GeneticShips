@@ -23,6 +23,9 @@ struct FMovementPack
 	FVector currentspeed;
 
 	UPROPERTY()
+	float maxSpeed;
+
+	UPROPERTY()
 	float accelerationInMS;
 
 	UPROPERTY()
@@ -38,17 +41,19 @@ struct FMovementPack
 		position = FVector::ZeroVector;
 		direction = FVector::ZeroVector;
 		currentspeed = FVector::ZeroVector;
+		maxSpeed = 0.f;
 		accelerationInMS = 0.f;
 		updateTimeStamp = 0.f;
 		maneuverabilityInPercent = 0.f;
 	}
 
-	void Update(FVector _position, FVector _direction, FVector _currentspeed, float _accelerationInMS, float _updateTimeStamp, float _maneuverabilityInPercent)
+	void Update(FVector _position, FVector _direction, FVector _currentspeed, float _maxspeed, float _accelerationInMS, float _updateTimeStamp, float _maneuverabilityInPercent)
 	{
 
 		position = _position;
 		direction = _direction;
 		currentspeed = _currentspeed;
+		maxSpeed = _maxspeed;
 		accelerationInMS = _accelerationInMS;
 		updateTimeStamp = _updateTimeStamp;
 		maneuverabilityInPercent = _maneuverabilityInPercent;
@@ -83,7 +88,7 @@ public:
 	void MoveRight(float movement);
 
 	UFUNCTION(Server, Reliable, WithValidation)
-	void Move_Server(FVector movement, FVector _direction, FVector _currentSpeed, float _currentTime, float _accelerationInMs, float _maneuverabilityInPercent);
+	void Move_Server(FVector movement, FVector _direction, FVector _currentSpeed, float _maxspeed, float _currentTime, float _accelerationInMs, float _maneuverabilityInPercent);
 
 	void SetMaxAcceleration(float _maxAcceleration);
 	void SetCurrentAcceleration(float _currentAcceleration);

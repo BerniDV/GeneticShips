@@ -61,7 +61,7 @@ void AAIBaseController::Tick(float DeltaSeconds)
 	AEnemyActionPawn* myPawn = Cast<AEnemyActionPawn>(GetPawn());
 
 
-	if (myPawn) {
+	if (myPawn && target) {
 
 		//Si esta muy lejos no puede disparar
 		if ((myPawn->GetActorLocation() - target->GetActorLocation()).Size() < 50000 && HasAuthority())

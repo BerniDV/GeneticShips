@@ -64,6 +64,7 @@ public:
 
 	USpringArmComponent* GetSpringArmComponent();
 
+	
 	float GetCurrentSpeed();
 	float GetMaxSpeed();
 	FVector GetPredictedPosition();
@@ -80,6 +81,8 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void SpawnFollowingFireParticles();
+
+	void InitializeMovement();
 
 protected:
 

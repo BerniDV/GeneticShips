@@ -169,7 +169,7 @@ void AActionPlayerControllerImpl::Client_HideTeamMateActor_Implementation()
 
 	if (!HasAuthority() && teamMate)
 	{
-
+		//tiene que ser true
 		teamMate->SetActorHiddenInGame(true);
 		
 	}

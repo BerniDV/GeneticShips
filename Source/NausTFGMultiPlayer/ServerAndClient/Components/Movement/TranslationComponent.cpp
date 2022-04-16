@@ -50,6 +50,8 @@ void UTranslationComponent::BeginPlay()
 	speedDropRate = 0.f;
 	maneuverabilityInPercent = 0.f;
 
+
+
 }
 
 void UTranslationComponent::Inicialite(float _speedDropRate, float _defaultMaxAcceleration, float _defaultMaxSpeed, float _maxAcceleration, float _maxSpeed, float _accelerationSpeed, float _decelerationSpeed, float _meneuverabilityInPercent)
@@ -169,7 +171,7 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 
 		if (currentspeed.Size() != 0)
-			Move_Server(position, direction, currentspeed, currentTime, accelerationInMS, maneuverabilityInPercent);
+			Move_Server(position, direction, currentspeed, maxSpeed, currentTime, accelerationInMS, maneuverabilityInPercent);
 
 		Cast<AActionPawn>(GetOwner())->SetActorLocation(position, true);
 		
@@ -178,27 +180,22 @@ void UTranslationComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 		//Si nos hemos parado corregimos a la ultima posiciopn confirmada conocida, en caso contrario seguimos interpolando entre la actual y la que hemos predecido
 		//Como siempre predecimos segun la ultima confirmada las pequeñas correciones se hacen implicitamente  interpolationSpeed != 0.f && !Cast<APilotActionPawn>(GetOwner())
-		if (true) {
+		if (GetCurrenntSpeed() > 0 && !Cast<APilotActionPawn>(GetOwner())) {
 
-			interpolatedPosition = FMath::VInterpConstantTo(GetOwner()->GetActorLocation(), predictedPosition, DeltaTime, interpolationSpeed);
+			interpolatedPosition = FMath::VInterpConstantTo(GetOwner()->GetActorLocation(), predictedPosition, DeltaTime, currentspeed.Size());
+
 			Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, "Prediction");
+
 		}
 		else
 		{	//En caso de llegar a una interpolacion casi completa significa que el jugador ya no se mueve, y por lo tanto rectificamos el ultimo movimiento predicho y lo ponemos en la posición final
-			predictedPosition = position;
+			//predictedPosition = position;
 			//interpolationSpeed = (GetOwner()->GetActorLocation() - position).Size() / delay;
 
 			//interpolatedPosition = FMath::VInterpConstantTo(GetOwner()->GetActorLocation(), position, DeltaTime, interpolationSpeed);
-			interpolatedPosition = FMath::Lerp(GetOwner()->GetActorLocation(), position, 0.3);
-			Cast<AActionPawn>(GetOwner())->SetActorLocation(interpolatedPosition, true);
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Correction");
+			//interpolatedPosition = FMath::Lerp(GetOwner()->GetActorLocation(), position, 0.1);
+			Cast<AActionPawn>(GetOwner())->SetActorLocation(predictedPosition, true);
 
-			if(Cast<AEnemyActionPawn>(GetOwner()))
-			{
-
-				int i = 2;
-			}
 		}
 	}
 
@@ -242,10 +239,10 @@ void UTranslationComponent::MoveForward(float movement)
 }
 
 
-void UTranslationComponent::Move_Server_Implementation(FVector movement, FVector _direction, FVector _currentSpeed, float _currentTime, float _accelerationInMs, float _maneuverabilityInPercent)
+void UTranslationComponent::Move_Server_Implementation(FVector movement, FVector _direction, FVector _currentSpeed, float _maxspeed, float _currentTime, float _accelerationInMs, float _maneuverabilityInPercent)
 {
 	
-	movementReplicatedPack.Update(movement, _direction, _currentSpeed, _accelerationInMs, _currentTime, _maneuverabilityInPercent);
+	movementReplicatedPack.Update(movement, _direction, _currentSpeed, _maxspeed, _accelerationInMs, _currentTime, _maneuverabilityInPercent);
 
 
 	if(GetOwner()->HasAuthority() && !Cast<AEnemyActionPawn>(GetOwner()))
@@ -256,7 +253,7 @@ void UTranslationComponent::Move_Server_Implementation(FVector movement, FVector
 	}
 }
 
-bool UTranslationComponent::Move_Server_Validate(FVector movement, FVector _direction, FVector _currentSpeed, float _currentTime, float accelerationInMs, float _maneuverabilityInPercent)
+bool UTranslationComponent::Move_Server_Validate(FVector movement, FVector _direction, FVector _currentSpeed, float _maxspeed, float _currentTime, float accelerationInMs, float _maneuverabilityInPercent)
 {
 
 	return true;
@@ -361,6 +358,7 @@ void UTranslationComponent::ApplyMovementWithInterpolation()
 		position = movementReplicatedPack.position;
 		direction = movementReplicatedPack.direction;
 		currentspeed = movementReplicatedPack.currentspeed;
+		maxSpeed = movementReplicatedPack.maxSpeed;
 		accelerationInMS = movementReplicatedPack.accelerationInMS;
 		maneuverabilityInPercent = movementReplicatedPack.maneuverabilityInPercent;
 		float updateTimeStamp = movementReplicatedPack.updateTimeStamp;
