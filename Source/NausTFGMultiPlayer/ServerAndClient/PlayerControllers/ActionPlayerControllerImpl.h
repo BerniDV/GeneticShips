@@ -74,6 +74,8 @@ public:
 
 	virtual void LoadHUD();
 
+	virtual void UpdateClientHealth(float health);
+
 protected:
 
 	virtual void BeginPlay() override;

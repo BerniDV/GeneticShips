@@ -174,6 +174,15 @@ void AActionGameMode::ProcesEndRound()
 
 	UE_LOG(LogTemp, Warning, TEXT("End Round"));
 	GetWorld()->GetTimerManager().ClearTimer(timerHandler);
+
+	for(auto x: playersInGame)
+	{
+
+		AActionPlayerController* PC = Cast<AActionPlayerController>(x.Value);
+
+		PC->SetPlayerHealth(PC->GetPlayerMaxHealth());
+	}
+
 	InitializeNextRound();
 }
 

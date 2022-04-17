@@ -7,6 +7,8 @@
 #include "DrawDebugHelpers.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "NausTFGMultiPlayer/Client/Cameras/PilotActionCamera.h"
+#include "NausTFGMultiPlayer/Client/Controllers/ArtilleryActionGameController.h"
+#include "NausTFGMultiPlayer/Client/Controllers/PilotActionGameController.h"
 #include "NausTFGMultiPlayer/Client/Controllers/PresentationController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/RotationComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/TranslationComponent.h"
@@ -186,9 +188,34 @@ void APilotActionPlayerController::CreaMenus()
 
 void APilotActionPlayerController::LoadHUD()
 {
-	Super::LoadHUD();
+	bool bIsLocalPlayerContropller = Cast<AActionPlayerController>(GetOwner())->IsLocalPlayerController();
+	if (bIsLocalPlayerContropller)
+	{
 
+		Cast<UPilotActionGameController>(presentationController)->LoadHUD();
 
+	}
+}
+
+void APilotActionPlayerController::InitializePresentationController()
+{
+
+	if (!HasAuthority())
+	{
+
+		presentationController = NewObject<UPilotActionGameController>(GetOwner());
+
+		presentationController->Init(Cast<AActionPlayerController>(GetOwner()));
+	}
+}
+
+void APilotActionPlayerController::UpdateClientHealth(float health)
+{
+	if(!HasAuthority())
+	{
+
+		Cast<UPilotActionGameController>(presentationController)->UpdateHealth(health);
+	}
 }
 
 

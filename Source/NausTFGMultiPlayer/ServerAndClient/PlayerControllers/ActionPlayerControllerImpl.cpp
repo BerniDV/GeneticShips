@@ -225,4 +225,10 @@ void AActionPlayerControllerImpl::LoadHUD()
 
 }
 
+void AActionPlayerControllerImpl::UpdateClientHealth(float health)
+{
+
+
+}
+
 

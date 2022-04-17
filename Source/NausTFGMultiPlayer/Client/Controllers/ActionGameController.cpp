@@ -52,6 +52,12 @@ void UActionGameController::UnloadHUD()
 	
 }
 
+void UActionGameController::UpdateHealth(float health)
+{
+
+
+}
+
 void UActionGameController::LoadGameStateHUD()
 {
 	Super::LoadMenu(gameStateHUD);

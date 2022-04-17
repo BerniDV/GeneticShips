@@ -159,8 +159,8 @@ void AArtilleryActionPlayerController::Fire()
 
 void AArtilleryActionPlayerController::StopShooting()
 {
-	//tiene que ser false
-	bIsShooting = true;
+	
+	bIsShooting = false;
 	AActionPlayerController* playerController = Cast<AActionPlayerController>(GetOwner());
 	Cast<AActionPawn>(playerController->GetPawn())->StopFire();
 }

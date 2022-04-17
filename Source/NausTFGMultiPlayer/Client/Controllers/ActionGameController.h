@@ -34,6 +34,8 @@ public:
 	virtual void LoadHUD();
 	virtual void UnloadHUD();
 
+	virtual void UpdateHealth(float health);
+
 	void LoadGameStateHUD();
 	void UnloadGameStateHUD();
 
@@ -44,7 +46,7 @@ public:
 
 protected:
 
-	AActionPlayerController* actionPlayerController;
+	APlayerController* actionPlayerController;
 
 private:
 

@@ -50,6 +50,7 @@ public:
 	void ApplyDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 		AController* EventInstigator, AActor* DamageCauser);
 
+
 	int GetTeamId();
 
 	float GetCadency();
@@ -67,7 +68,7 @@ public:
 
 	virtual void InitializePresentationController() override;
 
-
+	
 	//Comandos para la consola
 
 	UFUNCTION(Exec)
@@ -81,6 +82,11 @@ public:
 
 	UFUNCTION(Server, WithValidation, Reliable)
 		void SetNumEnemiesServer(int enemies);
+
+	UFUNCTION()
+	void UpdateClientHealth();
+
+	float GetPlayerMaxHealth();
 
 protected:
 
@@ -99,8 +105,10 @@ private:
 	UClass* pilotReference;
 	UClass* artilleryReference;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing = UpdateClientHealth)
 	float playerHealth;
+
+	float maxPlayerHealth;
 
 	
 };

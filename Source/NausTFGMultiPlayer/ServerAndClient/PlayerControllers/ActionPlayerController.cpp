@@ -37,10 +37,9 @@ AActionPlayerController::AActionPlayerController()
 
 	ConstructorHelpers::FClassFinder <AArtilleryActionPawn> refArtilleryActionPawnBP(TEXT("/Game/ServerAndClient/Pawns/ArtilleryActionPawn_BP"));
 	artilleryReference = refArtilleryActionPawnBP.Class;
-
-	playerHealth = 100.f;
-
 	
+	maxPlayerHealth = 100.f;
+	playerHealth = maxPlayerHealth;
 }
 
 
@@ -196,6 +195,7 @@ void AActionPlayerController::SetPlayerHealth_Implementation(float value)
 		GetPlayerState<AActionPlayerState>()->SetHealth(value);
 
 	playerHealth = value;
+
 }
 
 bool AActionPlayerController::SetPlayerHealth_Validate(float value)
@@ -226,6 +226,7 @@ void AActionPlayerController::ApplyDamage_Implementation(float DamageAmount, FDa
 	}
 
 	SetPlayerHealth(newHealth);
+
 
 }
 
@@ -362,6 +363,18 @@ bool AActionPlayerController::SetRoundServer_Validate(int round)
 {
 
 	return true;
+}
+
+void AActionPlayerController::UpdateClientHealth()
+{
+
+	playerControllerImpl->UpdateClientHealth(playerHealth);
+}
+
+float AActionPlayerController::GetPlayerMaxHealth()
+{
+
+	return maxPlayerHealth;
 }
 
 void AActionPlayerController::BeginPlay()

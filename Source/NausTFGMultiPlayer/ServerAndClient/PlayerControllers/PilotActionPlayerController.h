@@ -55,6 +55,9 @@ public:
 
 	virtual void LoadHUD() override;
 
+	virtual void InitializePresentationController() override;
+
+	virtual void UpdateClientHealth(float health) override;
 
 protected:
 
