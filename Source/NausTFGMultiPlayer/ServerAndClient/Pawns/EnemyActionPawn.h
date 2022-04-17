@@ -108,6 +108,6 @@ private:
 	UPROPERTY(Replicated)
 	URotationComponent* rotationComponent;
 
-
+	UMaterialInstanceDynamic* emissiveMaterial;
 
 };

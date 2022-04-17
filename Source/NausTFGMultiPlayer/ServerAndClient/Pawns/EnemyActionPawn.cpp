@@ -232,6 +232,15 @@ void AEnemyActionPawn::BeginPlay()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 
+	auto material = meshComponent->GetMaterial(2);
+
+	emissiveMaterial = UMaterialInstanceDynamic::Create(material, this);
+
+	meshComponent->SetMaterial(2, emissiveMaterial);
+
+	FLinearColor color(FMath::FRandRange(0, 1), FMath::FRandRange(0, 1), FMath::FRandRange(0, 1));
+
+	emissiveMaterial->SetVectorParameterValue(TEXT("EmissiveColor"), color);
 	
 	if(HasAuthority())
 	{
