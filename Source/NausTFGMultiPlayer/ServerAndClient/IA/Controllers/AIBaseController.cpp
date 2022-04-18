@@ -7,6 +7,7 @@
 #include "ParameterCollection.h"
 #include "Kismet/GameplayStatics.h"
 #include "NausTFGMultiPlayer/Server/GameModes/ActionGameMode.h"
+#include "NausTFGMultiPlayer/ServerAndClient/GameStates/ActionGameState.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/EnemyActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/PilotActionPawn.h"
 #include "NausTFGMultiPlayer/ServerAndClient/IA/Chromosome.h"
@@ -23,7 +24,7 @@ AAIBaseController::AAIBaseController()
 
 }
 
-void AAIBaseController::BindSignals()
+void AAIBaseController::BindPawnSignals()
 {
 
 	AEnemyActionPawn* myPawn = Cast<AEnemyActionPawn>(GetPawn());
@@ -159,6 +160,9 @@ void AAIBaseController::OnEnemyDead()
 {
 
 	enemyState = EnemyState::Dead;
+
+	AActionGameState* GS = GetWorld()->GetGameState<AActionGameState>();
+	GS->SetEnemiesAlive(GS->GetEnemiesAlive() - 1);
 }
 
 void AAIBaseController::OnPossess(APawn* InPawn)
@@ -170,6 +174,8 @@ void AAIBaseController::OnPossess(APawn* InPawn)
 
 	cadencyFire = myPawn->GetChromosome()->GetGene(Gene::fireCadancy);
 	health = myPawn->GetChromosome()->GetGene(Gene::health);
+
+	BindPawnSignals();
 
 }
 

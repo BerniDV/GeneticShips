@@ -20,6 +20,7 @@ void AActionGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AActionGameState, round);
+	DOREPLIFETIME(AActionGameState, enemiesAlive);
 }
 
 void AActionGameState::PlayerDead()
@@ -31,7 +32,7 @@ void AActionGameState::PlayerDead()
 void AActionGameState::SetRound(int newRound)
 {
 	round = newRound;
-	signalNewRound.Broadcast();
+	ClientUpdateRound();
 
 }
 
@@ -42,10 +43,29 @@ void AActionGameState::ClientUpdateRound_Implementation()
 }
 
 
+void AActionGameState::ClientUpdateEnemies_Implementation()
+{
+
+	signalEnemiesAlive.Broadcast();
+}
+
 int AActionGameState::GetRound()
 {
 
 	return round;
+}
+
+int AActionGameState::GetEnemiesAlive()
+{
+
+	return enemiesAlive;
+}
+
+void AActionGameState::SetEnemiesAlive(int numEnemies)
+{
+
+	enemiesAlive = numEnemies;
+	ClientUpdateEnemies();
 }
 
 

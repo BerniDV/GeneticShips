@@ -26,7 +26,7 @@ AEnemyManager::AEnemyManager()
 
 }
 
-std::future<TArray<AChromosome*>> AEnemyManager::SpawnGeneration(TArray<AChromosome*> generationDNA)
+std::future<TArray<AChromosome*>> AEnemyManager::SpawnGeneration(TArray<AChromosome*> generationDNA, FVector center)
 {
 
 
@@ -36,7 +36,7 @@ std::future<TArray<AChromosome*>> AEnemyManager::SpawnGeneration(TArray<AChromos
 	for(int i = 0; i < generationDNA.Num(); i++)
 	{
 
-		FVector spawnLocation(FMath::RandRange(-1500000.f/3, 1500000.f/3), FMath::RandRange(-1500000.f/3, 1500000.f/3), FMath::RandRange(-1500000.f/3, 1500000.f/3));
+		FVector spawnLocation(FMath::RandRange(-150000.f + center.X, 150000.f + center.X), FMath::RandRange(-150000.f + center.Y, 150000.f + center.Y), FMath::RandRange(-150000.f + center.Z, 150000.f + center.Z));
 
 		AActor* spawnedActor = nullptr;
 		spawnedActor = GetWorld()->SpawnActor<AActionPawn>(enemyClass, spawnLocation, FRotator::ZeroRotator);
@@ -67,6 +67,9 @@ std::future<TArray<AChromosome*>> AEnemyManager::SpawnGeneration(TArray<AChromos
 		}
 	}
 
+	int numeEnemies = EnemyMap.Num();
+	GetWorld()->GetGameState<AActionGameState>()->SetEnemiesAlive(numeEnemies);
+
 	return roundResultPromise.get_future();
 }
 
@@ -89,6 +92,8 @@ void AEnemyManager::DeleteAllEnemies()
 
 		}
 
+		GetWorld()->GetGameState<AActionGameState>()->SetEnemiesAlive(0);
+
 	}
 	
 }
@@ -103,6 +108,8 @@ void AEnemyManager::DeleteEnemy(int32 enemyID)
 	}
 
 	EnemyMap.Remove(enemyID);
+
+	GetWorld()->GetGameState<AActionGameState>()->SetEnemiesAlive(EnemyMap.Num());
 }
 
 // Called when the game starts or when spawned

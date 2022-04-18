@@ -73,7 +73,9 @@ enum class Gene : uint8
 	decelerationSpeed,
 	maneuverabilityInPercent,
 	fireCadancy,
-	color,
+	color1,
+	color2,
+	color3,
 	health,
 	bulletDamage
 

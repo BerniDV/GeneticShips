@@ -22,6 +22,9 @@ public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnNewRound);
 	FOnNewRound signalNewRound;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnNumEnemiesChanged);
+	FOnNumEnemiesChanged signalEnemiesAlive;
+
 	AActionGameState();
 
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
@@ -35,13 +38,24 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void ClientUpdateRound();
 
+	UFUNCTION(NetMulticast, Reliable)
+	void ClientUpdateEnemies();
+
 	UFUNCTION(BlueprintCallable)
 	int GetRound();
+
+	UFUNCTION(BlueprintCallable)
+	int GetEnemiesAlive();
+
+	UFUNCTION()
+	void SetEnemiesAlive(int numEnemies);
 
 private:
 
 	UPROPERTY(ReplicatedUsing = ClientUpdateRound)
 	int round;
 
+	UPROPERTY(ReplicatedUsing = ClientUpdateEnemies)
+	int enemiesAlive;
 
 };

@@ -45,10 +45,14 @@ public:
 
 
 	void SetGene(Gene typeGene, float value);
+	void SetGene(int indexGene, float value);
 	float GetGene(Gene typeGene);
+	float GetGene(int indexGene);
 	void AddToGene(Gene typeGene, float amount);
 
 	void SetGenesArray(TArray<float> genes);
+
+	int GetNumGenes();
 
 private:
 

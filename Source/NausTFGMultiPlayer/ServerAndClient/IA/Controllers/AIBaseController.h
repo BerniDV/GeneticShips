@@ -24,7 +24,7 @@ public:
 
 	AAIBaseController();
 
-	void BindSignals();
+	void BindPawnSignals();
 
 protected:
 
@@ -44,6 +44,7 @@ public:
 
 	void MoveRight(float movement);
 
+	UFUNCTION()
 	void OnEnemyDead();
 
 	virtual void OnPossess(APawn* InPawn) override;

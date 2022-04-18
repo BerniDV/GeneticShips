@@ -66,6 +66,9 @@ public:
 	UFUNCTION(Client, Reliable)
 	void UpdateRound();
 
+	UFUNCTION(Client, Reliable)
+	void UpdateEnemies();
+
 	virtual void InitializePresentationController() override;
 
 	

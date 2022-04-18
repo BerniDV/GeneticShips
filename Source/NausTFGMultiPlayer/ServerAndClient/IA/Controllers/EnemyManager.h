@@ -19,7 +19,7 @@ public:
 	AEnemyManager();
 
 	//Per repte utilitzar promises i futures per a que la mateixa funcio retorni els resultats
-	std::future<TArray<AChromosome*>> SpawnGeneration(TArray<AChromosome*> generationDNA);
+	std::future<TArray<AChromosome*>> SpawnGeneration(TArray<AChromosome*> generationDNA, FVector center);
 
 	void DeleteAllEnemies();
 

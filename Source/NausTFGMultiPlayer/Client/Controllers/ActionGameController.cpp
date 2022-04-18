@@ -96,6 +96,31 @@ FString UActionGameController::GetRound()
 	return result; 
 }
 
+void UActionGameController::SetEnemiesAlive(int enemies)
+{
+
+	if (gameStateHUD)
+	{
+
+		gameStateHUD->SetEnemiesAlive(enemies);
+		gameStateHUD->UpdateEnemiesAliveText();
+	}
+
+}
+
+FString UActionGameController::GetEnemiesAliveText()
+{
+	FString result = "";
+
+	if (gameStateHUD)
+	{
+
+		result = gameStateHUD->GetEnemiesAliveText();
+	}
+
+	return result;
+}
+
 void UActionGameController::SpawnParticlesAtLocation(FVector Location, FVector Scale)
 {
 	

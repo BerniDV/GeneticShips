@@ -42,9 +42,9 @@ void AChromosome::Destroyed()
 void AChromosome::SetRandomGenes()
 {
 
-	genesArray[(int8)Gene::color] = FMath::FRandRange(0, 1);
-	genesArray[(int8)Gene::color + 1] = FMath::FRandRange(0, 1);
-	genesArray[(int8)Gene::color + 2] = FMath::FRandRange(0, 1);
+	genesArray[(int8)Gene::color1] = FMath::FRandRange(0, 1);
+	genesArray[(int8)Gene::color2] = FMath::FRandRange(0, 1);
+	genesArray[(int8)Gene::color3] = FMath::FRandRange(0, 1);
 
 	genesArray[(int8)Gene::size] = FMath::RandRange(1, 10);
 	genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(1.f, 25.f);
@@ -58,7 +58,7 @@ void AChromosome::SetRandomGenes()
 	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(0.f, 500.f);
 	genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, 1000.f);
 	genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, 100.f);
-	genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(5.f, 10.f);
+	genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(2.f, 6.f);
 	genesArray[(int8)Gene::health] = FMath::FRandRange(1.f, 100.f);
 }
 
@@ -67,8 +67,107 @@ void AChromosome::Mutation()
 
 	int round = Cast<AActionGameState>(GetWorld()->GetGameState())->GetRound();
 
-	//Igual dividir el maximo por un numero acordado menos la ronda
+	int numGenesToMutate = FMath::RandRange(0, numGenes/3);
 
+	for(int i = 0; i < numGenesToMutate; i++)
+	{
+
+		int geneToMutate = FMath::RandRange(0, numGenes - 1);
+
+		switch (geneToMutate)
+		{
+
+		case 0:
+
+			genesArray[(int8)Gene::size] = FMath::RandRange(10, (1 * round) % 100); //10
+
+			break;
+
+		case 1:
+
+			//time alive
+
+			break;
+		case 2:
+
+			//damage caused
+
+			break;
+
+		case 3:
+
+			genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(0.f, (5 * round) % 100); //100
+
+			break;
+
+		case 4:
+
+			genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, (5000 * round) % 100000); //300
+			break;
+
+		case 5:
+
+			genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(0.f, (10000 * round) % 200000); //400
+			break;
+		case 6:
+
+			genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(0.f, (10000 * round) % 200000); //400
+			break;
+
+		case 7:
+
+			genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(0.f, (2000 * round) % 40000); //1000
+			break;
+		case 8:
+
+			genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(0.f, (2000 * round) % 40000); //1000
+			
+			break;
+
+		case 9:
+
+			genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(0.f, (200 * round) % 4000); //50
+			break;
+		case 10:
+
+			genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, (200 * round) % 4000); //100
+			
+			break;
+
+		case 11:
+
+			genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, (2 * round) % 100); //100
+			break;
+
+		case 12:
+
+			genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(0.1f, (1 * round + 1) % 20); //0.1
+			genesArray[(int8)Gene::fireCadancy] = 1.f / genesArray[12];
+			break;
+
+		case 13:
+			 //color
+			break;
+		case 14:
+			//color
+			break;
+
+		case 15:
+			//color
+			break;
+		case 16:
+
+			genesArray[(int8)Gene::health] = FMath::FRandRange(1.f, (100 * round) % 1000);
+			break;
+
+		case 17:
+
+			genesArray[(int8)Gene::bulletDamage] = FMath::FRandRange(0.f, (5 * round) % 100); //100
+			break;
+		}
+
+	}
+	/*
 	genesArray[(int8)Gene::size] = FMath::RandRange(10, (1 * round) % 100); //10
 	genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(0.f, (5 * round) % 100); //100
 	genesArray[(int8)Gene::bulletDamage] = FMath::FRandRange(0.f, (5 * round) % 100); //100
@@ -84,6 +183,7 @@ void AChromosome::Mutation()
 	genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(0.1f, (1 * round + 1) % 20); //0.1
 	genesArray[(int8)Gene::fireCadancy] = 1.f / genesArray[12];
 	genesArray[(int8)Gene::health] = FMath::FRandRange(1.f, (100 * round) % 1000);
+	*/
 }
 
 AChromosome* AChromosome::Clone()
@@ -108,16 +208,35 @@ void AChromosome::SetGenesArray(TArray<float> genes)
 	}
 }
 
+int AChromosome::GetNumGenes()
+{
+
+	return numGenes;
+}
+
 void AChromosome::SetGene(Gene typeGene, float value)
 {
 
 	genesArray[(int8)typeGene] = value;
 }
 
+void AChromosome::SetGene(int indexGene, float value)
+{
+
+	genesArray[indexGene] = value;
+}
+
+
 float AChromosome::GetGene(Gene typeGene)
 {
 
 	return genesArray[(int8)typeGene];
+}
+
+float AChromosome::GetGene(int indexGene)
+{
+
+	return genesArray[indexGene];
 }
 
 void AChromosome::AddToGene(Gene typeGene, float amount)
@@ -130,7 +249,7 @@ void AChromosome::ApplyFenotipe()
 {
 
 	ApplyFenotipeSize(FVector(genesArray[(int8)Gene::size]));
-	ApplyFenotipeColor(FLinearColor(genesArray[(int8)Gene::color], genesArray[(int8)Gene::color + 1], genesArray[(int8)Gene::color + 2]));
+	ApplyFenotipeColor(FLinearColor(genesArray[(int8)Gene::color1], genesArray[(int8)Gene::color2], genesArray[(int8)Gene::color3]));
 }
 
 void AChromosome::ApplyFenotipeSize(FVector size)

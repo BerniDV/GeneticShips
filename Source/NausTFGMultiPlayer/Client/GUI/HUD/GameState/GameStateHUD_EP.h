@@ -31,13 +31,30 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetNumRound();
 
+
+	void SetEnemiesAlive(int enemies);
+
+	void UpdateEnemiesAliveText();
+
+	UFUNCTION(BlueprintCallable)
+	FString GetEnemiesAliveText();
+
+	UFUNCTION(BlueprintCallable)
+	int GetEnemiesAlive();
+
 protected:
 
-	UPROPERTY(BlueprintReadWrite, Category = "numRoundInfo")
+	UPROPERTY(BlueprintReadWrite, Category = "gameStateInfo")
 	FString numRoundText;
 
-	UPROPERTY(EditAnywhere, Category = "numRoundInfo")
+	UPROPERTY(EditAnywhere, Category = "gameStateInfo")
 	int round;
+
+	UPROPERTY(BlueprintReadWrite, Category = "gameStateInfo")
+	FString enemiesAliveText;
+
+	UPROPERTY(EditAnywhere, Category = "gameStateInfo")
+	int enemiesAlive;
 
 private:
 

@@ -57,7 +57,8 @@ TArray<AChromosome*> AGeneticManager::GenerateNextGenerationDna(TArray<AChromoso
 
 		float aptitudePopulation = CalculateRelativeAptitudes(aptitudes, actualGenerationDNA);
 
-		//Los cruzo (de momento) haciendo que los dos mejores se reproduzca con todos los mejores
+
+
 		//Metodo de la ruleta (seleccion de montecarlo): Calcular la aptitud relativa al grupo y usarla como probabilidad, se tira la ruleta y se escoge como padre la region en la que cae.
 		for (int i = 0; i < aptitudes.Num(); i++)
 		{
@@ -68,14 +69,12 @@ TArray<AChromosome*> AGeneticManager::GenerateNextGenerationDna(TArray<AChromoso
 
 		}
 
-		for (int j = 0; j < DNAParents.Num() - 1; ++j)
+		for (int j = 0; j < DNAParents.Num(); ++j)
 		{
-			AChromosome* son = CrossOver(DNAParents[j], DNAParents[j + 1]);
+			AChromosome* son = CrossOver(DNAParents[0], DNAParents[j]);
 
 			DNAResult.Add(son);
 		}
-
-		DNAResult.Add(CrossOver(DNAParents[0], DNAParents[DNAParents.Num() - 1]));
 
 	}
 
@@ -140,12 +139,15 @@ TArray<AChromosome*> AGeneticManager::GenerateFirstGenerationDna()
 AChromosome* AGeneticManager::CrossOver(AChromosome* parent1, AChromosome* parent2)
 {
 
-	float probabilityCrossOver = (rand() % 100) + 1;
+	//float probabilityCrossOver = (rand() % 100) + 1;
 
-	AChromosome* son; //= GetWorld()->SpawnActor<AChromosome>();
+	AChromosome* son = GetWorld()->SpawnActor<AChromosome>();
 
 	//Aqui aplicare diferentes metodos de crossover como de doble punto etc...
+	//De momento aplico un punto
+	int point = FMath::RandRange(0, parent1->GetNumGenes());
 
+	/*
 	if(probabilityCrossOver < 60)
 	{
 		
@@ -155,6 +157,18 @@ AChromosome* AGeneticManager::CrossOver(AChromosome* parent1, AChromosome* paren
 	{
 
 		son = parent2->Clone();
+	}*/
+
+	for(int i = 0; i < point; i++)
+	{
+
+		son->SetGene(i, parent1->GetGene(i));
+	}
+
+	for (int i = point; i < parent1->GetNumGenes(); i++)
+	{
+
+		son->SetGene(i, parent2->GetGene(i));
 	}
 
 	float probabilityMutation = (rand() % 100) + 1;
@@ -188,20 +202,32 @@ int AGeneticManager::GetIndexChromosomeRulete(TArray<float> aptitudes, float rul
 
 	float amountProbabilities = 0.f;
 
-	for (int i = 0; i < aptitudes.Num(); i++)
+	//crear un altre vector amb info de aptitud i index associat per calcular la ruleta amb ell i retornar el index correcte
+	TArray<TPair<float, int>> aptitudeIndexArray;
+
+	for(int i = 0; i < aptitudes.Num(); i++)
 	{
 
-		amountProbabilities += aptitudes[i];
+		aptitudeIndexArray.Add(TPair<float, int>(aptitudes[i], i));
+	}
+
+	aptitudeIndexArray.Sort([](TPair<float, int> a, TPair<float, int> b) { return a.Key > b.Key; });
+
+	for (int i = 0; i < aptitudeIndexArray.Num(); i++)
+	{
+
+		amountProbabilities += aptitudeIndexArray[i].Key;
 
 		if (amountProbabilities >= rulete)
 		{
 
-			index = i;
-			break;
+			index = aptitudeIndexArray[i].Value;
+			return index;
 		}
 	}
 
-	return index;
+	//No deberiamos llegar nunca aqui
+	return -1;
 }
 
 TArray<AChromosome*> AGeneticManager::GetBestIndividues(TArray<AChromosome*> population, int32 numIndividues)

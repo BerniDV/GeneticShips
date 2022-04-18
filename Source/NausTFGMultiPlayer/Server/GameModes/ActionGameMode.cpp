@@ -139,7 +139,15 @@ void AActionGameMode::SetUpFirstGeneration()
 
 	TArray<AChromosome*> firstGeneration = geneticManager->GenerateFirstGenerationDna();
 
-	roundResultFuture = enemyManager->SpawnGeneration(firstGeneration);
+	FVector pilotPosition;
+
+	for(auto x : playersInGame)
+	{
+		pilotPosition = x.Value->GetPawn()->GetActorLocation();
+		break;
+	}
+
+	roundResultFuture = enemyManager->SpawnGeneration(firstGeneration, pilotPosition);
 
 	GetWorld()->GetTimerManager().ClearTimer(timerHandler);
 	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::ProcesEndRound, 20.f, false);
@@ -190,7 +198,18 @@ void AActionGameMode::ProcesNewRound(TArray<AChromosome*>& newGeneration)
 {
 
 	UE_LOG(LogTemp, Warning, TEXT("New Round"));
-	roundResultFuture = enemyManager->SpawnGeneration(newGeneration);
+
+
+	FVector pilotPosition;
+
+	for (auto x : playersInGame)
+	{
+		pilotPosition = x.Value->GetPawn()->GetActorLocation();
+		break;
+	}
+
+
+	roundResultFuture = enemyManager->SpawnGeneration(newGeneration, pilotPosition);
 	GetWorld()->GetTimerManager().ClearTimer(timerHandler);
 	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::ProcesEndRound, 20.f, false);
 }

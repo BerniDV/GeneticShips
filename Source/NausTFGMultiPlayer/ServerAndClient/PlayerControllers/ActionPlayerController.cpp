@@ -48,7 +48,13 @@ void AActionPlayerController::BindSignals()
 	Super::BindSignals();
 
 	if (!HasAuthority())
+	{
+
 		Cast<AActionGameState>(GetWorld()->GetGameState())->signalNewRound.AddDynamic(this, &AActionPlayerController::UpdateRound);
+		Cast<AActionGameState>(GetWorld()->GetGameState())->signalEnemiesAlive.AddDynamic(this, &AActionPlayerController::UpdateEnemies);
+
+	}
+		
 	
 	playerControllerImpl->BindSignals();
 }
@@ -301,6 +307,19 @@ void AActionPlayerController::UpdateRound_Implementation()
 	}
 }
 
+
+void AActionPlayerController::UpdateEnemies_Implementation()
+{
+
+	if (IsLocalPlayerController())
+	{
+
+		int enemiesAlive = Cast<AActionGameState>(GetWorld()->GetGameState())->GetEnemiesAlive();
+		
+		Cast<UActionGameController>(presentationController)->SetEnemiesAlive(enemiesAlive);
+
+	}
+}
 
 void AActionPlayerController::InitializePresentationController()
 {

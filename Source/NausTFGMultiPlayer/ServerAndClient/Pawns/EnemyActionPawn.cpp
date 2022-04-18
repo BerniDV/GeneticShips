@@ -143,6 +143,7 @@ void AEnemyActionPawn::PlayDeath()
 	SpawnParticlesDeath();
 	SetHidden(true);
 	SetActorEnableCollision(false);
+	OnEnemyDead();
 	//Destroy();
 }
 

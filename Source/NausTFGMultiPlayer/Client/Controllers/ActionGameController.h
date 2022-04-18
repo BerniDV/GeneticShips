@@ -42,6 +42,9 @@ public:
 	void SetRound(int round);
 	FString GetRound();
 
+	void SetEnemiesAlive(int enemies);
+	FString GetEnemiesAliveText();
+
 	virtual void SpawnParticlesAtLocation(FVector Location, FVector Scale) override;
 
 protected:
