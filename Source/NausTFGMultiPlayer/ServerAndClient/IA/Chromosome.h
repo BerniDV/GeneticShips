@@ -32,8 +32,10 @@ public:
 
 	
 	void ApplyFenotipeSize(FVector size);
+	void ApplyFenotipeColor(FLinearColor color);
 
 	void ApplyMovementGenes();
+	void ApplyHealthGenes();
 
 	void SetRandomGenes();
 
@@ -65,13 +67,16 @@ private:
 	 * 10: decelerationSpeed
 	 * 11: maneuverabilityInPercent
 	 * 12: fireCadancy
+	 * 13 - 15: color
+	 * 16: health
+	 * 17:bulletDamage
 	 */
 	
 	TArray<float> genesArray;
 
 	bool bAlive;
 
-	int numGenes = 13;
+	int numGenes = 18;
 
 	USceneComponent* root;
 

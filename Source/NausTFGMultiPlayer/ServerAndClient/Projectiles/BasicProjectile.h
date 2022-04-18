@@ -37,6 +37,8 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void SpawnParticles();
 
+	void SetDamage(float _damage);
+
 
 protected:
 

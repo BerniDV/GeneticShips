@@ -4,6 +4,7 @@
 #include "Chromosome.h"
 
 #include "ParameterCollection.h"
+#include "Controllers/AIBaseController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
 #include "NausTFGMultiPlayer/ServerAndClient/GameStates/ActionGameState.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/EnemyActionPawn.h"
@@ -41,9 +42,13 @@ void AChromosome::Destroyed()
 void AChromosome::SetRandomGenes()
 {
 
+	genesArray[(int8)Gene::color] = FMath::FRandRange(0, 1);
+	genesArray[(int8)Gene::color + 1] = FMath::FRandRange(0, 1);
+	genesArray[(int8)Gene::color + 2] = FMath::FRandRange(0, 1);
 
 	genesArray[(int8)Gene::size] = FMath::RandRange(1, 10);
-	genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(0.f, 25.f);
+	genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(1.f, 25.f);
+	genesArray[(int8)Gene::bulletDamage] = FMath::FRandRange(1.f, 25.f);
 
 	genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, 1000.f);
 	genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(0.f, 1000.f);
@@ -54,6 +59,7 @@ void AChromosome::SetRandomGenes()
 	genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, 1000.f);
 	genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, 100.f);
 	genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(5.f, 10.f);
+	genesArray[(int8)Gene::health] = FMath::FRandRange(1.f, 100.f);
 }
 
 void AChromosome::Mutation()
@@ -62,19 +68,22 @@ void AChromosome::Mutation()
 	int round = Cast<AActionGameState>(GetWorld()->GetGameState())->GetRound();
 
 	//Igual dividir el maximo por un numero acordado menos la ronda
-	genesArray[(int8)Gene::size] = FMath::RandRange(10, 1 * round); //10
-	genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(0.f, 5 * round); //100
 
-	genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, 5000 * round); //300
-	genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(0.f, 10000 * round); //400
-	genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(0.f, 10000 * round); //400
-	genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(0.f, 2000 * round); //1000
-	genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(0.f, 2000 * round); //1000
-	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(0.f, 200 * round); //50
-	genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, 200 * round); //100
+	genesArray[(int8)Gene::size] = FMath::RandRange(10, (1 * round) % 100); //10
+	genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(0.f, (5 * round) % 100); //100
+	genesArray[(int8)Gene::bulletDamage] = FMath::FRandRange(0.f, (5 * round) % 100); //100
+
+	genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, (5000 * round) % 100000); //300
+	genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(0.f, (10000 * round)%200000); //400
+	genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(0.f, (10000 * round) % 200000); //400
+	genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(0.f, (2000 * round) % 40000); //1000
+	genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(0.f, (2000 * round) % 40000); //1000
+	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(0.f, (200 * round) % 4000); //50
+	genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, (200 * round) % 4000); //100
 	genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, (2 * round) % 100); //100
 	genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(0.1f, (1 * round + 1) % 20); //0.1
 	genesArray[(int8)Gene::fireCadancy] = 1.f / genesArray[12];
+	genesArray[(int8)Gene::health] = FMath::FRandRange(1.f, (100 * round) % 1000);
 }
 
 AChromosome* AChromosome::Clone()
@@ -120,8 +129,8 @@ void AChromosome::AddToGene(Gene typeGene, float amount)
 void AChromosome::ApplyFenotipe()
 {
 
-	
 	ApplyFenotipeSize(FVector(genesArray[(int8)Gene::size]));
+	ApplyFenotipeColor(FLinearColor(genesArray[(int8)Gene::color], genesArray[(int8)Gene::color + 1], genesArray[(int8)Gene::color + 2]));
 }
 
 void AChromosome::ApplyFenotipeSize(FVector size)
@@ -137,6 +146,18 @@ void AChromosome::ApplyFenotipeSize(FVector size)
 	}
 }
 
+void AChromosome::ApplyFenotipeColor(FLinearColor color)
+{
+
+	if (AEnemyActionPawn* myPawn = Cast<AEnemyActionPawn>(GetOwner()))
+	{
+
+		myPawn->SetEmissiveColor(color);
+		myPawn->SetColorAllClients(color);
+
+	}
+}
+
 void AChromosome::ApplyMovementGenes()
 {
 
@@ -146,6 +167,26 @@ void AChromosome::ApplyMovementGenes()
 	{
 
 		myOwner->InitMovementCompnent(genesArray[(int8)Gene::speedDropRate], genesArray[(int8)Gene::defaultMaxAcceleration], genesArray[(int8)Gene::defaultMaxSpeed], genesArray[(int8)Gene::maxAcceleration], genesArray[(int8)Gene::maxSpeed], genesArray[(int8)Gene::accelerationSpeed], genesArray[(int8)Gene::decelerationSpeed], genesArray[(int8)Gene::maneuverabilityInPercent]);
+
+	}
+}
+
+void AChromosome::ApplyHealthGenes()
+{
+
+	AEnemyActionPawn* myOwner = Cast<AEnemyActionPawn>(GetOwner());
+
+	if (myOwner && myOwner->HasAuthority())
+	{
+
+		AAIBaseController* myController = myOwner->GetController<AAIBaseController>();
+
+
+		if(myController)
+		{
+
+			myController->SetHealth(genesArray[(int8)Gene::health]);
+		}
 
 	}
 }

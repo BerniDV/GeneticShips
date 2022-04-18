@@ -38,6 +38,7 @@ public:
 
 	void ApplyFenotipe();
 	void ApplyMovementGenes();
+	void ApplyHealthGenes();
 
 	void SetChromosome(AChromosome* newChromosome);
 	AChromosome* GetChromosome();
@@ -67,6 +68,11 @@ public:
 	float GetInterpolationSpeed();
 
 	void OnEnemyDead();
+
+	void SetEmissiveColor(FLinearColor color);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void SetColorAllClients(FLinearColor color);
 
 protected:
 

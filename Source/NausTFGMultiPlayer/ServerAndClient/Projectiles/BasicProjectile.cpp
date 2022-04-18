@@ -31,8 +31,8 @@ ABasicProjectile::ABasicProjectile()
 
 	projectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	projectileMovementComponent->SetUpdatedComponent(projectileSphereComponent);
-	projectileMovementComponent->InitialSpeed = 35000.0f;
-	projectileMovementComponent->MaxSpeed = 35000.0f;
+	projectileMovementComponent->InitialSpeed = 60000.0f;
+	projectileMovementComponent->MaxSpeed = 60000.0f;
 	projectileMovementComponent->bRotationFollowsVelocity = true;
 	projectileMovementComponent->ProjectileGravityScale = 0.0f;
 
@@ -141,6 +141,12 @@ bool ABasicProjectile::IsNetRelevantFor(const AActor* RealViewer, const AActor* 
 {
 	//Hacemos que el actor sea relevante para otros actores en base a su propia posicion
 	return Super::IsNetRelevantFor(RealViewer, this, SrcLocation);
+}
+
+void ABasicProjectile::SetDamage(float _damage)
+{
+
+	damage = _damage;
 }
 
 void ABasicProjectile::SpawnParticles_Implementation()

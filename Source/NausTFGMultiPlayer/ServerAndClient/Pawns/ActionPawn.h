@@ -69,6 +69,7 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void SetSizeAllClients(FVector Size);
 
+
 private:
 
 	float maxHealth;

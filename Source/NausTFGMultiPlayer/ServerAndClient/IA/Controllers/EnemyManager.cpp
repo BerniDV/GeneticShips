@@ -51,6 +51,7 @@ std::future<TArray<AChromosome*>> AEnemyManager::SpawnGeneration(TArray<AChromos
 			Enemy->SetID(nextEnemyID);
 			Enemy->SetReplicates(true);
 			generationDNA[i]->SetOwner(Enemy);
+
 			Enemy->SetChromosome(generationDNA[i]);
 
 			controller->Possess(Enemy);

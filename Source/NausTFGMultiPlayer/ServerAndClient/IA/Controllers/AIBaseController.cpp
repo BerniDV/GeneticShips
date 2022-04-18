@@ -169,10 +169,18 @@ void AAIBaseController::OnPossess(APawn* InPawn)
 	AEnemyActionPawn* myPawn = Cast<AEnemyActionPawn>(InPawn);
 
 	cadencyFire = myPawn->GetChromosome()->GetGene(Gene::fireCadancy);
+	health = myPawn->GetChromosome()->GetGene(Gene::health);
+
 }
 
 void AAIBaseController::SetEnemyCanShoot(bool canShoot)
 {
 
 	bCanShoot = canShoot;
+}
+
+void AAIBaseController::SetHealth(float _health)
+{
+
+	health = _health;
 }

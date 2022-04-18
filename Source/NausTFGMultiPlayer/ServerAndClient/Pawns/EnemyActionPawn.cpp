@@ -97,6 +97,12 @@ void AEnemyActionPawn::ApplyMovementGenes()
 	enemyChromosome->ApplyMovementGenes();
 }
 
+void AEnemyActionPawn::ApplyHealthGenes()
+{
+	
+	enemyChromosome->ApplyHealthGenes();
+}
+
 void AEnemyActionPawn::SetChromosome(AChromosome* newChromosome)
 {
 
@@ -104,7 +110,6 @@ void AEnemyActionPawn::SetChromosome(AChromosome* newChromosome)
 
 	ApplyFenotipe();
 	ApplyMovementGenes();
-	
 }
 
 AChromosome* AEnemyActionPawn::GetChromosome()
@@ -201,6 +206,18 @@ void AEnemyActionPawn::OnEnemyDead()
 	signalOnEnemyDead.Broadcast();
 }
 
+void AEnemyActionPawn::SetEmissiveColor(FLinearColor color)
+{
+
+	emissiveMaterial->SetVectorParameterValue(TEXT("EmissiveColor"), color);
+}
+
+void AEnemyActionPawn::SetColorAllClients_Implementation(FLinearColor color)
+{
+
+	emissiveMaterial->SetVectorParameterValue(TEXT("EmissiveColor"), color);
+}
+
 void AEnemyActionPawn::Server_Fire_Implementation(FVector locationToFire, FVector target)
 {
 
@@ -212,6 +229,7 @@ void AEnemyActionPawn::Server_Fire_Implementation(FVector locationToFire, FVecto
 	spawnParameters.Owner = this;
 	
 	ABasicProjectile* BasicProjectile = GetWorld()->SpawnActor<ABasicProjectile>(projectile, spawnLocation, spawnRotation, spawnParameters);
+	BasicProjectile->SetDamage(GetChromosome()->GetGene(Gene::bulletDamage));
 
 }
 
@@ -238,9 +256,9 @@ void AEnemyActionPawn::BeginPlay()
 
 	meshComponent->SetMaterial(2, emissiveMaterial);
 
-	FLinearColor color(FMath::FRandRange(0, 1), FMath::FRandRange(0, 1), FMath::FRandRange(0, 1));
+	//FLinearColor color(FMath::FRandRange(0, 1), FMath::FRandRange(0, 1), FMath::FRandRange(0, 1));
 
-	emissiveMaterial->SetVectorParameterValue(TEXT("EmissiveColor"), color);
+	//emissiveMaterial->SetVectorParameterValue(TEXT("EmissiveColor"), color);
 	
 	if(HasAuthority())
 	{

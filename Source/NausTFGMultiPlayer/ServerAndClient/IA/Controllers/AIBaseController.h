@@ -50,6 +50,8 @@ public:
 
 	void SetEnemyCanShoot(bool canShoot);
 
+	void SetHealth(float _health);
+
 private:
 
 	APilotActionPawn* target;
