@@ -47,19 +47,20 @@ void AChromosome::SetRandomGenes()
 	genesArray[(int8)Gene::color3] = FMath::FRandRange(0, 1);
 
 	genesArray[(int8)Gene::size] = FMath::RandRange(1, 10);
-	genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(15.f, 50.f);
-	genesArray[(int8)Gene::bulletDamage] = FMath::FRandRange(15.f, 50.f);
+	genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(15.f, maxImpactDamage);
+	genesArray[(int8)Gene::bulletDamage] = FMath::FRandRange(15.f, maxBulletDamage);
 
-	genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, 1000.f);
-	genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(1000.f / 4.f, 1000.f / 4.f);
-	genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(1000.f / 4.f, 4000.f / 4.f);
-	genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(1000.f / 4.f, 4000.f / 4.f);
-	genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(30000.f/4.f, 7000.f / 4.f);
-	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(500.f / 4.f, 2000.f / 4.f);
-	genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, 1000.f / 4.f);
+	genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, maxSpeedDropRate);
+	genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(1000.f / 4.f, maxDefaultMaxAcceleration);
+	genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(1000.f / 4.f, 4000.f / maxMaxAcceleration);
+	genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(1000.f / 4.f, 4000.f / maxdefaultMaxSpeed);
+	genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(30000.f/4.f, 7000.f / maxMaxSpeed);
+	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(500.f / 4.f, 2000.f / maxAccelerationSpeed);
+	genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, 1000.f / maxDecelerationSpeed);
 	genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, 50.f);
-	genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(0.5f, 6.f);
-	genesArray[(int8)Gene::health] = FMath::FRandRange(100.f, 300.f);
+	genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(1, 6);
+	//genesArray[(int8)Gene::fireCadancy] = 1.f / genesArray[12];
+	genesArray[(int8)Gene::health] = FMath::FRandRange(100.f, maxHealth);
 }
 
 void AChromosome::Mutation()
@@ -79,63 +80,63 @@ void AChromosome::Mutation()
 
 		case 3:
 
-			genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(0.f, (5 * round) % maxImpactDamage); //100
+			genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(0.f, maxImpactDamage); //100
 
 			break;
 
 		case 4:
 
-			genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, (5000 * round) % maxSpeedDropRate); //300
+			genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, maxSpeedDropRate); //300
 			break;
 
 		case 5:
 
-			genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(0.f, (10000 * round) % maxDefaultMaxAcceleration); //400
+			genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(0.f,  maxDefaultMaxAcceleration); //400
 			break;
 		case 6:
 
-			genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(0.f, (10000 * round) % maxMaxAcceleration); //400
+			genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(0.f, maxMaxAcceleration); //400
 			break;
 
 		case 7:
 
-			genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(0.f, (2000 * round) % maxdefaultMaxSpeed); //1000
+			genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(0.f, maxdefaultMaxSpeed); //1000
 			break;
 		case 8:
 
-			genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(0.f, (2000 * round) % maxMaxSpeed); //1000
+			genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(0.f, maxMaxSpeed); //1000
 			
 			break;
 
 		case 9:
 
-			genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(0.f, (200 * round) % maxAccelerationSpeed); //50
+			genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(0.f, maxAccelerationSpeed); //50
 			break;
 		case 10:
 
-			genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, (200 * round) % maxDecelerationSpeed); //100
+			genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, maxDecelerationSpeed); //100
 			
 			break;
 
 		case 11:
 
-			genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, (2 * round) % maxManeuverabilityInPercent); //100
+			genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, maxManeuverabilityInPercent); //100
 			break;
 
 		case 12:
 
-			genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(0.1f, (1 * round + 1) % maxFireCadancy); //0.1
+			genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(0.1f, maxFireCadancy); //0.1
 			genesArray[(int8)Gene::fireCadancy] = 1.f / genesArray[12];
 			break;
 
 		case 16:
 
-			genesArray[(int8)Gene::health] = FMath::FRandRange(1.f, (100 * round) % maxHealth);
+			genesArray[(int8)Gene::health] = FMath::FRandRange(1.f, maxHealth);
 			break;
 
 		case 17:
 
-			genesArray[(int8)Gene::bulletDamage] = FMath::FRandRange(0.f, (5 * round) % maxBulletDamage); //100
+			genesArray[(int8)Gene::bulletDamage] = FMath::FRandRange(0.f, maxBulletDamage); //100
 			break;
 
 		default:
@@ -282,7 +283,7 @@ void AChromosome::ApplyFenotipeColor(FLinearColor color)
 		float parentSize = (genesArray[(int8)Gene::size] / maxSize);
 
 		red = ((0.6 * relativeImpactDamage) + (0.4 * relativeBulletDamage));
-		green = ((0.5 * relativeCadency) + (0.5 * relativeHealth));
+		green = ((0.5 * (relativeCadency)) + (0.5 * relativeHealth));
 		blue = ((0.7 * relativeVelocity) + (0.3 * relativeManeuverability));
 
 		FLinearColor resultColor(red, green, blue);

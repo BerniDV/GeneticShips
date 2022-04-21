@@ -86,7 +86,7 @@ private:
 	USceneComponent* root;
 
 	const int maxSize = 100;
-	const int maxImpactDamage = 100;
+	const int maxImpactDamage = 25;
 	const int maxSpeedDropRate = 10000;
 	const int maxDefaultMaxAcceleration = 20000;
 	const int maxMaxAcceleration = 20000;
@@ -97,7 +97,7 @@ private:
 	const int maxManeuverabilityInPercent = 100;
 	const int maxFireCadancy = 20;
 	const int maxHealth = 1000;
-	const int maxBulletDamage = 100;
+	const int maxBulletDamage = 25;
 
 
 };

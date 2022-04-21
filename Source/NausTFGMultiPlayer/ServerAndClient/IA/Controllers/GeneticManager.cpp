@@ -191,7 +191,7 @@ float AGeneticManager::CalculateAptitude(AChromosome* individual)
 {
 
 	//No mes temps viud -> si mes temps aporp meu, 
-	return individual->GetGene(Gene::timeAlive) * 10 + individual->GetGene(Gene::damageCaused) * 90 + individual->GetGene(Gene::traveledDistance) * 40;
+	return individual->GetGene(Gene::timeAlive) * 0 + individual->GetGene(Gene::damageCaused) * 1 + individual->GetGene(Gene::traveledDistance) * 0 + individual->GetGene(Gene::bulletDamage) * 0;
 }
 
 void AGeneticManager::SetPopulationSize(int population)
