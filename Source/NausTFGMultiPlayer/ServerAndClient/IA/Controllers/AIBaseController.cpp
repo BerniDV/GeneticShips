@@ -21,6 +21,7 @@ AAIBaseController::AAIBaseController()
 	fireTimeTest = 0.f;
 	cadencyFire = 10.f;
 	bCanShoot = true;
+	shootDistance = 50000 * 2;
 
 }
 
@@ -53,6 +54,8 @@ void AAIBaseController::BeginPlay()
 			break;
 		}
 	}
+
+	lastPosition = FVector(0);
 }
 
 void AAIBaseController::Tick(float DeltaSeconds)
@@ -65,7 +68,7 @@ void AAIBaseController::Tick(float DeltaSeconds)
 	if (myPawn && target) {
 
 		//Si esta muy lejos no puede disparar
-		if ((myPawn->GetActorLocation() - target->GetActorLocation()).Size() < 50000 && HasAuthority())
+		if ((myPawn->GetActorLocation() - target->GetActorLocation()).Size() < shootDistance && HasAuthority())
 		{
 
 
@@ -109,6 +112,13 @@ void AAIBaseController::Tick(float DeltaSeconds)
 
 
 		}
+
+		FVector actualPosition = myPawn->GetActorLocation();
+
+		myPawn->GetChromosome()->AddToGene(Gene::traveledDistance, (actualPosition - lastPosition).Size());
+
+		lastPosition = actualPosition;
+
 	}
 
 }
@@ -174,6 +184,8 @@ void AAIBaseController::OnPossess(APawn* InPawn)
 
 	cadencyFire = myPawn->GetChromosome()->GetGene(Gene::fireCadancy);
 	health = myPawn->GetChromosome()->GetGene(Gene::health);
+
+	lastPosition = GetPawn()->GetActorLocation();
 
 	BindPawnSignals();
 

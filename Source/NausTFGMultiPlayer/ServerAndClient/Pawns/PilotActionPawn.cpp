@@ -265,8 +265,8 @@ void APilotActionPawn::InitializeMovement()
 	speedDropRate = 3000.f / 3;
 	defaultMaxAcceleration = 4000 / 3;
 	maxAcceleration = 4000 / 3;
-	defaultMaxSpeed = 10000;
-	maxSpeed = 10000;
+	defaultMaxSpeed = 100000/5;
+	maxSpeed = 100000/5;
 	accelerationSpeed = 500.f / 2;
 	decelerationSpeed = 1000.f / 2;
 	maneuverabilityInPercent = 15.f;

@@ -77,7 +77,8 @@ enum class Gene : uint8
 	color2,
 	color3,
 	health,
-	bulletDamage
+	bulletDamage,
+	traveledDistance
 
 };
 

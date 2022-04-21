@@ -73,15 +73,31 @@ private:
 	 * 12: fireCadancy
 	 * 13 - 15: color
 	 * 16: health
-	 * 17:bulletDamage
+	 * 17: bulletDamage
+	 * 18: traveledDistance
 	 */
 	
 	TArray<float> genesArray;
 
 	bool bAlive;
 
-	int numGenes = 18;
+	int numGenes = 19;
 
 	USceneComponent* root;
+
+	const int maxSize = 100;
+	const int maxImpactDamage = 100;
+	const int maxSpeedDropRate = 10000;
+	const int maxDefaultMaxAcceleration = 20000;
+	const int maxMaxAcceleration = 20000;
+	const int maxdefaultMaxSpeed = 4000;
+	const int maxMaxSpeed = 4000;
+	const int maxAccelerationSpeed = 4000;
+	const int maxDecelerationSpeed = 4000;
+	const int maxManeuverabilityInPercent = 100;
+	const int maxFireCadancy = 20;
+	const int maxHealth = 1000;
+	const int maxBulletDamage = 100;
+
 
 };

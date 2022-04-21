@@ -65,5 +65,8 @@ private:
 	bool bCanShoot;
 
 	EnemyState enemyState;
-	
+
+	float shootDistance;
+
+	FVector lastPosition;
 };

@@ -31,8 +31,8 @@ ABasicProjectile::ABasicProjectile()
 
 	projectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	projectileMovementComponent->SetUpdatedComponent(projectileSphereComponent);
-	projectileMovementComponent->InitialSpeed = 60000.0f;
-	projectileMovementComponent->MaxSpeed = 60000.0f;
+	projectileMovementComponent->InitialSpeed = 60000.0f * 2;
+	projectileMovementComponent->MaxSpeed = 60000.0f * 2;
 	projectileMovementComponent->bRotationFollowsVelocity = true;
 	projectileMovementComponent->ProjectileGravityScale = 0.0f;
 

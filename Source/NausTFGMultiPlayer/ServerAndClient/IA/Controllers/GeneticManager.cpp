@@ -173,11 +173,16 @@ AChromosome* AGeneticManager::CrossOver(AChromosome* parent1, AChromosome* paren
 
 	float probabilityMutation = (rand() % 100) + 1;
 
-	if(probabilityMutation < 5)
+	if(probabilityMutation < 15)
 	{
 
 		son->Mutation();
 	}
+
+	son->SetGene(Gene::traveledDistance, 0.f);
+	son->SetGene(Gene::damageCaused, 0.f);
+	son->SetGene(Gene::timeAlive, 0.f);
+
 
 	return son;
 }
@@ -185,8 +190,8 @@ AChromosome* AGeneticManager::CrossOver(AChromosome* parent1, AChromosome* paren
 float AGeneticManager::CalculateAptitude(AChromosome* individual)
 {
 
-
-	return individual->GetGene(Gene::timeAlive) + individual->GetGene(Gene::damageCaused);
+	//No mes temps viud -> si mes temps aporp meu, 
+	return individual->GetGene(Gene::timeAlive) * 10 + individual->GetGene(Gene::damageCaused) * 90 + individual->GetGene(Gene::traveledDistance) * 40;
 }
 
 void AGeneticManager::SetPopulationSize(int population)
