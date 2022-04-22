@@ -3,10 +3,12 @@
 
 #include "ArtilleryActionPawn.h"
 
+#include "Components/AudioComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Projectiles/BasicProjectile.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/RotationComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "Sound/SoundCue.h"
 
 AArtilleryActionPawn::AArtilleryActionPawn()
 {
@@ -28,6 +30,17 @@ AArtilleryActionPawn::AArtilleryActionPawn()
 	rotationComponent = CreateDefaultSubobject<URotationComponent>(TEXT("rotationComponent"));
 	rotationComponent->SetIsReplicated(true);
 	
+	static ConstructorHelpers::FObjectFinder<USoundCue> gunCue(TEXT("SoundCue'/Game/Assets/Sounds/LaserShot/laserShot.laserShot'"));
+
+	if(gunCue.Succeeded())
+	{
+
+		gunAudioCue = gunCue.Object;
+		gunAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("gunAudioComp"));
+		gunAudioComponent->bAutoActivate = false;
+		gunAudioComponent->SetupAttachment(RootComponent);
+	}
+	
 }
 
 void AArtilleryActionPawn::Fire()
@@ -43,8 +56,14 @@ void AArtilleryActionPawn::StopFire()
 	
 }
 
+void AArtilleryActionPawn::ClientFireSound_Implementation()
+{
+	if(!HasAuthority())
+		gunAudioComponent->Play();
+}
+
 bool AArtilleryActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget,
-	const FVector& SrcLocation) const
+                                            const FVector& SrcLocation) const
 {
 	
 	return Super::IsNetRelevantFor(RealViewer, ViewTarget, SrcLocation);
@@ -68,6 +87,17 @@ void AArtilleryActionPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 void AArtilleryActionPawn::PlayDeath_Implementation()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Black, "Death");
+}
+
+void AArtilleryActionPawn::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if(gunAudioCue->IsValidLowLevelFast())
+	{
+
+		gunAudioComponent->SetSound(gunAudioCue);
+	}
 }
 
 
@@ -98,6 +128,8 @@ void AArtilleryActionPawn::Server_Fire_Implementation(FVector locationToFire)
 	spawnParameters.Owner = this;
 
 	ABasicProjectile* BasicProjectile =  GetWorld()->SpawnActor<ABasicProjectile>(projectile, spawnLocation, spawnRotation, spawnParameters);
+
+	ClientFireSound();
 
 }
 

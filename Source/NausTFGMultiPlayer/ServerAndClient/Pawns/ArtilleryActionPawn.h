@@ -7,6 +7,7 @@
 #include "ArtilleryActionPawn.generated.h"
 
 
+class USoundCue;
 class URotationComponent;
 class ABasicProjectile;
 /**
@@ -27,6 +28,9 @@ public:
 	UFUNCTION(Server, Reliable, WithValidation)
 	void Server_Fire(FVector locationToFire);
 
+	UFUNCTION(NetMulticast, Reliable)
+	void ClientFireSound();
+
 	virtual bool IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const override;
 
 	virtual void ExecuteRotation(FRotator rotator) override;
@@ -34,6 +38,8 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
 
 	virtual void PlayDeath_Implementation() override;
+
+	virtual void PostInitializeComponents() override;
 
 protected:
 
@@ -46,6 +52,13 @@ protected:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Replicated)
 	URotationComponent* rotationComponent;
+
+	//sound (se hara en una clase propia como el visual controller para las particulas en el controlador de presentacion)
+	UPROPERTY()
+	USoundCue* gunAudioCue;
+
+	UPROPERTY()
+	UAudioComponent* gunAudioComponent;
 
 private:
 

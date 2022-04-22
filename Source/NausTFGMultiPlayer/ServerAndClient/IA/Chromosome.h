@@ -96,7 +96,7 @@ private:
 	const int maxDecelerationSpeed = 4000;
 	const int maxManeuverabilityInPercent = 100;
 	const int maxFireCadancy = 20;
-	const int maxHealth = 1000;
+	const int maxHealth = 500;
 	const int maxBulletDamage = 25;
 
 

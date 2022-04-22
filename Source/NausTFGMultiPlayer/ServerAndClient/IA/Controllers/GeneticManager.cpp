@@ -190,8 +190,12 @@ AChromosome* AGeneticManager::CrossOver(AChromosome* parent1, AChromosome* paren
 float AGeneticManager::CalculateAptitude(AChromosome* individual)
 {
 
-	//No mes temps viud -> si mes temps aporp meu, 
-	return individual->GetGene(Gene::timeAlive) * 0 + individual->GetGene(Gene::damageCaused) * 1 + individual->GetGene(Gene::traveledDistance) * 0 + individual->GetGene(Gene::bulletDamage) * 0;
+	//No mes temps viud -> si mes temps aporp meu,
+
+	float result = 1.f;
+
+	result = individual->GetGene(Gene::timeAlive) + individual->GetGene(Gene::damageCaused) * 90 + individual->GetGene(Gene::traveledDistance) * 0 + individual->GetGene(Gene::bulletDamage) * 0;
+	return result;
 }
 
 void AGeneticManager::SetPopulationSize(int population)

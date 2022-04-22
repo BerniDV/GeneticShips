@@ -36,7 +36,7 @@ ABasicProjectile::ABasicProjectile()
 	projectileMovementComponent->bRotationFollowsVelocity = true;
 	projectileMovementComponent->ProjectileGravityScale = 0.0f;
 
-	damage = 10.f;
+	damage = 50.f;
 	damageType = UDamageType::StaticClass();
 	
 }

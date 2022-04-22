@@ -6,6 +6,7 @@
 #include "ActionPawn.h"
 #include "PilotActionPawn.generated.h"
 
+class USoundCue;
 class UBoxComponent;
 class USpringArmComponent;
 class URotationComponent;
@@ -100,7 +101,6 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	UStaticMeshComponent* meshComponent;
-
 
 private:
 
