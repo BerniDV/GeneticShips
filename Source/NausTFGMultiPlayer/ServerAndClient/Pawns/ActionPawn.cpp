@@ -5,6 +5,7 @@
 
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/ActionPlayerState.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Singletons/CustomGameInstance.h"
 #include "Net/UnrealNetwork.h"
 
 // Sets default values
@@ -157,6 +158,19 @@ bool AActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewT
 	return Super::IsNetRelevantFor(RealViewer, this, SrcLocation);
 }
 
+void AActionPawn::SpawnExplosionSound()
+{
+
+	if (!HasAuthority())
+	{
+
+		AActionPlayerController* PC = Cast<AActionPlayerController>(Cast<UCustomGameInstance>(GetGameInstance())->GetLocalPlayerController());
+
+		if (PC)
+			PC->SpawnSoundAtLocation(GetActorLocation(), Sounds::Explosion, 1);
+	}
+}
+
 void AActionPawn::SetSizeAllClients_Implementation(FVector Size)
 {
 
@@ -165,6 +179,8 @@ void AActionPawn::SetSizeAllClients_Implementation(FVector Size)
 
 void AActionPawn::PlayDeath_Implementation()
 {
+
+	SpawnExplosionSound();
 
 }
 

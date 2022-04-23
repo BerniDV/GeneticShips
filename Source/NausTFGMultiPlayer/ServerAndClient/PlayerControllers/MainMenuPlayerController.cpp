@@ -31,6 +31,8 @@ void AMainMenuPlayerController::InitializePresentationController()
 		presentationController = NewObject<UMainMenuController>();
 
 		presentationController->Init(this);
+
+		
 	}
 
 }
@@ -161,4 +163,6 @@ void AMainMenuPlayerController::BeginPlay()
 
 	SpawnMainMenuCamera();
 
+	if(!HasAuthority())
+		presentationController->SpawnSoundAtLocation(FVector::ZeroVector, Sounds::MainMenuMusic, 0.3);
 }

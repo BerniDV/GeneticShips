@@ -140,6 +140,8 @@ float AEnemyActionPawn::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 void AEnemyActionPawn::PlayDeath()
 {
 
+	Super::PlayDeath();
+
 	SpawnParticlesDeath();
 	SetHidden(true);
 	SetActorEnableCollision(false);
@@ -232,6 +234,8 @@ void AEnemyActionPawn::Server_Fire_Implementation(FVector locationToFire, FVecto
 	ABasicProjectile* BasicProjectile = GetWorld()->SpawnActor<ABasicProjectile>(projectile, spawnLocation, spawnRotation, spawnParameters);
 	BasicProjectile->SetDamage(GetChromosome()->GetGene(Gene::bulletDamage));
 
+	ClientFireSound();
+
 }
 
 bool AEnemyActionPawn::Server_Fire_Validate(FVector locationToFire, FVector target)
@@ -306,3 +310,16 @@ void AEnemyActionPawn::SpawnParticlesDeath_Implementation()
 
 }
 
+void AEnemyActionPawn::ClientFireSound_Implementation()
+{
+
+	if (!HasAuthority())
+	{
+
+		AActionPlayerController* PC = Cast<AActionPlayerController>(Cast<UCustomGameInstance>(GetGameInstance())->GetLocalPlayerController());
+
+		if (PC)
+			PC->SpawnSoundAtLocation(GetActorLocation(), Sounds::Shoot, 0.05);
+
+	}
+}

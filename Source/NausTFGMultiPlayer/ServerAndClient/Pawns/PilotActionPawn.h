@@ -75,7 +75,7 @@ public:
 
 	virtual bool IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const override;
 
-    virtual void PlayDeath_Implementation() override;
+    virtual void PlayDeath() override;
 
 	UFUNCTION(NetMulticast, Reliable)
 	void SpawnExplosionParticlesAtActorLocation();

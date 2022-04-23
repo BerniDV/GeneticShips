@@ -167,6 +167,8 @@ void AActionPlayerController::Client_InitializeClientPlayerControllerImpl_Implem
 	playerControllerImpl->SetCameraManager(PlayerCameraManager);
 	SpawnActionCamera();
 
+	SpawnSoundAtLocation(FVector(0, 0, 0), Sounds::SpaceAmbient, 1.f);
+
 }
 
 

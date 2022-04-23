@@ -96,6 +96,13 @@ void APlayerControllerDefaultBehaviour::GetLifetimeReplicatedProps(TArray<FLifet
 	
 }
 
+void APlayerControllerDefaultBehaviour::SpawnSoundAtLocation(FVector Location, Sounds sound, float soundMultiplier)
+{
+
+	if (presentationController)
+		presentationController->SpawnSoundAtLocation(Location, sound, soundMultiplier);
+}
+
 void APlayerControllerDefaultBehaviour::BeginPlay()
 {
 	Super::BeginPlay();

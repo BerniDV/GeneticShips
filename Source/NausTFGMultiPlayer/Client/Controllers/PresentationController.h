@@ -6,6 +6,8 @@
 #include "UObject/NoExportTypes.h"
 #include "PresentationController.generated.h"
 
+class ASoundsController;
+enum class Sounds : uint8;
 class AInitMenuPlayerController;
 /**
  * 
@@ -39,6 +41,8 @@ public:
 	virtual void SpawnParticlesAtLocation(FVector Location, FVector Scale);
 	virtual void SpawnFollowingParticles(USceneComponent* AttatchTo, FVector Scale);
 
+	virtual void SpawnSoundAtLocation(FVector Location, Sounds sound, float soundMultiplier);
+
 public:
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FShowNotLockingCursor, UUserWidget*, userWidget);
@@ -50,5 +54,8 @@ public:
 protected:
 
 	class AVisualEffectsController* visualEffectsController;
+
+	TSubclassOf<ASoundsController> soundsControllerClass;
+	ASoundsController* soundsController;
 	
 };

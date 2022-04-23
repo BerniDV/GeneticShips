@@ -37,6 +37,9 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void SpawnParticles();
 
+	UFUNCTION(NetMulticast, Reliable)
+	void SpawnHitSound(AActor* spawnDamaged);
+
 	void SetDamage(float _damage);
 
 
@@ -63,3 +66,5 @@ private:
 
 
 };
+
+

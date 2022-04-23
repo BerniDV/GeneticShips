@@ -13,6 +13,7 @@
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Singletons/CustomGameInstance.h"
 #include "NausTFGMultiPlayer/ServerAndClient/IA/Chromosome.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Pawns/ArtilleryActionPawn.h"
 
 // Sets default values
 ABasicProjectile::ABasicProjectile()
@@ -123,6 +124,7 @@ void ABasicProjectile::OnProjectileImpact(UPrimitiveComponent* OverlappedCompone
 	{
 		//Aplicamos particulas de contacto y lo destruimos
 		SpawnParticles();
+		SpawnHitSound(OtherActor);
 		UGameplayStatics::ApplyDamage(OtherActor, damage, GetOwner()->GetInstigatorController(), this, damageType);
 		
 	}
@@ -134,6 +136,24 @@ void ABasicProjectile::OnProjectileImpact(UPrimitiveComponent* OverlappedCompone
 	}
 
 	Destroy();
+}
+
+void ABasicProjectile::SpawnHitSound_Implementation(AActor* actorDamaged)
+{
+
+	if (!HasAuthority())
+	{
+
+		AActionPlayerController* PC = Cast<AActionPlayerController>(Cast<UCustomGameInstance>(GetGameInstance())->GetLocalPlayerController());
+
+		if (PC && ((Cast<AEnemyActionPawn>(actorDamaged) && Cast<AArtilleryActionPawn>(PC->GetPawn())) || (Cast<APilotActionPawn>(actorDamaged) && Cast<APilotActionPawn>(PC->GetPawn()))))
+		{
+
+			PC->SpawnSoundAtLocation(GetActorLocation(), Sounds::BulletImpact, 0.6);
+
+		}
+			
+	}
 }
 
 bool ABasicProjectile::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget,

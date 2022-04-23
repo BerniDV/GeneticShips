@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "PlayerControllerDefaultBehaviour.generated.h"
 
+enum class Sounds : uint8;
 class UPresentationController;
 /**
  * 
@@ -37,6 +38,8 @@ public:
 	void SetCameraActor(ACameraActor* camera);
 
 	virtual void GetLifetimeReplicatedProps(TArray< class FLifetimeProperty >& OutLifetimeProps)const override;
+
+	void SpawnSoundAtLocation(FVector Location, Sounds sound, float soundMultiplier);
 
 protected:
 

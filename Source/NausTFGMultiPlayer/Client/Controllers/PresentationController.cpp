@@ -2,6 +2,8 @@
 
 
 #include "PresentationController.h"
+
+#include "SoundsController.h"
 #include "VisualEffectsController.h"
 #include "Blueprint/UserWidget.h"
 
@@ -9,7 +11,9 @@ UPresentationController::UPresentationController()
 {
 
 	//visualEffectsController = NewObject<AVisualEffectsController>(this, TEXT("ParticleCtrl"));
-	
+
+	ConstructorHelpers::FClassFinder<ASoundsController> soundsController_BPClass(TEXT("/Game/Client/Sounds/SoundsController_BP"));
+	soundsControllerClass = soundsController_BPClass.Class;
 }
 
 void UPresentationController::Init(APlayerController* owner)
@@ -80,5 +84,11 @@ void UPresentationController::SpawnFollowingParticles(USceneComponent* AttatchTo
 {
 
 	visualEffectsController->SpawnFollowingParticles(AttatchTo, Scale);
+}
+
+void UPresentationController::SpawnSoundAtLocation(FVector Location, Sounds sound, float soundMultiplier)
+{
+
+	soundsController->SpawnSoundAtLocation(Location, sound, FRotator::ZeroRotator, soundMultiplier);
 }
 

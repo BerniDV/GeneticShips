@@ -2,7 +2,10 @@
 
 
 #include "ActionGameController.h"
+
+#include "SoundsController.h"
 #include "NausTFGMultiPlayer/Client/Controllers/VisualEffectsController.h"
+#include "NausTFGMultiPlayer/Client/Controllers/SoundsController.h"
 #include "NausTFGMultiPlayer/Client/GUI/HUD/GameState/GameStateHUD_EP.h"
 #include "NausTFGMultiPlayer/Client/GUI/HUD/GameState/HUDGameState.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
@@ -33,6 +36,8 @@ void UActionGameController::CreaMenus()
 
 	//Crea el controlador de efectos visuales, es actor ya que en objeto unreal anulaba las referencias de punteros por algun motivo
 	visualEffectsController = GetWorld()->SpawnActor<AVisualEffectsController>();
+
+	soundsController = GetWorld()->SpawnActor<ASoundsController>(soundsControllerClass);
 
 }
 

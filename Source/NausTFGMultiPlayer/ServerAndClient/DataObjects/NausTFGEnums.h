@@ -82,6 +82,18 @@ enum class Gene : uint8
 
 };
 
+UENUM()
+enum class Sounds : uint8
+{
+
+	Shoot = 0,
+	BulletImpact,
+	Explosion,
+	SpaceAmbient,
+	MainMenuMusic
+
+};
+
 
 /*
 UCLASS()

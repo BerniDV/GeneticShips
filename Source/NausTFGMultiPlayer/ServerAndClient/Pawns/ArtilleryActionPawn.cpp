@@ -7,6 +7,7 @@
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Projectiles/BasicProjectile.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/RotationComponent.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Singletons/CustomGameInstance.h"
 #include "Net/UnrealNetwork.h"
 #include "Sound/SoundCue.h"
 
@@ -29,7 +30,7 @@ AArtilleryActionPawn::AArtilleryActionPawn()
 
 	rotationComponent = CreateDefaultSubobject<URotationComponent>(TEXT("rotationComponent"));
 	rotationComponent->SetIsReplicated(true);
-	
+	/*
 	static ConstructorHelpers::FObjectFinder<USoundCue> gunCue(TEXT("SoundCue'/Game/Assets/Sounds/LaserShot/laserShot.laserShot'"));
 
 	if(gunCue.Succeeded())
@@ -40,7 +41,7 @@ AArtilleryActionPawn::AArtilleryActionPawn()
 		gunAudioComponent->bAutoActivate = false;
 		gunAudioComponent->SetupAttachment(RootComponent);
 	}
-	
+	*/
 }
 
 void AArtilleryActionPawn::Fire()
@@ -58,8 +59,15 @@ void AArtilleryActionPawn::StopFire()
 
 void AArtilleryActionPawn::ClientFireSound_Implementation()
 {
-	if(!HasAuthority())
-		gunAudioComponent->Play();
+	if (!HasAuthority())
+	{
+
+		AActionPlayerController* PC = Cast<AActionPlayerController>(Cast<UCustomGameInstance>(GetGameInstance())->GetLocalPlayerController());
+
+		if (PC)
+			PC->SpawnSoundAtLocation(GetActorLocation(), Sounds::Shoot, 0.25);
+
+	}
 }
 
 bool AArtilleryActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget,
@@ -84,20 +92,23 @@ void AArtilleryActionPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	
 }
 
-void AArtilleryActionPawn::PlayDeath_Implementation()
+void AArtilleryActionPawn::PlayDeath()
 {
+
+	Super::PlayDeath();
+
 	GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Black, "Death");
 }
 
 void AArtilleryActionPawn::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-
+	/*
 	if(gunAudioCue->IsValidLowLevelFast())
 	{
 
 		gunAudioComponent->SetSound(gunAudioCue);
-	}
+	}*/
 }
 
 

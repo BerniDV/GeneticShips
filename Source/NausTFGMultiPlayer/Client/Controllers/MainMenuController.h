@@ -40,6 +40,8 @@ public:
 
 	void UpdateNumPlayers();
 
+	
+
 private:
 
 	void BindSetPilotAsRoleSelected();

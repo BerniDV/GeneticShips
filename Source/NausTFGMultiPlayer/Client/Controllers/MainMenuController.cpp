@@ -4,6 +4,7 @@
 #include "MainMenuController.h"
 #include "NausTFGMultiPlayer/Client/GUI/Menus/MainMenu_EP.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/MainMenuPlayerController.h"
+#include "NausTFGMultiPlayer/Client/Controllers/SoundsController.h"
 
 UMainMenuController::UMainMenuController()
 {
@@ -33,6 +34,7 @@ void UMainMenuController::CreaMenus()
 	mainMenu = CreateWidget<UMainMenu_EP>(mainMenuPlayerController, mainMenuClass);
 	mainMenu->SetNumPlayersValue(numPlayersDataForMainMenuText);
 	mainMenu->UpdateNumPlayers();
+	
 }
 
 void UMainMenuController::BindSignals()
@@ -48,6 +50,7 @@ void UMainMenuController::LoadMainMenu()
 
 	Super::LoadMenu(mainMenu);
 	ShowNotLockingMouseCursor(mainMenu);
+	soundsController = mainMenuPlayerController->GetWorld()->SpawnActor<ASoundsController>(soundsControllerClass);
 }
 
 void UMainMenuController::UnloadMainMenu()

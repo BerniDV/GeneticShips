@@ -58,6 +58,9 @@ public:
 	UFUNCTION(Server, Reliable, WithValidation)
 	void Server_Fire(FVector locationToFire, FVector target);
 
+	UFUNCTION(NetMulticast, Reliable)
+	void ClientFireSound();
+
 	void MoverForward(float movement);
 
 	void MoverRight(float movement);

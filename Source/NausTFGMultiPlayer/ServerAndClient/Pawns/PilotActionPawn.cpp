@@ -9,6 +9,7 @@
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/TranslationComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Projectiles/BasicProjectile.h"
+#include "NausTFGMultiPlayer/ServerAndClient/Singletons/CustomGameInstance.h"
 #include "Net/UnrealNetwork.h"
 
 APilotActionPawn::APilotActionPawn()
@@ -251,12 +252,14 @@ bool APilotActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AActor* 
 	return Super::IsNetRelevantFor(RealViewer, ViewTarget, SrcLocation);
 }
 
-void APilotActionPawn::PlayDeath_Implementation()
+void APilotActionPawn::PlayDeath()
 {
+	Super::PlayDeath();
 	SpawnExplosionParticlesAtActorLocation();
 	SpawnFollowingFireParticles();
 	Cast<AActionPlayerController>(GetOwner())->SetInputEnabled(false);
 }
+
 
 void APilotActionPawn::InitializeMovement()
 {
