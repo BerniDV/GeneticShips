@@ -14,6 +14,7 @@
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerControllerImpl.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerStates/ActionPlayerState.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Pawns/ActionPawn.h"
+#include "NausTFGMultiPlayer/ServerAndClient/PickUps/EnergyPickUp.h"
 
 AActionGameMode::AActionGameMode()
 {
@@ -22,6 +23,11 @@ AActionGameMode::AActionGameMode()
 	PlayerStateClass = AActionPlayerState::StaticClass();
 	PlayerControllerClass = AActionPlayerController::StaticClass();
 	GameStateClass = AActionGameState::StaticClass();
+
+	teamPosition = FVector::ZeroVector;
+
+	ConstructorHelpers::FClassFinder <AEnergyPickUp> refEnergyPickUpBP(TEXT("/Game/ServerAndClient/PickUps/EnergyPickUp_BP"));
+	pilotPickUpClass = refEnergyPickUpBP.Class;
 	
 }
 
@@ -85,8 +91,11 @@ void AActionGameMode::BeginPlay()
 
 	geneticManager = GetWorld()->SpawnActor<AGeneticManager>();
 	enemyManager = GetWorld()->SpawnActor<AEnemyManager>();
+	SpawnPickUp();
 
 	Cast<AActionGameState>(GameState)->signalPlayerDead.AddDynamic(this, &AActionGameMode::EndGame);
+	pilotPickUpEnergy->signalPickedUp.AddDynamic(this, &AActionGameMode::SpawnPickUp);
+
 	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::SetUpFirstGeneration, 10.f, false);
 }
 
@@ -139,15 +148,14 @@ void AActionGameMode::SetUpFirstGeneration()
 
 	TArray<AChromosome*> firstGeneration = geneticManager->GenerateFirstGenerationDna();
 
-	FVector pilotPosition;
 
 	for(auto x : playersInGame)
 	{
-		pilotPosition = x.Value->GetPawn()->GetActorLocation();
+		teamPosition = x.Value->GetPawn()->GetActorLocation();
 		break;
 	}
 
-	roundResultFuture = enemyManager->SpawnGeneration(firstGeneration, pilotPosition);
+	roundResultFuture = enemyManager->SpawnGeneration(firstGeneration, teamPosition);
 
 	GetWorld()->GetTimerManager().ClearTimer(timerHandler);
 	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::ProcesEndRound, 20.f, false);
@@ -200,16 +208,14 @@ void AActionGameMode::ProcesNewRound(TArray<AChromosome*>& newGeneration)
 	UE_LOG(LogTemp, Warning, TEXT("New Round"));
 
 
-	FVector pilotPosition;
-
 	for (auto x : playersInGame)
 	{
-		pilotPosition = x.Value->GetPawn()->GetActorLocation();
+		teamPosition = x.Value->GetPawn()->GetActorLocation();
 		break;
 	}
 
 
-	roundResultFuture = enemyManager->SpawnGeneration(newGeneration, pilotPosition);
+	roundResultFuture = enemyManager->SpawnGeneration(newGeneration, teamPosition);
 	GetWorld()->GetTimerManager().ClearTimer(timerHandler);
 	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::ProcesEndRound, 20.f, false);
 }
@@ -242,6 +248,22 @@ void AActionGameMode::SetPopulationSize(int populationSize)
 {
 
 	geneticManager->SetPopulationSize(populationSize);
+}
+
+void AActionGameMode::SpawnPickUp()
+{
+
+	if(!pilotPickUpEnergy)
+	{
+
+		pilotPickUpEnergy = GetWorld()->SpawnActor<AEnergyPickUp>(pilotPickUpClass);
+
+	}
+
+	FVector pickUpPosition(FMath::RandRange(-150000.f + teamPosition.X, 150000.f + teamPosition.X), FMath::RandRange(-150000.f + teamPosition.Y, 150000.f + teamPosition.Y), FMath::RandRange(-150000.f + teamPosition.Z, 150000.f + teamPosition.Z));
+
+	pilotPickUpEnergy->Client_SetActorLocation(pickUpPosition);
+
 }
 
 void AActionGameMode::Tick(float DeltaSeconds)

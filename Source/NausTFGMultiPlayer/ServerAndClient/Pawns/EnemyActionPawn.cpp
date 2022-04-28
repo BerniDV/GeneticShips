@@ -232,7 +232,9 @@ void AEnemyActionPawn::Server_Fire_Implementation(FVector locationToFire, FVecto
 	spawnParameters.Owner = this;
 	
 	ABasicProjectile* BasicProjectile = GetWorld()->SpawnActor<ABasicProjectile>(projectile, spawnLocation, spawnRotation, spawnParameters);
-	BasicProjectile->SetDamage(GetChromosome()->GetGene(Gene::bulletDamage));
+
+	if(BasicProjectile)
+		BasicProjectile->SetDamage(GetChromosome()->GetGene(Gene::bulletDamage));
 
 	ClientFireSound();
 

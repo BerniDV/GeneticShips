@@ -73,6 +73,9 @@ public:
 	FVector GetLastPosition();
 	FVector GetReplicatedPosition();
 
+	float GetEnergy();
+	void AddEnergy(float AmountEnergy);
+
 	virtual bool IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const override;
 
     virtual void PlayDeath() override;
@@ -114,6 +117,10 @@ private:
 	float speedDropRate;
 	float maneuverabilityInPercent;
 
+	bool bExhausted;
+
+	UPROPERTY(Replicated)
+	float Energy;
 	
 	UPROPERTY(VisibleAnywhere)
 	TSubclassOf<UDamageType> damageType;

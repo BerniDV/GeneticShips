@@ -29,6 +29,8 @@ public:
 
 	virtual void UpdateHealth(float health) override;
 
+	virtual void UpdateEnergy(float energy);
+
 
 private:
 

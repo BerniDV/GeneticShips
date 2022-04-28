@@ -7,6 +7,7 @@
 #include <future>
 #include "ActionGameMode.generated.h"
 
+class AEnergyPickUp;
 class AChromosome;
 class AEnemyManager;
 class AGeneticManager;
@@ -60,7 +61,8 @@ public:
 
 	void SetPopulationSize(int populationSize);
 
-	
+	UFUNCTION()
+	void SpawnPickUp();
 
 protected:
 
@@ -78,6 +80,12 @@ private:
 	AEnemyManager* enemyManager;
 
 	std::future<TArray<AChromosome*>> roundResultFuture;
-	//TFuture<TArray<AChromosome*>> roundResultFuture;
+
+	TSubclassOf<AEnergyPickUp> pilotPickUpClass;
+
+	UPROPERTY()
+	AEnergyPickUp* pilotPickUpEnergy;
+
+	FVector teamPosition;
 
 };

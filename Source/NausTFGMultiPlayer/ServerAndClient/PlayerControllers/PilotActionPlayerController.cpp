@@ -72,6 +72,15 @@ void APilotActionPlayerController::Tick(float DeltaSeconds)
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, myPawn->GetActorLocation().ToString());
 	}
 
+	if(!HasAuthority() && presentationController)
+	{
+		AActionPlayerController* PC = Cast<AActionPlayerController>(GetOwner());
+
+		APilotActionPawn* myPawn = Cast<APilotActionPawn>(PC->GetPawn());
+
+		Cast<UPilotActionGameController>(presentationController)->UpdateEnergy(myPawn->GetEnergy());
+	}
+
 }
 
 

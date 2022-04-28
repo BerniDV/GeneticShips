@@ -47,3 +47,9 @@ void UPilotActionGameController::UpdateHealth(float health)
 
 	pilotHUD->SetLifeRendered(health);
 }
+
+void UPilotActionGameController::UpdateEnergy(float energy)
+{
+
+	pilotHUD->SetEnergyRendered(energy);
+}

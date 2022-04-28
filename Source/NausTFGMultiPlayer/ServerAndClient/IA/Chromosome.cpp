@@ -51,12 +51,12 @@ void AChromosome::SetRandomGenes()
 	genesArray[(int8)Gene::bulletDamage] = FMath::FRandRange(15.f, maxBulletDamage);
 
 	genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, maxSpeedDropRate);
-	genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(1000.f / 4.f, maxDefaultMaxAcceleration);
-	genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(1000.f / 4.f, 4000.f / maxMaxAcceleration);
-	genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(1000.f / 4.f, 4000.f / maxdefaultMaxSpeed);
-	genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(30000.f/4.f, 7000.f / maxMaxSpeed);
-	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(500.f / 4.f, 2000.f / maxAccelerationSpeed);
-	genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, 1000.f / maxDecelerationSpeed);
+	genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(1000.f / 5.f, maxDefaultMaxAcceleration);
+	genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(1000.f / 5.f, maxMaxAcceleration);
+	genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(1000.f / 5.f, maxdefaultMaxSpeed);
+	genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(30000.f/4.f, maxMaxSpeed);
+	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(500.f / 5.f, maxAccelerationSpeed);
+	genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, maxDecelerationSpeed);
 	genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, 50.f);
 	genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(1, 6);
 	//genesArray[(int8)Gene::fireCadancy] = 1.f / genesArray[12];
@@ -284,7 +284,7 @@ void AChromosome::ApplyFenotipeColor(FLinearColor color)
 
 		red = ((0.6 * relativeImpactDamage) + (0.4 * relativeBulletDamage));
 		green = ((0.5 * (relativeCadency)) + (0.5 * relativeHealth));
-		blue = ((0.7 * relativeVelocity) + (0.3 * relativeManeuverability));
+		blue = ((0.6 * relativeVelocity) + (0.4 * relativeManeuverability));
 
 		FLinearColor resultColor(red, green, blue);
 

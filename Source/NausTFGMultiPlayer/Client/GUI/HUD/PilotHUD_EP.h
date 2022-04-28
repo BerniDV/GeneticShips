@@ -20,12 +20,20 @@ public:
 
 	void SetLifeRendered(float life);
 
+	void SetEnergyRendered(float energy);
+
 	UFUNCTION(BlueprintCallable)
 	float GetLife();
+
+	UFUNCTION(BlueprintCallable)
+	float GetEnergy();
 
 private:
 
 	UPROPERTY(EditAnywhere, Category = "PilotInfo")
 	float renderedLifeInPercent;
+
+	UPROPERTY(EditAnywhere, Category = "PilotInfo")
+	float renderedEnergyInPercent;
 	
 };

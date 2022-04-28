@@ -7,6 +7,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/RotationComponent.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Components/Movement/TranslationComponent.h"
+#include "NausTFGMultiPlayer/ServerAndClient/PickUps/EnergyPickUp.h"
 #include "NausTFGMultiPlayer/ServerAndClient/PlayerControllers/ActionPlayerController.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Projectiles/BasicProjectile.h"
 #include "NausTFGMultiPlayer/ServerAndClient/Singletons/CustomGameInstance.h"
@@ -47,6 +48,9 @@ APilotActionPawn::APilotActionPawn()
 	//NetUpdateFrequency = 2.5f;
 
 	//NetCullDistanceSquared = 1000000.f;
+
+	Energy = 100.f;
+	bExhausted = false;
 	
 }
 
@@ -84,6 +88,26 @@ void APilotActionPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if(HasAuthority() && !bExhausted)
+	{
+
+		Energy -= 2 * DeltaTime;
+
+	}
+
+	if (Energy <= 0.f && !bExhausted)
+	{
+		bExhausted = true;
+		translationComponent->SetMaxSpeed(translationComponent->GetMaxSpeed() / 3);
+	}
+
+	if(Energy > 0.f && bExhausted)
+	{
+
+		bExhausted = false;
+		translationComponent->SetMaxSpeed(translationComponent->GetMaxSpeed() * 3);
+	}
+
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, "Location: " + GetActorLocation().ToString());
 }
 
@@ -101,6 +125,7 @@ void APilotActionPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 
 	DOREPLIFETIME(APilotActionPawn, translationComponent);
 	DOREPLIFETIME(APilotActionPawn, rotationComponent);
+	DOREPLIFETIME(APilotActionPawn, Energy);
 	
 }
 
@@ -175,7 +200,7 @@ void APilotActionPawn::OnPilotOverlap(UPrimitiveComponent* OverlappedComponent, 
 
 	
 
-	if(!Cast<ABasicProjectile>(OtherActor))
+	if(!Cast<ABasicProjectile>(OtherActor) && !Cast<AEnergyPickUp>(OtherActor))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Pilot Overlap"));
 		UGameplayStatics::ApplyDamage(OtherActor, 100.f, Cast<AActionPlayerController>(GetOwner()), this, damageType);
@@ -246,6 +271,30 @@ FVector APilotActionPawn::GetReplicatedPosition()
 	return translationComponent->GetReplicatedPosition();
 }
 
+float APilotActionPawn::GetEnergy()
+{
+
+	return Energy;
+}
+
+void APilotActionPawn::AddEnergy(float AmountEnergy)
+{
+	if(HasAuthority())
+	{
+
+		if((Energy + AmountEnergy) > 100.f)
+		{
+
+			Energy = 100.f;
+		}else
+		{
+
+			Energy += AmountEnergy;
+		}
+	}
+	
+}
+
 bool APilotActionPawn::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget,
                                         const FVector& SrcLocation) const
 {
@@ -265,13 +314,13 @@ void APilotActionPawn::InitializeMovement()
 {
 
 	//estos valores pueden variar para personalizar la nave x10
-	speedDropRate = 3000.f / 3;
-	defaultMaxAcceleration = 4000 / 3;
-	maxAcceleration = 4000 / 3;
-	defaultMaxSpeed = 100000/5;
-	maxSpeed = 100000/5;
-	accelerationSpeed = 500.f / 2;
-	decelerationSpeed = 1000.f / 2;
+	speedDropRate = 1000.f;
+	defaultMaxAcceleration = 1333.f;
+	maxAcceleration =1333.f;
+	defaultMaxSpeed = 20000;
+	maxSpeed = 20000;
+	accelerationSpeed = 250.f;
+	decelerationSpeed = 500.f;
 	maneuverabilityInPercent = 15.f;
 
 	translationComponent->Inicialite(speedDropRate, defaultMaxAcceleration, defaultMaxSpeed, maxAcceleration, maxSpeed, accelerationSpeed, decelerationSpeed, maneuverabilityInPercent);
