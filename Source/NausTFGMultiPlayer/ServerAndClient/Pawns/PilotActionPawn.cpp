@@ -98,14 +98,14 @@ void APilotActionPawn::Tick(float DeltaTime)
 	if (Energy <= 0.f && !bExhausted)
 	{
 		bExhausted = true;
-		translationComponent->SetMaxSpeed(translationComponent->GetMaxSpeed() / 3);
+		translationComponent->SetMaxSpeed(translationComponent->GetMaxSpeed() / 4);
 	}
 
 	if(Energy > 0.f && bExhausted)
 	{
 
 		bExhausted = false;
-		translationComponent->SetMaxSpeed(translationComponent->GetMaxSpeed() * 3);
+		translationComponent->SetMaxSpeed(translationComponent->GetMaxSpeed() * 4);
 	}
 
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, "Location: " + GetActorLocation().ToString());
@@ -150,10 +150,10 @@ void APilotActionPawn::ExecuteRotation(FRotator rotator)
 void APilotActionPawn::ImpulseON()
 {
 
-	translationComponent->SetMaxSpeed(maxSpeed * 3);
+	translationComponent->SetMaxSpeed(maxSpeed * 5);
 	translationComponent->SetCurrentSpeed(maxSpeed * 2);
 
-	translationComponent->SetMaxAcceleration(maxAcceleration * 3);
+	translationComponent->SetMaxAcceleration(maxAcceleration * 5);
 	translationComponent->SetCurrentAcceleration(maxAcceleration * 2);
 	
 }

@@ -321,7 +321,7 @@ void AEnemyActionPawn::ClientFireSound_Implementation()
 		AActionPlayerController* PC = Cast<AActionPlayerController>(Cast<UCustomGameInstance>(GetGameInstance())->GetLocalPlayerController());
 
 		if (PC)
-			PC->SpawnSoundAtLocation(GetActorLocation(), Sounds::Shoot, 0.05);
+			PC->SpawnSoundAtLocation(GetActorLocation(), Sounds::Shoot, 0.2);
 
 	}
 }
