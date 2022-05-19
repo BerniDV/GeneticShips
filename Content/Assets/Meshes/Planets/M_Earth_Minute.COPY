@@ -1,0 +1,230 @@
+Begin Object Class=/Script/Engine.Material Name="M_Earth_Minute"
+   Begin Object Class=/Script/Engine.MaterialExpressionClamp Name="MaterialExpressionClamp_0"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionComment Name="MaterialExpressionComment_0"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionComment Name="MaterialExpressionComment_1"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionConstant3Vector Name="MaterialExpressionConstant3Vector_2"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionDotProduct Name="MaterialExpressionDotProduct_0"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionLinearInterpolate Name="MaterialExpressionLinearInterpolate_10"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionLinearInterpolate Name="MaterialExpressionLinearInterpolate_8"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionMultiply Name="MaterialExpressionMultiply_0"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionOneMinus Name="MaterialExpressionOneMinus_0"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionPanner Name="MaterialExpressionPanner_1"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionPower Name="MaterialExpressionPower_1"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionPower Name="MaterialExpressionPower_2"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionSkyAtmosphereLightDirection Name="MaterialExpressionSkyAtmosphereLightDirection_0"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionTextureSample Name="MaterialExpressionTextureSample_0"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionTextureSample Name="MaterialExpressionTextureSample_5"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionTextureSample Name="MaterialExpressionTextureSample_6"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionTextureSample Name="MaterialExpressionTextureSample_7"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionTextureSample Name="MaterialExpressionTextureSample_8"
+   End Object
+   Begin Object Class=/Script/Engine.MaterialExpressionVertexNormalWS Name="MaterialExpressionVertexNormalWS_0"
+   End Object
+   Begin Object Class=/Script/UnrealEd.SceneThumbnailInfoWithPrimitive Name="SceneThumbnailInfoWithPrimitive_0"
+   End Object
+   Begin Object Name="MaterialExpressionClamp_0"
+      Input=(Expression=MaterialExpressionOneMinus'"M_Earth_Minute:MaterialExpressionOneMinus_0"')
+      MaterialExpressionEditorX=-1551
+      MaterialExpressionEditorY=529
+      MaterialExpressionGuid=B440C4A04CD6C22CABAEF5ADDB78579B
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionComment_0"
+      SizeX=1241
+      SizeY=596
+      Text="This was not in the quick tutorial. But here is how you add an emmisive map"
+      CommentColor=(R=1.000000,G=0.041135,B=0.000000,A=1.000000)
+      MaterialExpressionEditorX=-2160
+      MaterialExpressionEditorY=416
+      MaterialExpressionGuid=0A8E1B3645C61A519B94E49BEA0CF229
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionComment_1"
+      SizeX=896
+      SizeY=64
+      Text="Download 8K textures from https://www.solarsystemscope.com/textures/"
+      CommentColor=(R=0.000000,G=0.243569,B=1.000000,A=1.000000)
+      MaterialExpressionEditorX=-1904
+      MaterialExpressionEditorY=-240
+      MaterialExpressionGuid=3B479E5942F1529B6099C38987E2AD7F
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionConstant3Vector_2"
+      Constant=(R=1.000000,G=1.000000,B=1.000000,A=0.000000)
+      MaterialExpressionEditorX=-771
+      MaterialExpressionEditorY=-332
+      MaterialExpressionGuid=AF9DB8D548E238C80A13D6BDFB9FCEE7
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionDotProduct_0"
+      A=(Expression=MaterialExpressionSkyAtmosphereLightDirection'"M_Earth_Minute:MaterialExpressionSkyAtmosphereLightDirection_0"')
+      B=(Expression=MaterialExpressionVertexNormalWS'"M_Earth_Minute:MaterialExpressionVertexNormalWS_0"')
+      MaterialExpressionEditorX=-1812
+      MaterialExpressionEditorY=510
+      MaterialExpressionGuid=D713013240078448EDD5349322B2D878
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionLinearInterpolate_10"
+      A=(Expression=MaterialExpressionTextureSample'"M_Earth_Minute:MaterialExpressionTextureSample_0"',Mask=1,MaskR=1,MaskG=1,MaskB=1)
+      B=(Expression=MaterialExpressionConstant3Vector'"M_Earth_Minute:MaterialExpressionConstant3Vector_2"')
+      Alpha=(Expression=MaterialExpressionTextureSample'"M_Earth_Minute:MaterialExpressionTextureSample_5"',Mask=1,MaskR=1,MaskG=1,MaskB=1)
+      MaterialExpressionEditorX=-370
+      MaterialExpressionEditorY=-339
+      MaterialExpressionGuid=F119A3A34EC00AC39185078AE9C227F6
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionLinearInterpolate_8"
+      Alpha=(Expression=MaterialExpressionTextureSample'"M_Earth_Minute:MaterialExpressionTextureSample_8"',OutputIndex=1,Mask=1,MaskR=1)
+      ConstA=1.000000
+      ConstB=0.500000
+      MaterialExpressionEditorX=-704
+      MaterialExpressionEditorY=112
+      MaterialExpressionGuid=C5C6FF1D4047D3FBF90F1A930E3C6ED9
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionMultiply_0"
+      A=(Expression=MaterialExpressionPower'"M_Earth_Minute:MaterialExpressionPower_2"')
+      B=(Expression=MaterialExpressionPower'"M_Earth_Minute:MaterialExpressionPower_1"')
+      MaterialExpressionEditorX=-1066
+      MaterialExpressionEditorY=752
+      MaterialExpressionGuid=C10582D94EB9DCDBD0EC9195A821D2E1
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionOneMinus_0"
+      Input=(Expression=MaterialExpressionDotProduct'"M_Earth_Minute:MaterialExpressionDotProduct_0"')
+      MaterialExpressionEditorX=-1673
+      MaterialExpressionEditorY=539
+      MaterialExpressionGuid=8B5D66BF434B48D82026C99C6D0E33A3
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionPanner_1"
+      SpeedX=0.001000
+      MaterialExpressionEditorX=-1015
+      MaterialExpressionEditorY=-46
+      MaterialExpressionGuid=49C1D45F47053840B2DF2DB710F8B57A
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionPower_1"
+      Base=(Expression=MaterialExpressionTextureSample'"M_Earth_Minute:MaterialExpressionTextureSample_6"',Mask=1,MaskR=1,MaskG=1,MaskB=1)
+      MaterialExpressionEditorX=-1353
+      MaterialExpressionEditorY=778
+      MaterialExpressionGuid=83E89766473AE7871ECA278DCF14A029
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionPower_2"
+      Base=(Expression=MaterialExpressionClamp'"M_Earth_Minute:MaterialExpressionClamp_0"')
+      ConstExponent=20.000000
+      MaterialExpressionEditorX=-1293
+      MaterialExpressionEditorY=572
+      MaterialExpressionGuid=D5D3694A45B91DCB9715F9B8CE996851
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionSkyAtmosphereLightDirection_0"
+      MaterialExpressionEditorX=-2110
+      MaterialExpressionEditorY=466
+      MaterialExpressionGuid=87B565874E73B9C1B17CA6A6AE1D2872
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionTextureSample_0"
+      Texture=Texture2D'"/Game/Planets/2k_earth_daymap.2k_earth_daymap"'
+      MaterialExpressionEditorX=-784
+      MaterialExpressionEditorY=-640
+      MaterialExpressionGuid=0B3CCBC040CEB78946BE4A9A9C11DF27
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionTextureSample_5"
+      Coordinates=(Expression=MaterialExpressionPanner'"M_Earth_Minute:MaterialExpressionPanner_1"')
+      Texture=Texture2D'"/Game/Planets/2k_earth_clouds.2k_earth_clouds"'
+      MaterialExpressionEditorX=-784
+      MaterialExpressionEditorY=-144
+      MaterialExpressionGuid=AA1315B44577C586E2FD95BFC74A6969
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionTextureSample_6"
+      Texture=Texture2D'"/Game/Planets/2k_earth_nightmap.2k_earth_nightmap"'
+      MaterialExpressionEditorX=-1605
+      MaterialExpressionEditorY=742
+      MaterialExpressionGuid=FE0CE89B42BA9B89456116807AE4D222
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionTextureSample_7"
+      Texture=Texture2D'"/Game/Planets/2k_earth_normal_map.2k_earth_normal_map"'
+      SamplerType=SAMPLERTYPE_Normal
+      MaterialExpressionEditorX=-304
+      MaterialExpressionEditorY=624
+      MaterialExpressionGuid=0FC526324BE3CCC5A73AAE88DCE72BE4
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionTextureSample_8"
+      Texture=Texture2D'"/Game/Planets/2k_earth_specular_map.2k_earth_specular_map"'
+      SamplerType=SAMPLERTYPE_LinearColor
+      MaterialExpressionEditorX=-960
+      MaterialExpressionEditorY=112
+      MaterialExpressionGuid=BE07A57C49CA9757C37D4FA73301B15A
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="MaterialExpressionVertexNormalWS_0"
+      MaterialExpressionEditorX=-2085
+      MaterialExpressionEditorY=566
+      MaterialExpressionGuid=0653B5AB4662BF2A0451498D49652910
+      Material=Material'"M_Earth_Minute"'
+   End Object
+   Begin Object Name="SceneThumbnailInfoWithPrimitive_0"
+   End Object
+   BaseColor=(Expression=MaterialExpressionLinearInterpolate'"MaterialExpressionLinearInterpolate_10"')
+   Roughness=(Expression=MaterialExpressionLinearInterpolate'"MaterialExpressionLinearInterpolate_8"')
+   Normal=(Expression=MaterialExpressionTextureSample'"MaterialExpressionTextureSample_7"',Mask=1,MaskR=1,MaskG=1,MaskB=1)
+   EmissiveColor=(Expression=MaterialExpressionMultiply'"MaterialExpressionMultiply_0"')
+   Expressions(0)=MaterialExpressionLinearInterpolate'"MaterialExpressionLinearInterpolate_10"'
+   Expressions(1)=MaterialExpressionLinearInterpolate'"MaterialExpressionLinearInterpolate_8"'
+   Expressions(2)=MaterialExpressionTextureSample'"MaterialExpressionTextureSample_7"'
+   Expressions(3)=MaterialExpressionMultiply'"MaterialExpressionMultiply_0"'
+   Expressions(4)=MaterialExpressionTextureSample'"MaterialExpressionTextureSample_0"'
+   Expressions(5)=MaterialExpressionTextureSample'"MaterialExpressionTextureSample_5"'
+   Expressions(6)=MaterialExpressionTextureSample'"MaterialExpressionTextureSample_6"'
+   Expressions(7)=MaterialExpressionTextureSample'"MaterialExpressionTextureSample_8"'
+   Expressions(8)=MaterialExpressionConstant3Vector'"MaterialExpressionConstant3Vector_2"'
+   Expressions(9)=MaterialExpressionPanner'"MaterialExpressionPanner_1"'
+   Expressions(10)=MaterialExpressionPower'"MaterialExpressionPower_1"'
+   Expressions(11)=MaterialExpressionSkyAtmosphereLightDirection'"MaterialExpressionSkyAtmosphereLightDirection_0"'
+   Expressions(12)=MaterialExpressionVertexNormalWS'"MaterialExpressionVertexNormalWS_0"'
+   Expressions(13)=MaterialExpressionDotProduct'"MaterialExpressionDotProduct_0"'
+   Expressions(14)=MaterialExpressionOneMinus'"MaterialExpressionOneMinus_0"'
+   Expressions(15)=MaterialExpressionClamp'"MaterialExpressionClamp_0"'
+   Expressions(16)=MaterialExpressionPower'"MaterialExpressionPower_2"'
+   EditorComments(0)=MaterialExpressionComment'"MaterialExpressionComment_0"'
+   EditorComments(1)=MaterialExpressionComment'"MaterialExpressionComment_1"'
+   bCanMaskedBeAssumedOpaque=True
+   StateId=E79E97B3419C5D189E1501836419FEBA
+   CachedExpressionData=(ReferencedTextures=(Texture2D'"/Game/Planets/2k_earth_normal_map.2k_earth_normal_map"',Texture2D'"/Game/Planets/2k_earth_daymap.2k_earth_daymap"',Texture2D'"/Game/Planets/2k_earth_clouds.2k_earth_clouds"',Texture2D'"/Game/Planets/2k_earth_nightmap.2k_earth_nightmap"',Texture2D'"/Game/Planets/2k_earth_specular_map.2k_earth_specular_map"'),QualityLevelsUsed=(False,False,False,False))
+   ReferencedTextureGuids(0)=743E5D884605BF9C41777FA5FA47D2CC
+   ReferencedTextureGuids(1)=4AE635AF48115AE9739C98920EAE93DC
+   ReferencedTextureGuids(2)=9D97FF174B0483EBD619A2A31B629513
+   ReferencedTextureGuids(3)=5C35799243F202D8CDD37C84E5629F24
+   ReferencedTextureGuids(4)=8E19F77745F637EDE1F3029DDD737496
+   TextureStreamingDataVersion=1
+   TextureStreamingData(0)=(SamplingScale=1.000000,UVChannelIndex=0,TextureName="2k_earth_clouds",TextureReference=/Game/Planets/2k_earth_clouds.2k_earth_clouds)
+   TextureStreamingData(1)=(SamplingScale=1.000000,UVChannelIndex=0,TextureName="2k_earth_daymap",TextureReference=/Game/Planets/2k_earth_daymap.2k_earth_daymap)
+   TextureStreamingData(2)=(SamplingScale=1.000000,UVChannelIndex=0,TextureName="2k_earth_nightmap",TextureReference=/Game/Planets/2k_earth_nightmap.2k_earth_nightmap)
+   TextureStreamingData(3)=(SamplingScale=1.000000,UVChannelIndex=0,TextureName="2k_earth_normal_map",TextureReference=/Game/Planets/2k_earth_normal_map.2k_earth_normal_map)
+   TextureStreamingData(4)=(SamplingScale=1.000000,UVChannelIndex=0,TextureName="2k_earth_specular_map",TextureReference=/Game/Planets/2k_earth_specular_map.2k_earth_specular_map)
+   ThumbnailInfo=SceneThumbnailInfoWithPrimitive'"SceneThumbnailInfoWithPrimitive_0"'
+   LightingGuid=301D030442A5A5F151D546A1A1510CCC
+End Object
