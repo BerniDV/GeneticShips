@@ -158,7 +158,7 @@ void AActionGameMode::SetUpFirstGeneration()
 	roundResultFuture = enemyManager->SpawnGeneration(firstGeneration, teamPosition);
 
 	GetWorld()->GetTimerManager().ClearTimer(timerHandler);
-	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::ProcesEndRound, 20.f, false);
+	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::ProcesEndRound, 50.f, false);
 }
 
 void AActionGameMode::InitializeNextRound()
@@ -217,7 +217,7 @@ void AActionGameMode::ProcesNewRound(TArray<AChromosome*>& newGeneration)
 
 	roundResultFuture = enemyManager->SpawnGeneration(newGeneration, teamPosition);
 	GetWorld()->GetTimerManager().ClearTimer(timerHandler);
-	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::ProcesEndRound, 20.f, false);
+	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::ProcesEndRound, 50.f, false);
 }
 
 void AActionGameMode::ProcesBetweenRounds(TArray<AChromosome*> actualGenerationresult)

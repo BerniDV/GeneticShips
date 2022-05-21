@@ -85,10 +85,10 @@ void AEnemyActionPawn::SetRandomGenes()
 	enemyChromosome->SetRandomGenes();
 }
 
-void AEnemyActionPawn::ApplyFenotipe()
+void AEnemyActionPawn::ApplyFenotipe(const std::vector<float> averageGenes)
 {
 
-	enemyChromosome->ApplyFenotipe();
+	enemyChromosome->ApplyFenotipe(averageGenes);
 }
 
 void AEnemyActionPawn::ApplyMovementGenes()
@@ -103,12 +103,12 @@ void AEnemyActionPawn::ApplyHealthGenes()
 	enemyChromosome->ApplyHealthGenes();
 }
 
-void AEnemyActionPawn::SetChromosome(AChromosome* newChromosome)
+void AEnemyActionPawn::SetChromosome(AChromosome* newChromosome, const std::vector<float> averageGenes)
 {
 
 	enemyChromosome = newChromosome;
 
-	ApplyFenotipe();
+	ApplyFenotipe(averageGenes);
 	ApplyMovementGenes();
 }
 

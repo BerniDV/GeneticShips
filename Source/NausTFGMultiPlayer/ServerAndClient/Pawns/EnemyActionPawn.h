@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include "CoreMinimal.h"
 #include "ActionPawn.h"
 #include "EnemyActionPawn.generated.h"
@@ -36,11 +38,11 @@ public:
 
 	void SetRandomGenes();
 
-	void ApplyFenotipe();
+	void ApplyFenotipe(const std::vector<float> averageGenes);
 	void ApplyMovementGenes();
 	void ApplyHealthGenes();
 
-	void SetChromosome(AChromosome* newChromosome);
+	void SetChromosome(AChromosome* newChromosome, const std::vector<float> averageGenes);
 	AChromosome* GetChromosome();
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;

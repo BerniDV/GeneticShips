@@ -33,6 +33,21 @@ std::future<TArray<AChromosome*>> AEnemyManager::SpawnGeneration(TArray<AChromos
 	roundResultPromise = std::promise<TArray<AChromosome*>>();
 
 
+	//Calcular media de todos los atributos de esta generacion
+	std::vector<float> averageGenes(19, 0.f);
+
+	for(int i = 0; i < averageGenes.size(); i++)
+	{
+		for (int j = 0; j < generationDNA.Num(); j++)
+		{
+
+			averageGenes[i] += generationDNA[j]->GetGene(i);
+		}
+
+		averageGenes[i] /= generationDNA.Num();
+	}
+
+
 	for(int i = 0; i < generationDNA.Num(); i++)
 	{
 
@@ -52,7 +67,7 @@ std::future<TArray<AChromosome*>> AEnemyManager::SpawnGeneration(TArray<AChromos
 			Enemy->SetReplicates(true);
 			generationDNA[i]->SetOwner(Enemy);
 
-			Enemy->SetChromosome(generationDNA[i]);
+			Enemy->SetChromosome(generationDNA[i], averageGenes);
 
 			controller->Possess(Enemy);
 

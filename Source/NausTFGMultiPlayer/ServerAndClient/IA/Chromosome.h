@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "NausTFGMultiPlayer/ServerAndClient/DataObjects/NausTFGEnums.h"
@@ -28,11 +30,11 @@ public:
 
 	virtual void Destroyed() override;
 
-	void ApplyFenotipe();
+	void ApplyFenotipe(const std::vector<float> averageGenes);
 
 	
 	void ApplyFenotipeSize(FVector size);
-	void ApplyFenotipeColor(FLinearColor color);
+	void ApplyFenotipeColor(const std::vector<float> averageGenes);
 
 	void ApplyMovementGenes();
 	void ApplyHealthGenes();

@@ -47,17 +47,17 @@ void AChromosome::SetRandomGenes()
 	genesArray[(int8)Gene::color3] = FMath::FRandRange(0, 1);
 
 	genesArray[(int8)Gene::size] = FMath::RandRange(1, 10);
-	genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(15.f, maxImpactDamage);
-	genesArray[(int8)Gene::bulletDamage] = FMath::FRandRange(15.f, maxBulletDamage);
+	genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(5.f, maxImpactDamage);
+	genesArray[(int8)Gene::bulletDamage] = FMath::FRandRange(5.f, maxBulletDamage);
 
 	genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, maxSpeedDropRate);
-	genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(1000.f / 5.f, maxDefaultMaxAcceleration);
-	genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(1000.f / 5.f, maxMaxAcceleration);
-	genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(1000.f / 5.f, maxdefaultMaxSpeed);
-	genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(30000.f/4.f, maxMaxSpeed);
-	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(500.f / 5.f, maxAccelerationSpeed);
+	genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(1000.f / 7.f, maxDefaultMaxAcceleration);
+	genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(1000.f / 7.f, maxMaxAcceleration);
+	genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(1000.f / 7.f, maxdefaultMaxSpeed);
+	genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(30000.f/7.f, maxMaxSpeed);
+	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(500.f / 7.f, maxAccelerationSpeed);
 	genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, maxDecelerationSpeed);
-	genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, 50.f);
+	genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, 15.f);
 	genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(1, 6);
 	//genesArray[(int8)Gene::fireCadancy] = 1.f / genesArray[12];
 	genesArray[(int8)Gene::health] = FMath::FRandRange(100.f, maxHealth);
@@ -126,7 +126,7 @@ void AChromosome::Mutation()
 		case 12:
 
 			genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(0.1f, maxFireCadancy); //0.1
-			genesArray[(int8)Gene::fireCadancy] = 1.f / genesArray[12];
+			//genesArray[(int8)Gene::fireCadancy] = 1.f / genesArray[12];
 			break;
 
 		case 16:
@@ -224,11 +224,11 @@ void AChromosome::AddToGene(Gene typeGene, float amount)
 	genesArray[(int8)typeGene] += amount;
 }
 
-void AChromosome::ApplyFenotipe()
+void AChromosome::ApplyFenotipe(const std::vector<float> averageGenes)
 {
 
 	ApplyFenotipeSize(FVector(genesArray[(int8)Gene::size]));
-	ApplyFenotipeColor(FLinearColor(genesArray[(int8)Gene::color1], genesArray[(int8)Gene::color2], genesArray[(int8)Gene::color3]));
+	ApplyFenotipeColor(averageGenes);
 }
 
 void AChromosome::ApplyFenotipeSize(FVector size)
@@ -262,7 +262,7 @@ void AChromosome::ApplyFenotipeSize(FVector size)
 	}
 }
 
-void AChromosome::ApplyFenotipeColor(FLinearColor color)
+void AChromosome::ApplyFenotipeColor(const std::vector<float> averageGenes)
 {
 
 	if (AEnemyActionPawn* myPawn = Cast<AEnemyActionPawn>(GetOwner()))
@@ -274,13 +274,13 @@ void AChromosome::ApplyFenotipeColor(FLinearColor color)
 
 		//Calcula color
 
-		float relativeHealth = (genesArray[(int8)Gene::health] / maxHealth);
-		float relativeBulletDamage = (genesArray[(int8)Gene::bulletDamage] / maxBulletDamage);
-		float relativeImpactDamage = (genesArray[(int8)Gene::impactDamage] / maxImpactDamage);
-		float relativeVelocity = (genesArray[(int8)Gene::maxSpeed] / maxMaxSpeed);
-		float relativeManeuverability = (genesArray[(int8)Gene::maneuverabilityInPercent] / maxManeuverabilityInPercent);
-		float relativeCadency = (genesArray[(int8)Gene::fireCadancy] / maxFireCadancy);
-		float parentSize = (genesArray[(int8)Gene::size] / maxSize);
+		float relativeHealth = (genesArray[(int8)Gene::health] / averageGenes[(int8)Gene::health]);
+		float relativeBulletDamage = (genesArray[(int8)Gene::bulletDamage] / averageGenes[(int8)Gene::bulletDamage]);
+		float relativeImpactDamage = (genesArray[(int8)Gene::impactDamage] / averageGenes[(int8)Gene::impactDamage]);
+		float relativeVelocity = (genesArray[(int8)Gene::maxSpeed] / averageGenes[(int8)Gene::maxSpeed]);
+		float relativeManeuverability = (genesArray[(int8)Gene::maneuverabilityInPercent] / averageGenes[(int8)Gene::maneuverabilityInPercent]);
+		float relativeCadency = (genesArray[(int8)Gene::fireCadancy] / averageGenes[(int8)Gene::fireCadancy]);
+		float parentSize = (genesArray[(int8)Gene::size] / averageGenes[(int8)Gene::size]);
 
 		red = ((0.6 * relativeImpactDamage) + (0.4 * relativeBulletDamage));
 		green = ((0.5 * (relativeCadency)) + (0.5 * relativeHealth));
