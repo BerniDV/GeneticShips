@@ -39,7 +39,7 @@ AEnemyActionPawn::AEnemyActionPawn()
 
 	id = -1;
 
-	ConstructorHelpers::FClassFinder <ABasicProjectile> refBasicProjectileBP(TEXT("/Game/ServerAndClient/Projectiles/BasicProjectile_BP"));
+	ConstructorHelpers::FClassFinder <ABasicProjectile> refBasicProjectileBP(TEXT("/Game/ServerAndClient/Projectiles/BasicEnemyProjectile_BP"));
 	projectile = refBasicProjectileBP.Class;
 
 	bUseControllerRotationYaw = false;

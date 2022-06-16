@@ -51,11 +51,11 @@ void AChromosome::SetRandomGenes()
 	genesArray[(int8)Gene::bulletDamage] = FMath::FRandRange(5.f, maxBulletDamage);
 
 	genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, maxSpeedDropRate);
-	genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(1000.f / 7.f, maxDefaultMaxAcceleration);
-	genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(1000.f / 7.f, maxMaxAcceleration);
-	genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(1000.f / 7.f, maxdefaultMaxSpeed);
-	genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(30000.f/7.f, maxMaxSpeed);
-	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(500.f / 7.f, maxAccelerationSpeed);
+	genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(1000.f / 6.f, maxDefaultMaxAcceleration);
+	genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(1000.f / 6.f, maxMaxAcceleration);
+	genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(1000.f / 6.f, maxdefaultMaxSpeed);
+	genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(30000.f/6.f, maxMaxSpeed);
+	genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(500.f / 6.f, maxAccelerationSpeed);
 	genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, maxDecelerationSpeed);
 	genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, 15.f);
 	genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(1, 6);
@@ -65,6 +65,8 @@ void AChromosome::SetRandomGenes()
 
 void AChromosome::Mutation()
 {
+
+	float ceilOfChangeInOneGeneration = 0.5;
 
 	int round = Cast<AActionGameState>(GetWorld()->GetGameState())->GetRound();
 
@@ -80,63 +82,64 @@ void AChromosome::Mutation()
 
 		case 3:
 
-			genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(0.f, maxImpactDamage); //100
+			
+			genesArray[(int8)Gene::impactDamage] = FMath::FRandRange(0.f, maxImpactDamage + (ceilOfChangeInOneGeneration * maxImpactDamage)); //100
 
 			break;
 
 		case 4:
 
-			genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, maxSpeedDropRate); //300
+			genesArray[(int8)Gene::speedDropRate] = FMath::FRandRange(0.f, maxSpeedDropRate + (ceilOfChangeInOneGeneration * maxSpeedDropRate)); //300
 			break;
 
 		case 5:
 
-			genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(0.f,  maxDefaultMaxAcceleration); //400
+			genesArray[(int8)Gene::defaultMaxAcceleration] = FMath::FRandRange(0.f,  maxDefaultMaxAcceleration + (ceilOfChangeInOneGeneration * maxDefaultMaxAcceleration)); //400
 			break;
 		case 6:
 
-			genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(0.f, maxMaxAcceleration); //400
+			genesArray[(int8)Gene::maxAcceleration] = FMath::FRandRange(0.f, maxMaxAcceleration + (ceilOfChangeInOneGeneration * maxMaxAcceleration)); //400
 			break;
 
 		case 7:
 
-			genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(0.f, maxdefaultMaxSpeed); //1000
+			genesArray[(int8)Gene::defaultMaxSpeed] = FMath::FRandRange(0.f, maxdefaultMaxSpeed + (ceilOfChangeInOneGeneration * maxdefaultMaxSpeed)); //1000
 			break;
 		case 8:
 
-			genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(0.f, maxMaxSpeed); //1000
+			genesArray[(int8)Gene::maxSpeed] = FMath::FRandRange(0.f, maxMaxSpeed + (ceilOfChangeInOneGeneration * maxMaxSpeed)); //1000
 			
 			break;
 
 		case 9:
 
-			genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(0.f, maxAccelerationSpeed); //50
+			genesArray[(int8)Gene::accelerationSpeed] = FMath::FRandRange(0.f, maxAccelerationSpeed + (ceilOfChangeInOneGeneration * maxAccelerationSpeed)); //50
 			break;
 		case 10:
 
-			genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, maxDecelerationSpeed); //100
+			genesArray[(int8)Gene::decelerationSpeed] = FMath::FRandRange(0.f, maxDecelerationSpeed + (ceilOfChangeInOneGeneration * maxDecelerationSpeed)); //100
 			
 			break;
 
 		case 11:
 
-			genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, maxManeuverabilityInPercent); //100
+			genesArray[(int8)Gene::maneuverabilityInPercent] = FMath::FRandRange(0.f, 100); //100
 			break;
 
 		case 12:
 
-			genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(0.1f, maxFireCadancy); //0.1
+			genesArray[(int8)Gene::fireCadancy] = FMath::FRandRange(0.01f, 1); //0.1
 			//genesArray[(int8)Gene::fireCadancy] = 1.f / genesArray[12];
 			break;
 
 		case 16:
 
-			genesArray[(int8)Gene::health] = FMath::FRandRange(1.f, maxHealth);
+			genesArray[(int8)Gene::health] = FMath::FRandRange(1.f, maxHealth + (ceilOfChangeInOneGeneration * maxHealth));
 			break;
 
 		case 17:
 
-			genesArray[(int8)Gene::bulletDamage] = FMath::FRandRange(0.f, maxBulletDamage); //100
+			genesArray[(int8)Gene::bulletDamage] = FMath::FRandRange(0.f, maxBulletDamage + (ceilOfChangeInOneGeneration * maxBulletDamage)); //100
 			break;
 
 		default:

@@ -62,6 +62,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TSubclassOf<UDamageType> damageType;
 
+	UPROPERTY(EditAnywhere)
 	UProjectileMovementComponent* projectileMovementComponent;
 
 

@@ -64,6 +64,8 @@ public:
 	UFUNCTION()
 	void SpawnPickUp();
 
+	void UpdateEventTimerGameState(int timeInSeconds);
+
 protected:
 
 	virtual void Tick(float DeltaSeconds) override;
@@ -75,6 +77,9 @@ private:
 	const uint32 maxplayers = 2;
 
 	FTimerHandle timerHandler;
+	const int startWait = 10;
+	const int betweenRoundsWait = 5;
+	const int roundTime = 50;
 
 	AGeneticManager* geneticManager;
 	AEnemyManager* enemyManager;

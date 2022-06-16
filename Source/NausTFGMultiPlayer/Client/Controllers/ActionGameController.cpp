@@ -126,6 +126,18 @@ FString UActionGameController::GetEnemiesAliveText()
 	return result;
 }
 
+void UActionGameController::SetTimeUntilNextEvent(int timeInSeconds)
+{
+
+	if (gameStateHUD)
+	{
+
+		gameStateHUD->SetRoundCountDownInSeconds(timeInSeconds);
+		gameStateHUD->UpdateRoundCountDownText();
+	}
+
+}
+
 void UActionGameController::SpawnParticlesAtLocation(FVector Location, FVector Scale)
 {
 	

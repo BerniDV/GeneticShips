@@ -69,6 +69,9 @@ public:
 	UFUNCTION(Client, Reliable)
 	void UpdateEnemies();
 
+	UFUNCTION(Client, Reliable)
+	void UpdateTimer();
+
 	virtual void InitializePresentationController() override;
 
 	
@@ -90,6 +93,8 @@ public:
 	void UpdateClientHealth();
 
 	float GetPlayerMaxHealth();
+
+	void UpdateHUDInformation();
 
 protected:
 

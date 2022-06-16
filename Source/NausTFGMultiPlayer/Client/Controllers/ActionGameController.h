@@ -45,7 +45,10 @@ public:
 	void SetEnemiesAlive(int enemies);
 	FString GetEnemiesAliveText();
 
+	void SetTimeUntilNextEvent(int timeInSeconds);
+
 	virtual void SpawnParticlesAtLocation(FVector Location, FVector Scale) override;
+
 
 protected:
 

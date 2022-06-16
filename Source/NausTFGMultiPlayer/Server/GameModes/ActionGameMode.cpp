@@ -75,7 +75,7 @@ void AActionGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 	
-	if(! playersInGame.Find(NewPlayer->GetUniqueID()))
+	if(!playersInGame.Find(NewPlayer->GetUniqueID()))
 	{
 
 		playersInGame.Add(NewPlayer->GetUniqueID(), NewPlayer);
@@ -96,7 +96,8 @@ void AActionGameMode::BeginPlay()
 	Cast<AActionGameState>(GameState)->signalPlayerDead.AddDynamic(this, &AActionGameMode::EndGame);
 	pilotPickUpEnergy->signalPickedUp.AddDynamic(this, &AActionGameMode::SpawnPickUp);
 
-	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::SetUpFirstGeneration, 10.f, false);
+	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::SetUpFirstGeneration, startWait, false);
+	UpdateEventTimerGameState(startWait);
 }
 
 void AActionGameMode::SetTeam(APlayerController* PlayerController)
@@ -158,7 +159,8 @@ void AActionGameMode::SetUpFirstGeneration()
 	roundResultFuture = enemyManager->SpawnGeneration(firstGeneration, teamPosition);
 
 	GetWorld()->GetTimerManager().ClearTimer(timerHandler);
-	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::ProcesEndRound, 50.f, false);
+	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::ProcesEndRound, roundTime, false);
+	UpdateEventTimerGameState(roundTime);
 }
 
 void AActionGameMode::InitializeNextRound()
@@ -217,7 +219,8 @@ void AActionGameMode::ProcesNewRound(TArray<AChromosome*>& newGeneration)
 
 	roundResultFuture = enemyManager->SpawnGeneration(newGeneration, teamPosition);
 	GetWorld()->GetTimerManager().ClearTimer(timerHandler);
-	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::ProcesEndRound, 50.f, false);
+	GetWorld()->GetTimerManager().SetTimer(timerHandler, this, &AActionGameMode::ProcesEndRound, roundTime, false);
+	UpdateEventTimerGameState(roundTime);
 }
 
 void AActionGameMode::ProcesBetweenRounds(TArray<AChromosome*> actualGenerationresult)
@@ -231,8 +234,8 @@ void AActionGameMode::ProcesBetweenRounds(TArray<AChromosome*> actualGenerationr
 	FTimerDelegate timerDel;
 	timerDel.BindUFunction(this, FName("ProcesNewRound"), nextGeneration);
 
-	GetWorld()->GetTimerManager().SetTimer(timerHandler, timerDel, 5.f, false);
-
+	GetWorld()->GetTimerManager().SetTimer(timerHandler, timerDel, betweenRoundsWait, false);
+	UpdateEventTimerGameState(betweenRoundsWait);
 	//ProcesNewRound(nextGeneration);
 
 }
@@ -264,6 +267,12 @@ void AActionGameMode::SpawnPickUp()
 
 	pilotPickUpEnergy->Client_SetActorLocation(pickUpPosition);
 
+}
+
+void AActionGameMode::UpdateEventTimerGameState(int timeInSeconds)
+{
+
+	GetGameState<AActionGameState>()->SetTimeUntilNextEvent(timeInSeconds);
 }
 
 void AActionGameMode::Tick(float DeltaSeconds)

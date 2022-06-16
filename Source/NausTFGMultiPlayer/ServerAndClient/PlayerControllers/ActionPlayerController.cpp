@@ -52,6 +52,7 @@ void AActionPlayerController::BindSignals()
 
 		Cast<AActionGameState>(GetWorld()->GetGameState())->signalNewRound.AddDynamic(this, &AActionPlayerController::UpdateRound);
 		Cast<AActionGameState>(GetWorld()->GetGameState())->signalEnemiesAlive.AddDynamic(this, &AActionPlayerController::UpdateEnemies);
+		Cast<AActionGameState>(GetWorld()->GetGameState())->signalTimer.AddDynamic(this, &AActionPlayerController::UpdateTimer);
 
 	}
 		
@@ -168,6 +169,9 @@ void AActionPlayerController::Client_InitializeClientPlayerControllerImpl_Implem
 	SpawnActionCamera();
 
 	SpawnSoundAtLocation(FVector(0, 0, 0), Sounds::SpaceAmbient, 1.f);
+
+	//Por si se ha proporcionado alguna informaciojn para el hud anters de poder realizar el binding
+	UpdateHUDInformation();
 
 }
 
@@ -323,6 +327,19 @@ void AActionPlayerController::UpdateEnemies_Implementation()
 	}
 }
 
+void AActionPlayerController::UpdateTimer_Implementation()
+{
+
+	if (IsLocalPlayerController())
+	{
+
+		int timeInSeconds = Cast<AActionGameState>(GetWorld()->GetGameState())->GetTimeUntilNextEvent();
+
+		Cast<UActionGameController>(presentationController)->SetTimeUntilNextEvent(timeInSeconds);
+		
+	}
+}
+
 void AActionPlayerController::InitializePresentationController()
 {
 
@@ -398,6 +415,14 @@ float AActionPlayerController::GetPlayerMaxHealth()
 	return maxPlayerHealth;
 }
 
+void AActionPlayerController::UpdateHUDInformation()
+{
+
+	UpdateRound();
+	UpdateEnemies();
+	UpdateTimer();
+}
+
 void AActionPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -412,5 +437,4 @@ void AActionPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	
 }

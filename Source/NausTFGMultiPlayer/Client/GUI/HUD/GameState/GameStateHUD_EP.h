@@ -29,12 +29,21 @@ public:
 	FString GetNumRoundText();
 
 	UFUNCTION(BlueprintCallable)
+	FString GetRoundCountDownText();
+
+	UFUNCTION(BlueprintCallable)
 	int GetNumRound();
 
+	UFUNCTION(BlueprintCallable)
+	int GetRoundCountDownInSeconds();
+
+	void SetRoundCountDownInSeconds(int _roundCountDownInSeconds);
 
 	void SetEnemiesAlive(int enemies);
 
 	void UpdateEnemiesAliveText();
+
+	void UpdateRoundCountDownText();
 
 	UFUNCTION(BlueprintCallable)
 	FString GetEnemiesAliveText();
@@ -55,6 +64,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "gameStateInfo")
 	int enemiesAlive;
+
+	UPROPERTY(BlueprintReadWrite, Category = "gameStateInfo")
+	int roundCountDownInSeconds;
+
+	UPROPERTY(BlueprintReadWrite, Category = "gameStateInfo")
+	FString roundCountDownText;
 
 private:
 

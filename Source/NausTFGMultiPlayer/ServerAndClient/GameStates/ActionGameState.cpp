@@ -10,9 +10,12 @@
 AActionGameState::AActionGameState()
 {
 
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 	round = 0;
+	timeUntilNextEvent = 0;
+	enemiesAlive = 0;
+	countSeconds = 0.f;
 }
 
 void AActionGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -21,6 +24,7 @@ void AActionGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 
 	DOREPLIFETIME(AActionGameState, round);
 	DOREPLIFETIME(AActionGameState, enemiesAlive);
+	DOREPLIFETIME(AActionGameState, timeUntilNextEvent);
 }
 
 void AActionGameState::PlayerDead()
@@ -49,6 +53,12 @@ void AActionGameState::ClientUpdateEnemies_Implementation()
 	signalEnemiesAlive.Broadcast();
 }
 
+void AActionGameState::ClientUpdateTimeUntilNextEvent_Implementation()
+{
+
+	signalTimer.Broadcast();
+}
+
 int AActionGameState::GetRound()
 {
 
@@ -66,6 +76,44 @@ void AActionGameState::SetEnemiesAlive(int numEnemies)
 
 	enemiesAlive = numEnemies;
 	ClientUpdateEnemies();
+}
+
+void AActionGameState::SetTimeUntilNextEvent(int timeInSeconds)
+{
+	if(HasAuthority())
+	{
+		timeUntilNextEvent = timeInSeconds;
+		ClientUpdateTimeUntilNextEvent();
+	}
+		
+}
+
+int AActionGameState::GetTimeUntilNextEvent()
+{
+
+	return timeUntilNextEvent;
+}
+
+void AActionGameState::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if(HasAuthority() && timeUntilNextEvent > 0.f)
+	{
+
+		countSeconds += DeltaSeconds;
+
+		if(countSeconds > 1)
+		{
+
+			countSeconds = 0.f;
+			timeUntilNextEvent--;
+
+			if(timeUntilNextEvent >= 0)
+				SetTimeUntilNextEvent(timeUntilNextEvent);
+		}
+		
+	}
 }
 
 
